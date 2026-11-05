@@ -1,0 +1,1954 @@
+"use client";
+
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import Image from "next/image";
+import { properties } from "@/lib/properties";
+import { HeroScene } from "./hero-scene";
+import { PropertyAssistant } from "./property-assistant";
+import Link from "next/link";
+import { CarFront, Phone } from "lucide-react";
+import {
+  ArrowRight,
+  Handshake,
+  ArrowUpRight,
+  BedDouble,
+  Bot,
+  Building2,
+  Calculator,
+  ChartNoAxesColumnIncreasing,
+  Check,
+  ChevronDown,
+  Cookie,
+  FileText,
+  FolderOpen,
+  Headphones,
+  Heart,
+  House,
+  MapPin,
+  Menu,
+  MessageCircle,
+  Search,
+  SlidersHorizontal,
+  Smartphone,
+  X,
+} from "lucide-react";
+
+const locations = [
+  { name: "Bengaluru", count: "128 properties" },
+  { name: "Koramangala", count: "86 properties" },
+  { name: "HSR Layout", count: "74 properties" },
+  { name: "Indiranagar", count: "52 properties" },
+];
+
+function Reveal({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.12 },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={`reveal ${visible ? "reveal-visible" : ""} ${className}`}
+      style={{ "--reveal-delay": `${delay}ms` } as React.CSSProperties}
+    >
+      {children}
+    </div>
+  );
+}
+
+function PropertySearchForm() {
+  const [location, setLocation] = useState("");
+  const [propertyType, setPropertyType] = useState("Any Type");
+  const [budget, setBudget] = useState("Any Budget");
+  const [openDropdown, setOpenDropdown] = useState<"type" | "budget" | null>(
+    null,
+  );
+  const dropdownRef = useRef<HTMLFormElement>(null);
+
+  const propertyTypes = [
+    "Any Type",
+    "Apartment",
+    "Villa",
+    "Plot",
+    "Independent House",
+    "Commercial",
+  ];
+
+  const budgets = [
+    "Any Budget",
+    "Under ₹25 Lakh",
+    "₹25–50 Lakh",
+    "₹50 Lakh–₹1 Crore",
+    "₹1–2 Crore",
+    "₹2 Crore+",
+  ];
+
+  const ranges: Record<string, { min: number; max: number }> = {
+    "Any Budget": { min: 0, max: Infinity },
+    "Under ₹25 Lakh": { min: 0, max: 2500000 },
+    "₹25–50 Lakh": { min: 2500000, max: 5000000 },
+    "₹50 Lakh–₹1 Crore": { min: 5000000, max: 10000000 },
+    "₹1–2 Crore": { min: 10000000, max: 20000000 },
+    "₹2 Crore+": { min: 20000000, max: Infinity },
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpenDropdown(null);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpenDropdown(null);
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+
+  function handleSearch(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setOpenDropdown(null);
+
+    window.dispatchEvent(
+      new CustomEvent("property-search", {
+        detail: {
+          location: location.trim(),
+          propertyType,
+          minPrice: ranges[budget].min,
+          maxPrice: ranges[budget].max,
+        },
+      }),
+    );
+
+    document.getElementById("properties")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
+  const dropdownPanel =
+    "absolute left-0 right-0 top-[calc(100%+8px)] z-[200] max-h-[min(320px,60vh)] overflow-y-auto rounded-xl border border-[#e5e7eb] bg-white p-1.5 text-left shadow-lg";
+
+  const optionClass = (active: boolean) =>
+    `flex min-h-10 w-full items-center rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+      active
+        ? "bg-[#eff4ff] font-medium text-[#2855e8]"
+        : "text-[#374151] hover:bg-[#f7f8fa]"
+    }`;
+
+  return (
+    <form
+      ref={dropdownRef}
+      onSubmit={handleSearch}
+      className="mobile-property-search relative z-40 mx-auto mt-5 flex min-h-[76px] w-full min-w-0 items-center gap-0 rounded-full border border-[#e5e7eb] bg-white p-2 shadow-[0_3px_12px_rgba(15,23,42,0.05)]"
+    >
+      {/* Keyword / Location */}
+      <div className="flex h-10 min-w-0 flex-[1.6] items-center px-3 sm:px-5">
+        <input
+          type="search"
+          aria-label="Search location"
+          placeholder="Enter city / locality / project"
+          value={location}
+          onChange={(event) => setLocation(event.target.value)}
+          className="w-full min-w-0 border-0 bg-transparent p-0 text-[13px] text-[#374151] outline-none placeholder:text-[#8993a8] focus:ring-0 sm:text-sm"
+        />
+      </div>
+
+      <span className="h-6 w-px shrink-0 bg-[#e5e7eb]" />
+
+      {/* Property Type */}
+      <div className="relative flex h-10 min-w-0 flex-1 items-center px-3 sm:px-5">
+        <button
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded={openDropdown === "type"}
+          onClick={() =>
+            setOpenDropdown((current) => (current === "type" ? null : "type"))
+          }
+          className="flex w-full min-w-0 items-center justify-between gap-2 text-left text-[13px] text-[#8993a8] outline-none sm:text-sm"
+        >
+          <span className="truncate">
+            {propertyType === "Any Type"
+              ? "Select property type"
+              : propertyType}
+          </span>
+          <ChevronDown
+            size={15}
+            className={`shrink-0 text-[#64748b] transition-transform ${
+              openDropdown === "type" ? "rotate-180" : ""
+            }`}
+          />
+        </button>
+
+        {openDropdown === "type" && (
+          <div
+            className={dropdownPanel}
+            role="listbox"
+            aria-label="Property type"
+          >
+            {propertyTypes.map((type) => (
+              <button
+                key={type}
+                type="button"
+                role="option"
+                aria-selected={propertyType === type}
+                className={optionClass(propertyType === type)}
+                onClick={() => {
+                  setPropertyType(type);
+                  setOpenDropdown(null);
+                }}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <span className="hidden h-6 w-px shrink-0 bg-[#e5e7eb] sm:block" />
+
+      {/* Budget */}
+      <div className="relative hidden h-10 min-w-0 flex-1 items-center px-3 sm:flex sm:px-4">
+        <button
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded={openDropdown === "budget"}
+          onClick={() =>
+            setOpenDropdown((current) =>
+              current === "budget" ? null : "budget",
+            )
+          }
+          className="flex w-full min-w-0 items-center justify-between gap-2 text-left text-[13px] text-[#8993a8] outline-none sm:text-sm"
+        >
+          <span className="truncate">
+            {budget === "Any Budget" ? "Select budget" : budget}
+          </span>
+          <ChevronDown
+            size={15}
+            className={`shrink-0 text-[#64748b] transition-transform ${
+              openDropdown === "budget" ? "rotate-180" : ""
+            }`}
+          />
+        </button>
+
+        {openDropdown === "budget" && (
+          <div
+            className={dropdownPanel}
+            role="listbox"
+            aria-label="Budget range"
+          >
+            {budgets.map((item) => (
+              <button
+                key={item}
+                type="button"
+                role="option"
+                aria-selected={budget === item}
+                className={optionClass(budget === item)}
+                onClick={() => {
+                  setBudget(item);
+                  setOpenDropdown(null);
+                }}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Search */}
+
+      <button
+        type="submit"
+        className="group relative inline-flex h-full min-h-[72px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#2855f6] px-7 text-sm font-semibold text-white transition-colors hover:bg-[#1e46dc] sm:self-stretch sm:px-8"
+      >
+        <span className="relative inline-flex items-center cursor-pointer justify-center gap-2">
+          <Search
+            size={20}
+            strokeWidth={2.5}
+            className="animate-[searchSweep_3s_ease-in-out_infinite] shrink-0"
+            style={{
+              transformOrigin: "center",
+              cursor: "pointer",
+            }}
+          />
+
+          <span className="animate-[searchText_3s_ease-in-out_infinite]">
+            Search
+          </span>
+        </span>
+
+        <style jsx>{`
+          @keyframes searchSweep {
+            0%,
+            100% {
+              transform: translateX(0) scale(1);
+            }
+            15% {
+              transform: translateX(0) scale(1.35);
+            }
+            65% {
+              transform: translateX(4px) scale(1.2);
+            }
+            85% {
+              transform: translateX(0) scale(1);
+            }
+          }
+
+          @keyframes searchText {
+            0%,
+            10% {
+              letter-spacing: 0;
+              opacity: 0.7;
+            }
+            45%,
+            75% {
+              letter-spacing: 1.2px;
+              opacity: 1;
+            }
+            100% {
+              letter-spacing: 0;
+              opacity: 1;
+            }
+          }
+        `}</style>
+      </button>
+    </form>
+  );
+}
+
+export function HomePage() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [locationOpen, setLocationOpen] = useState(false);
+  const [saved, setSaved] = useState<number[]>([]);
+  const [cookieConsent, setCookieConsent] = useState<boolean | null>(null);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [typedBrand, setTypedBrand] = useState("");
+
+  useEffect(() => {
+    setCookieConsent(document.cookie.includes("odp_cookie_consent=accepted"));
+  }, []);
+
+  const saveCookieConsent = (value: "accepted" | "essential") => {
+    document.cookie = `odp_cookie_consent=${value}; max-age=31536000; path=/; SameSite=Lax`;
+    setCookieConsent(true);
+  };
+
+  useEffect(() => {
+    const brand = "Start\nYour\nJourney";
+    let index = 0;
+    let deleting = false;
+    let timer: number;
+
+    const tick = () => {
+      if (!deleting) {
+        index += 1;
+        setTypedBrand(brand.slice(0, index));
+        if (index === brand.length) {
+          deleting = true;
+          timer = window.setTimeout(tick, 1800);
+          return;
+        }
+      } else {
+        index -= 1;
+        setTypedBrand(brand.slice(0, index));
+        if (index === 0) {
+          deleting = false;
+          timer = window.setTimeout(tick, 450);
+          return;
+        }
+      }
+      timer = window.setTimeout(tick, deleting ? 55 : 85);
+    };
+
+    timer = window.setTimeout(tick, 300);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    if (menuOpen) document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [menuOpen]);
+
+  const toggleSaved = (index: number) => {
+    setSaved((current) =>
+      current.includes(index)
+        ? current.filter((item) => item !== index)
+        : [...current, index],
+    );
+  };
+  useEffect(() => {
+    const scrollToHash = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      if (!id) return;
+
+      document.getElementById(id)?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    };
+
+    scrollToHash();
+
+    window.addEventListener("hashchange", scrollToHash);
+    return () => window.removeEventListener("hashchange", scrollToHash);
+  }, []);
+  return (
+    <div className="min-h-screen bg-white text-[#111111]">
+      <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#eaf5ff] text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)]">
+        <div className="mx-auto flex h-[58px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
+          <button
+            type="button"
+            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#cfe2f5] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] lg:hidden"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+          </button>
+
+          <Link
+            href="#top"
+            className="flex shrink-0 items-center text-[#0874d1]"
+            aria-label="OneStep Dream Property home"
+          >
+            <span className="text-[25px] font-black leading-none tracking-[-0.12em] lg:text-[32px]">
+              odp
+            </span>
+          </Link>
+
+          <nav
+            className="hidden flex-1 items-center justify-center gap-8 text-[13px] text-[#5f6368] lg:flex lg:text-[15px]"
+            aria-label="Main navigation"
+          >
+            {[
+              { label: "Home", href: "#top" },
+              { label: "Properties", href: "#properties" },
+              { label: "Locations", href: "#locations" },
+              { label: "About Us", href: "/about" },
+              { label: "Contact", href: "/contact" },
+            ].map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="transition-colors hover:text-[#0874d1]"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="order-3 ml-0 flex min-w-0 shrink-0 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px]">
+            <button
+              type="button"
+              aria-label="Choose location"
+              onClick={() => {
+                setLocationOpen(true);
+                setMenuOpen(false);
+                setSearchOpen(false);
+              }}
+              className="flex min-w-0 flex-1 items-center justify-end gap-1 truncate text-[11px] font-semibold"
+            >
+              <MapPin aria-hidden="true" className="size-4 shrink-0" />
+              <span className="truncate">Koramangala, Bengaluru</span>
+              <ChevronDown
+                aria-hidden="true"
+                className="size-3 shrink-0 text-[#496b73]"
+              />
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          aria-label="Close navigation"
+          onClick={() => setMenuOpen(false)}
+          className={`fixed inset-0 top-[58px] z-40 bg-[#152b43]/30 backdrop-blur-[2px] transition-opacity duration-300 lg:hidden ${
+            menuOpen ? "visible opacity-100" : "pointer-events-none invisible opacity-0"
+          }`}
+        />
+
+        <nav
+          id="mobile-navigation"
+          aria-hidden={!menuOpen}
+          inert={!menuOpen ? true : undefined}
+          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#cfe2f5] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
+            menuOpen
+              ? "visible translate-y-0 scale-y-100 opacity-100"
+              : "pointer-events-none invisible -translate-y-4 scale-y-95 opacity-0"
+          }`}
+          aria-label="Mobile navigation"
+        >
+          <div className="mx-auto w-full max-w-[520px] divide-y divide-[#cfe2f5]">
+  {([
+  ["Home", "/#top"],
+  ["Buy Flats", "/#properties"],
+  ["Properties", "/#properties"],
+  ["Locations", "/#locations"],
+  ["About Us", "/about"],
+  ["Contact", "/contact"],
+  ] as const).map(([item, href]) => {
+              const icons = {
+                Home: Building2,
+                "Buy Flats": BedDouble,
+                Properties: Building2,
+                Locations: MapPin,
+                "About Us": Smartphone,
+                Contact: Headphones,
+              };
+
+              const Icon = icons[item];
+
+              return (
+                <Link
+                  key={item}
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                  className="flex min-h-[70px] items-center gap-4 px-6 font-medium text-base text-[#152b43] transition-all duration-200 hover:bg-[#f1f8ff] hover:pl-7 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1]"
+                >
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#0874d1] text-white">
+                    <Icon aria-hidden="true" className="size-[18px]" />
+                  </span>
+                  <span>{item}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      </header>
+      {locationOpen && (
+        <section
+          className="fixed inset-0 z-[60] overflow-y-auto bg-white text-[#152b43]"
+          aria-label="Location picker"
+        >
+          {/* Header */}
+          <header className="sticky top-0 z-20 border-b border-[#e6edf5] bg-white/95 backdrop-blur-xl">
+            <div className="mx-auto flex h-[76px] max-w-[1280px] items-center justify-between px-5 sm:px-8">
+              <div className="flex items-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => setLocationOpen(false)}
+                  aria-label="Close location picker"
+                  className="flex size-10 items-center justify-center rounded-full border border-[#e1eaf3] text-[#152b43] transition hover:bg-[#f4f9fe] hover:text-[#0874d1]"
+                >
+                  <ArrowRight className="size-5 rotate-180" />
+                </button>
+
+                <div>
+                  <h1 className="text-base font-semibold tracking-tight sm:text-lg">
+                    Go Back
+                  </h1>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <div className="mx-auto max-w-[1040px] px-5 pb-16 pt-9 sm:px-8 sm:pt-14">
+            {/* Intro */}
+            <div className="max-w-2xl">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0874d1]">
+                Find your area
+              </p>
+
+              <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-[-0.045em] sm:text-4xl">
+                Where would you like
+                <span className="block text-[#0874d1]">
+                  to find a property?
+                </span>
+              </h2>
+
+              <p className="mt-4 max-w-xl text-sm leading-7 text-[#718195] sm:text-base">
+                Search a city or neighbourhood, or choose one of the popular
+                areas to explore available properties.
+              </p>
+            </div>
+
+            {/* Search */}
+            <div className="mt-8 max-w-3xl">
+              <label
+                htmlFor="location-search"
+                className="mb-2.5 block text-sm font-semibold"
+              >
+                Search locations
+              </label>
+
+              <div className="flex h-[58px] items-center gap-3 rounded-2xl border border-[#d5e3f0] bg-white px-4 transition focus-within:border-[#0874d1] focus-within:ring-4 focus-within:ring-[#0874d1]/10">
+                {/* <Search className="size-5 shrink-0 text-[#0874d1]" /> */}
+
+                <input
+                  id="location-search"
+                  type="search"
+                  placeholder="Enter city, area or locality"
+                  className="h-full min-w-0 flex-1 bg-transparent text-sm text-[#152b43] outline-none placeholder:text-[#9aa8b7] sm:text-base"
+                />
+
+                <MapPin className="hidden size-5 shrink-0 text-[#9aa8b7] sm:block" />
+              </div>
+            </div>
+
+            {/* Current location */}
+
+            {/* Popular locations */}
+            <div className="mt-10">
+              <div className="mb-5 flex items-end justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-semibold tracking-tight sm:text-xl">
+                    Popular locations
+                  </h3>
+                  <p className="mt-1.5 text-sm text-[#8292a3]">
+                    Explore sought-after areas in Bengaluru
+                  </p>
+                </div>
+
+                <span className="shrink-0 text-xs font-medium text-[#0874d1]">
+                  4 areas
+                </span>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                {[
+                  "Whitefield",
+                  "Indiranagar",
+                  "Koramangala",
+                  "Electronic City",
+                ].map((place) => (
+                  <button
+                    type="button"
+                    key={place}
+                    onClick={() => setLocationOpen(false)}
+                    className="
+    group flex min-h-[84px] items-center gap-4
+    rounded-2xl border border-[#e2eaf3]
+    bg-white p-4 text-left
+    transition-colors duration-200
+    hover:border-[#a9cfee]
+    sm:p-5
+  "
+                  >
+                    <span className="flex size-11 shrink-0 items-center justify-center text-[#0874d1]">
+                      <MapPin className="size-5" />
+                    </span>
+
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-semibold text-[#152b43]">
+                        {place}
+                      </span>
+                      <span className="mt-1 block text-xs text-[#8292a3]">
+                        Bengaluru, Karnataka
+                      </span>
+                    </span>
+
+                    <ArrowRight
+                      className="
+      size-4 shrink-0 text-[#a6b3c0]
+      transition-transform duration-200
+      group-hover:translate-x-1
+      group-hover:text-[#0874d1]
+    "
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="mt-12 border-t border-[#e6edf5] pt-5">
+              <p className="text-xs leading-6 text-[#8292a3]">
+                <span className="font-semibold text-[#52677d]">
+                  OneStep Dream Property
+                </span>{" "}
+                · One step closer to your dream property.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+      <main id="top" className="overflow-clip mt-15">
+        <section
+          id="property-search"
+          className="relative z-40 w-full overflow-visible bg-[#eaf5ff] px-4 pb-8 pt-8 min-[360px]:px-5 sm:pb-10 sm:pt-10 md:px-10 lg:px-14"
+        >
+          <div className="relative z-40 mx-auto w-full max-w-[1280px] text-center">
+            <h2 className="text-[clamp(1.8rem,4vw,2.4rem)] tracking-[-0.04em] text-[#263542]">
+              Start your journey with <strong>#OneStep Dream Property</strong>
+            </h2>
+
+            <PropertySearchForm />
+          </div>
+        </section>
+
+        <section className="relative mx-auto grid w-full min-w-0 max-w-full items-center overflow-hidden rounded-none border-0 bg-[#eaf5ff] px-3 pb-8 pt-8 min-[360px]:px-4 sm:pb-16 sm:pt-16 md:grid-cols-2 md:gap-10 md:px-10 md:py-12 lg:gap-16 lg:px-14 lg:py-16 xl:gap-20 2xl:px-16">
+          {/* LEFT — HERO INFORMATION */}
+          <Reveal className="hero-copy relative z-10 order-1 flex h-full w-full items-center justify-center md:justify-self-start">
+            <div className="mx-auto w-full min-w-0 max-w-[560px] overflow-hidden text-left">
+              <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#5f7185]">
+                Your next home starts here
+              </p>
+
+              <h1 className="max-w-[560px] text-[clamp(2.5rem,8vw,4.5rem)] font-medium leading-[1.05] tracking-[-0.06em] sm:text-[clamp(3rem,5vw,4.2rem)] sm:leading-[0.98] lg:text-[4rem]">
+                <span
+                  className="block min-h-[1.2em] whitespace-normal text-[clamp(1.25rem,7vw,4.5rem)] leading-tight tracking-tight text-[#0874d1]"
+                  aria-live="polite"
+                >
+                  {typedBrand}
+                  <span
+                    className="ml-1 inline-block h-[1em] w-[3px] translate-y-[0.08em] bg-[#111111] align-baseline motion-safe:animate-pulse"
+                    aria-hidden="true"
+                  />
+                </span>
+
+                <span className="mt-2 block leading-[1.08] text-[#152b43] sm:leading-20">
+                  Find the right property.
+                  <br />
+                  Make your next move.
+                </span>
+              </h1>
+
+              {/* MOBILE ONLY — HOUSE ILLUSTRATION */}
+              <div
+                className="mt-2 flex w-full items-center justify-center md:hidden min-[380px]:mt-3"
+                aria-label="Animated 3D property illustration"
+              >
+<div className="hero-scene-mobile relative h-[230px] w-[82%] max-w-[360px] min-[380px]:h-[250px]">
+  <HeroScene mobile />
+                </div>
+              </div>
+
+              <p className="mt-6 w-full max-w-[520px] break-words text-left text-[14px] leading-[1.65] text-[#5f7185] sm:mt-7 sm:text-[16px] sm:leading-7 lg:text-[18px] lg:leading-8">
+                Discover thoughtfully selected flats and residential properties
+                across India&apos;s most promising locations. Explore your
+                options and take the next step with confidence.
+              </p>
+
+              <div className="mt-7 flex w-full min-w-0 max-w-[560px] flex-col items-center gap-3 min-[380px]:mt-9 min-[380px]:flex-row min-[380px]:items-center min-[380px]:justify-center">
+                <Link
+                  href="#properties"
+                  className="group relative isolate inline-flex h-14 w-full max-w-[240px] min-w-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-[#0874d1] bg-[#0874d1] px-3 text-xs font-semibold text-white shadow-[0_5px_16px_rgba(8,116,209,0.16)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0874d1] min-[380px]:w-[min(220px,calc(50vw-24px))] min-[380px]:flex-none lg:h-16 lg:gap-3 lg:px-5 lg:text-sm"
+                >
+                  <Building2
+                    size={19}
+                    strokeWidth={1.8}
+                    className="relative z-20 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span className="relative z-20">Explore Properties</span>
+                  <ArrowUpRight
+                    size={15}
+                    className="relative z-20 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 z-10 rounded-full border-2 border-white [clip-path:inset(0_100%_0_0_round_999px)] transition-[clip-path] duration-500 ease-in-out group-hover:[clip-path:inset(0_0_0_0_round_999px)] motion-reduce:transition-none"
+                  />
+                </Link>
+
+                <Link
+                  href="#contact"
+                  className="group relative isolate inline-flex h-14 w-full max-w-[240px] min-w-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-[#c8dff4] bg-white px-3 text-xs font-semibold text-[#152b43] shadow-[0_4px_12px_rgba(21,43,67,0.05)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0874d1] min-[380px]:w-[min(220px,calc(50vw-24px))] min-[380px]:flex-none lg:h-16 lg:gap-3 lg:px-5 lg:text-sm"
+                >
+                  <Phone
+                    size={18}
+                    strokeWidth={1.8}
+                    className="relative z-20 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span className="relative z-20">Contact Us</span>
+                  <ArrowUpRight
+                    size={15}
+                    className="relative z-20 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 z-10 rounded-full border-2 border-[#064b91] [clip-path:inset(0_100%_0_0_round_999px)] transition-[clip-path] duration-500 ease-in-out group-hover:[clip-path:inset(0_0_0_0_round_999px)] motion-reduce:transition-none"
+                  />
+                </Link>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* RIGHT — DESKTOP HOUSE ILLUSTRATION */}
+          <Reveal className="hero-illustration relative z-10 order-2 hidden h-full min-h-[500px] w-full items-center justify-center md:flex">
+            <div className="relative h-[500px] w-full max-w-[680px] lg:h-[560px]">
+              <HeroScene />
+            </div>
+          </Reveal>
+        </section>
+        <section
+          id="properties"
+          className="mx-auto max-w-[1280px] px-4 pb-14 pt-14 min-[360px]:px-5 min-[360px]:pb-16 min-[360px]:pt-16 sm:pb-20 sm:pt-20 lg:px-8 lg:pb-24 lg:pt-32"
+        >
+          <div className="mb-8 flex flex-col items-start justify-between gap-5 sm:mb-10 sm:flex-row sm:items-end sm:gap-6">
+            <div>
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#5f6368]">
+                A considered selection
+              </p>
+              <h2 className="text-3xl font-medium tracking-[-0.04em] md:text-4xl lg:text-5xl">
+                Explore featured properties
+              </h2>
+              <p className="mt-3 text-sm text-[#5f6368]">
+                Find thoughtfully selected homes in locations that matter to
+                you.
+              </p>
+            </div>
+
+            <Link
+              href="#properties"
+              className="group hidden items-center gap-2 text-sm font-semibold text-[#152b43] md:inline-flex"
+            >
+              <Building2
+                size={17}
+                strokeWidth={1.8}
+                className="text-[#0874d1]"
+                aria-hidden="true"
+              />
+
+              <span className="relative py-1">
+                View all properties
+                <span className="absolute inset-x-0 -bottom-0.5 h-[2px] origin-left scale-x-0 rounded-full bg-[#0874d1] transition-transform duration-300 ease-out group-hover:scale-x-100" />
+              </span>
+            </Link>
+          </div>
+          <Reveal className="grid grid-cols-2 gap-x-3 gap-y-7 min-[390px]:gap-x-4 min-[390px]:gap-y-8 sm:gap-x-5 sm:gap-y-10 lg:grid-cols-4">
+            {properties.map((property, index) => (
+              <article key={property.title} className="group relative min-w-0">
+                <Link
+                  href={`/properties/${index}`}
+                  className="relative block aspect-[1.1/1] overflow-hidden bg-[#f2f2f2]"
+                  aria-label={`View ${property.title}`}
+                >
+                  <Image
+                    src={property.image}
+                    alt={property.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  />
+                  <span className="absolute left-3 top-3 bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em]">
+                    {property.status}
+                  </span>
+                </Link>
+                <button
+                  onClick={() => toggleSaved(index)}
+                  aria-label={`${saved.includes(index) ? "Remove" : "Save"} ${property.title}`}
+                  className="absolute right-3 top-3 flex size-8 items-center justify-center bg-white transition-colors hover:bg-[#f2f2f2]"
+                >
+                  <Heart
+                    size={16}
+                    fill={saved.includes(index) ? "#111111" : "none"}
+                  />
+                </button>
+                <div className="pt-3 min-[480px]:pt-4">
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-[13px] font-medium leading-4 min-[480px]:text-[15px] min-[480px]:leading-5">
+                      {property.title}
+                    </h3>
+                    <span className="whitespace-nowrap text-[13px] font-medium min-[480px]:text-[15px]">
+                      {property.price}
+                    </span>
+                  </div>
+                  <p className="mt-1.5 text-[11px] text-[#5f6368] min-[480px]:text-[13px]">
+                    {property.location}
+                  </p>
+
+                  <div className="mt-4 grid gap-3 border-t border-[#e5edf5] pt-4">
+                    <p className="line-clamp-2 break-words text-[12px] leading-5 text-[#5f6f80]">
+                      {property.details}
+                    </p>
+
+                    <Link
+                      href={`/properties/${index}`}
+                      className="group inline-flex w-fit items-center gap-2 text-[12px] font-semibold text-[#0874d1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0874d1]"
+                    >
+                      <span className="relative py-1">
+                        View Details
+                        <span className="absolute inset-x-0 -bottom-0.5 h-[2px] origin-left scale-x-0 rounded-full bg-[#0874d1] transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                      </span>
+
+                      <ArrowRight
+                        size={15}
+                        strokeWidth={2}
+                        className="transition-transform duration-300 group-hover:translate-x-1"
+                        aria-hidden="true"
+                      />
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </Reveal>
+          <Link
+            href="#properties"
+            className="mt-10 flex items-center gap-2 text-sm font-medium md:hidden"
+          >
+            View all properties <ArrowRight size={16} />
+          </Link>
+        </section>
+        <section id="locations" className="border-y border-[#dceaf7] bg-white">
+          <div className="mx-auto max-w-[1280px] px-4 py-12 min-[360px]:px-5 sm:py-16 lg:px-8 lg:py-20">
+            <Link
+              href="#properties"
+              className="group relative block w-full overflow-hidden rounded-2xl border border-[#c7e1f7] bg-[#f5faff] transition-all duration-300 hover:border-[#91c5ef] hover:shadow-xl hover:shadow-[#5b9bd5]/10"
+            >
+              {/* Light blue decorative background */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 overflow-hidden"
+              >
+                <div className="absolute -right-16 -top-24 size-80 rounded-full bg-[#dceeff]/80 blur-3xl" />
+                <div className="absolute right-[18%] -bottom-32 size-72 rounded-full bg-[#e8f4ff]/90 blur-3xl" />
+
+                <div className="absolute right-8 top-1/2 hidden size-64 -translate-y-1/2 rounded-full border border-[#d2e7f9]/80 sm:block lg:right-20 lg:size-80" />
+                <div className="absolute right-16 top-1/2 hidden size-48 -translate-y-1/2 rounded-full border border-[#d2e7f9]/70 sm:block lg:right-32 lg:size-64" />
+              </div>
+
+              <div className="relative grid min-h-[280px] items-center gap-5 p-6 sm:min-h-[320px] sm:p-9 md:grid-cols-[1.15fr_0.85fr] md:gap-3 lg:min-h-[360px] lg:p-12">
+                {/* Content */}
+                <div className="relative z-10 max-w-xl">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-[#cfe4f8] bg-white/90 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#3979ad] sm:text-xs">
+                    Find your place
+                  </span>
+
+                  <h2 className="mt-5 text-3xl font-semibold leading-tight tracking-[-0.045em] text-[#152b43] sm:text-4xl md:text-4xl lg:text-5xl">
+                    Find your home
+                    <span className="block text-[#287fbe]">in Bengaluru.</span>
+                  </h2>
+
+                  <p className="mt-4 max-w-md text-sm leading-6 text-[#5e7185] sm:text-base sm:leading-7">
+                    Discover thoughtfully selected properties in one of
+                    Bengaluru&apos;s most sought-after real estate markets.
+                  </p>
+
+                  <span className="mt-6 inline-flex min-h-12 items-center justify-center gap-3 rounded-xl bg-[#247db8] px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 group-hover:bg-[#175e91] sm:mt-8">
+                    Explore Bengaluru Properties
+                    <ArrowRight
+                      size={18}
+                      className="transition-transform duration-300 group-hover:translate-x-1"
+                    />
+                  </span>
+                </div>
+
+                {/* Property illustration */}
+                <div
+                  aria-hidden="true"
+                  className="relative mx-auto flex h-36 w-full max-w-sm items-center justify-center sm:h-44 md:h-full md:min-h-[230px] lg:min-h-[260px]"
+                >
+                  <div className="absolute bottom-3 h-5 w-4/5 rounded-[50%] bg-[#9fc9eb]/35 blur-md" />
+
+                  <div className="relative flex items-end gap-2 transition-transform duration-500 group-hover:scale-[1.04]">
+                    {/* Main house */}
+                    <div className="relative h-24 w-36 rounded-t-sm border border-[#b9cde0] bg-[#e9f3fc] shadow-lg sm:h-28 sm:w-44 lg:h-32 lg:w-48">
+                      {/* Roof */}
+                      <div className="absolute -top-7 -left-3 h-8 w-[calc(100%+24px)] border border-[#536b83] bg-[#435b73] [clip-path:polygon(8%_0,92%_0,100%_100%,0_100%)]" />
+
+                      {/* Windows */}
+                      <div className="absolute top-5 left-4 grid grid-cols-2 gap-3">
+                        <div className="h-7 w-6 border-2 border-[#9db6ce] bg-[#b9def7] sm:h-8 sm:w-7" />
+                        <div className="h-7 w-6 border-2 border-[#9db6ce] bg-[#b9def7] sm:h-8 sm:w-7" />
+                      </div>
+
+                      <div className="absolute top-5 right-4 h-7 w-6 border-2 border-[#9db6ce] bg-[#b9def7] sm:h-8 sm:w-7" />
+
+                      {/* Door */}
+                      <div className="absolute bottom-0 left-1/2 h-12 w-8 -translate-x-1/2 border border-[#8da9c4] bg-[#668eaf] sm:h-14 sm:w-9">
+                        <span className="absolute top-1/2 right-1.5 size-1 rounded-full bg-[#e5f3ff]" />
+                      </div>
+                    </div>
+
+                    {/* Side wing */}
+                    <div className="relative h-16 w-12 border border-[#b9cde0] bg-[#d8e9f8] sm:h-20 sm:w-14">
+                      <div className="absolute -top-4 -left-1 h-5 w-[calc(100%+8px)] bg-[#526b84] [clip-path:polygon(50%_0,100%_100%,0_100%)]" />
+                      <div className="absolute top-3 left-2 h-5 w-4 border border-[#9db6ce] bg-[#b9def7]" />
+                      <div className="absolute bottom-0 right-2 h-8 w-4 bg-[#668eaf]" />
+                    </div>
+                  </div>
+
+                  {/* Location label */}
+                  <div className="absolute right-0 bottom-0 rounded-lg border border-[#d1e5f7] bg-white/95 px-3 py-2 shadow-sm sm:right-2 sm:bottom-2">
+                    <p className="text-[12px] font-semibold uppercase tracking-[0.15em] text-[#5084ad]">
+                      Our featured locations - 1
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </section>
+        <section
+          id="about"
+          className="relative isolate overflow-hidden bg-white"
+        >
+          {/* Subtle background decoration */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-32 top-10 -z-10 h-80 w-80 rounded-full bg-[#eaf5ff] blur-3xl"
+          />
+
+          <section
+            id="about"
+            className="relative isolate overflow-hidden bg-white"
+          >
+            {/* Background decoration */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-32 top-10 -z-10 size-80 rounded-full bg-[#eaf5ff] blur-3xl"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -left-32 bottom-0 -z-10 size-72 rounded-full bg-[#f2f7ff] blur-3xl"
+            />
+
+            <div className="mx-auto grid max-w-[1280px] gap-12 px-5 py-16 sm:gap-16 sm:px-8 sm:py-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16 lg:py-28">
+              {/* LEFT: Brand introduction */}
+              <div className="relative z-10">
+                <div className="mb-5 inline-flex items-center gap-3">
+                  <span className="h-[2px] w-8 rounded-full bg-[#0874d1]" />
+                  <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#0874d1]">
+                    The OneStep Difference
+                  </p>
+                </div>
+
+                <h2 className="max-w-xl text-[34px] font-semibold leading-[1.12] tracking-[-0.045em] text-[#152b43] min-[420px]:text-[39px] sm:text-5xl lg:text-[52px]">
+                  Your next property.
+                  <span className="block text-[#0874d1]">One step closer.</span>
+                </h2>
+
+                <p className="mt-6 max-w-md text-sm leading-7 text-[#617286] sm:text-[15px]">
+                  Finding the right property should feel simple. Explore
+                  property options, discover locations that suit your needs, and
+                  connect with our team to take your next step with confidence.
+                </p>
+
+                {/* Primary action */}
+                <Link
+                  href="#properties"
+                  className="group relative isolate mt-8 inline-flex h-12 items-center gap-3 overflow-hidden rounded-full border border-[#0874d1] bg-[#0874d1] px-5 text-sm font-semibold text-white shadow-[0_8px_22px_rgba(8,116,209,0.16)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0874d1] sm:h-14 sm:px-6"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 z-10 rounded-full border-2 border-white [clip-path:inset(0_100%_0_0_round_999px)] transition-[clip-path] duration-500 ease-in-out group-hover:[clip-path:inset(0_0_0_0_round_999px)] motion-reduce:transition-none"
+                  />
+                  <House
+                    size={18}
+                    strokeWidth={1.8}
+                    className="relative z-20"
+                    aria-hidden="true"
+                  />
+                  <span className="relative z-20">Explore Properties</span>
+                  <ArrowRight
+                    size={16}
+                    className="relative z-20 transition-transform duration-300 group-hover:translate-x-1"
+                    aria-hidden="true"
+                  />
+                </Link>
+
+                {/* Brand principles */}
+                <div className="mt-10 flex items-center gap-3 border-t border-[#e5edf5] pt-6 sm:mt-12">
+                  <div className="flex shrink-0 -space-x-2" aria-hidden="true">
+                    <span className="flex size-10 items-center justify-center rounded-full border-2 border-white bg-[#eaf5ff] text-[#0874d1]">
+                      <House size={16} />
+                    </span>
+                    <span className="flex size-10 items-center justify-center rounded-full border-2 border-white bg-[#d8eafa] text-[#152b43]">
+                      <MapPin size={16} />
+                    </span>
+                    <span className="flex size-10 items-center justify-center rounded-full border-2 border-white bg-[#152b43] text-white">
+                      <Handshake size={16} />
+                    </span>
+                  </div>
+
+                  <div>
+                    <p className="text-xs font-semibold text-[#152b43] sm:text-sm">
+                      Search. Discover. Connect.
+                    </p>
+                    <p className="mt-1 text-[11px] leading-5 text-[#718195] sm:text-xs">
+                      A simpler way to move forward.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Three key steps */}
+  <div className="mt-8 hidden grid-cols-1 gap-3 sm:grid sm:grid-cols-3">
+  {[
+
+                    { number: "01", label: "Explore" },
+                    { number: "02", label: "Compare" },
+                    { number: "03", label: "Connect" },
+                  ].map((step) => (
+                    <div
+                      key={step.number}
+                      className="border-l-2 border-[#c7e2f9] pl-3"
+                    >
+                      <span className="block text-[10px] font-semibold tracking-[0.12em] text-[#0874d1]">
+                        {step.number}
+                      </span>
+                      <span className="mt-1 block text-xs font-medium text-[#152b43] sm:text-sm">
+                        {step.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* RIGHT: Floating, overlapping feature cards */}
+              <div className="relative mx-auto h-[430px] w-full max-w-[560px] sm:h-[520px] lg:h-[550px]">
+                {/* Soft glow behind cards */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-[20%] top-[20%] -z-10 size-64 rounded-full bg-[#eaf5ff] blur-3xl"
+                />
+
+                {[
+                  {
+                    number: "01",
+                    title: "Curated Choices",
+                    description: "Property options to match your search.",
+                    tags: ["PROPERTY", "EXPLORE"],
+                    icon: House,
+                    position: "left-[1%] top-[5%] z-10 w-[78%] -rotate-[7deg]",
+                    accent: "bg-[#dceeff]",
+                  },
+                  {
+                    number: "02",
+                    title: "Easy Discovery",
+                    description: "Browse listings with a simpler experience.",
+                    tags: ["DISCOVER", "COMPARE"],
+                    icon: Search,
+                    position: "right-[0%] top-[14%] z-20 w-[77%] rotate-[6deg]",
+                    accent: "bg-[#fff0d9]",
+                  },
+                  {
+                    number: "03",
+                    title: "Location Focus",
+                    description: "Explore areas that matter to you.",
+                    tags: ["LOCATIONS", "PROPERTY"],
+                    icon: MapPin,
+                    position: "left-[0%] top-[43%] z-30 w-[78%] rotate-[5deg]",
+                    accent: "bg-[#e8e3ff]",
+                  },
+                  {
+                    number: "04",
+                    title: "Enquiry Support",
+                    description: "Connect with our team about your needs.",
+                    tags: ["SUPPORT", "CONNECT"],
+                    icon: MessageCircle,
+                    position:
+                      "right-[0%] top-[61%] z-40 w-[77%] -rotate-[6deg]",
+                    accent: "bg-[#ffe1d8]",
+                  },
+                ].map((item) => {
+                  const FeatureIcon = item.icon;
+
+                  return (
+                    <div
+                      key={item.number}
+                      className={`group absolute min-w-0 ${item.position}`}
+                    >
+                      <div className="relative overflow-hidden rounded-[20px] border border-[#edf2f7] bg-white p-4 shadow-[0_16px_38px_rgba(44,62,100,0.12)] sm:rounded-[25px] sm:p-5">
+                        <div
+                          aria-hidden="true"
+                          className={`absolute inset-x-0 bottom-0 h-3 ${item.accent}`}
+                        />
+
+                        <div className="relative z-10">
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-2">
+                              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#eaf5ff] text-[#0874d1] sm:size-10">
+                                <FeatureIcon size={19} strokeWidth={1.8} />
+                              </span>
+                              <span className="text-[9px] font-bold tracking-[0.12em] text-[#0874d1] sm:text-[10px]">
+                                ONESTEP
+                              </span>
+                            </div>
+
+                            <span className="text-[10px] font-semibold text-[#9aabba]">
+                              {item.number}
+                            </span>
+                          </div>
+
+                          <h3 className="mt-4 text-[13px] font-semibold tracking-[-0.025em] text-[#152b43] sm:mt-5 sm:text-base">
+                            {item.title}
+                          </h3>
+
+                          <p className="mt-1.5 max-w-[250px] text-[10px] leading-5 text-[#718195] sm:text-xs sm:leading-6">
+                            {item.description}
+                          </p>
+
+                          <div className="mt-3 flex flex-wrap gap-1.5 pb-2 sm:mt-4 sm:gap-2">
+                            {item.tags.map((tag) => (
+                              <span
+                                key={tag}
+                                className="rounded-full border border-[#e5edf5] bg-white px-2 py-1 text-[7px] font-semibold tracking-wide text-[#526a83] sm:px-2.5 sm:text-[9px]"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        </section>
+      </main>
+      <section className="mx-auto max-w-[1280px] px-4 py-8 min-[360px]:px-5 sm:py-12 lg:px-8">
+        <Reveal>
+          <div className="relative overflow-hidden rounded-[18px] border border-[#f3c95f] bg-gradient-to-r from-[#fffdf8] via-[#fffefa] to-[#effaf2] px-5 py-7 sm:px-10 sm:py-9">
+            <div className="relative z-10 max-w-[760px]">
+              <p className="text-3xl font-semibold tracking-[-0.04em] text-[#ed1f2b] sm:text-4xl">
+                ODP<span className="text-[#e51f2b]"> L</span>oans
+              </p>
+              <h2 className="mt-4 text-[clamp(1.45rem,3vw,2.25rem)] font-semibold leading-tight text-[#070707]">
+                Compare Home Loan Offers from 40+ Banks
+              </h2>
+              <div className="mt-3 flex flex-wrap gap-x-7 gap-y-2 text-base text-[#636363] sm:text-lg">
+                <span className="inline-flex items-center gap-2">
+                  <Check className="size-5 rounded-full text-[#666]" /> Rates
+                  starting from <strong className="text-[#009c86]">7%</strong>
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <Check className="size-5 rounded-full text-[#666]" />{" "}
+                  <strong className="text-[#e5232b]">0%*</strong> Processing Fee
+                </span>
+              </div>
+              <p className="mt-7 text-xs font-medium uppercase tracking-wide text-[#a87518]">
+                Our banking partners
+              </p>
+
+              <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
+                {[
+                  {
+                    bank: "SBI",
+                    rate: "Starts at 7.25%",
+                    logo: "https://thebranvetica.com/assets/img/SBI_Logo.webp",
+                    alt: "State Bank of India logo",
+                  },
+                  {
+                    bank: "Canara Bank",
+                    rate: "Starts at 7.15%",
+                    logo: "https://www.google.com/s2/favicons?domain=canarabank.bank.in&sz=128",
+                    alt: "Canara Bank logo",
+                  },
+                  {
+                    bank: "Bank of Baroda",
+                    rate: "Starts at 7.2%",
+                    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPuf_6udo2drLRvycpVn3Vn74X7Gfzt77lsI203XDtKw&s",
+                    alt: "Bank of Baroda logo",
+                  },
+                  {
+                    bank: "Bank of India",
+                    rate: "Starts at 7.1%",
+                    logo: "https://companieslogo.com/img/orig/BANKINDIA.NS-e3d88e01.png?t=1720244490",
+                    alt: "Bank of India logo",
+                  },
+                ].map(({ bank, rate, logo, alt }) => (
+                  <div
+                    key={bank}
+                    className="group relative min-w-[145px] overflow-hidden rounded-xl border border-[#e6e6e6] bg-white px-3 py-3 text-center transition-colors duration-300 hover:border-[#b8b8b8]"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 z-10 rounded-xl border-2 border-black [clip-path:inset(0_100%_0_0_round_12px)] transition-[clip-path] duration-500 ease-in-out group-hover:[clip-path:inset(0_0_0_0_round_12px)] motion-reduce:transition-none"
+                    />
+
+                    <div className="relative z-0 flex h-10 items-center justify-center">
+                      <img
+                        src={logo}
+                        alt={alt}
+                        width={36}
+                        height={36}
+                        loading="lazy"
+                        className="size-9 object-contain"
+                      />
+                    </div>
+
+                    <p className="mt-2 text-sm font-bold text-black sm:text-base">
+                      {bank}
+                    </p>
+
+                    <p className="mt-1 whitespace-nowrap text-[10px] font-semibold text-black">
+                      {rate}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-7 flex flex-wrap items-center gap-7">
+                <Link
+                  href="#contact"
+                  className="group inline-flex items-center gap-2 text-base font-semibold text-[#e5232b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e5232b]"
+                >
+                  <span className="relative py-1">
+                    Explore Bank Offers
+                    <span className="absolute inset-x-0 -bottom-0.5 h-[2px] origin-left scale-x-0 rounded-full bg-[#e5232b] transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                  </span>
+                  <ArrowRight className="size-5 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+
+                <Link
+                  href="#contact"
+                  className="group relative isolate inline-flex items-center justify-center overflow-hidden rounded-full border border-[#e5232b] bg-[#e5232b] px-7 py-3 text-sm font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e5232b] sm:px-9"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 z-10 rounded-full border-2 border-white [clip-path:inset(0_100%_0_0_round_999px)] transition-[clip-path] duration-500 ease-in-out group-hover:[clip-path:inset(0_0_0_0_round_999px)] motion-reduce:transition-none"
+                  />
+                  <span className="relative z-20 inline-flex items-center gap-2">
+                    Check Your Eligibility
+                    <ArrowRight
+                      size={16}
+                      className="transition-transform duration-300 group-hover:translate-x-1"
+                    />
+                  </span>
+                </Link>
+              </div>
+            </div>
+            <div
+              className="pointer-events-none absolute -right-8 bottom-0 hidden h-52 w-80 rounded-t-[100%] bg-[#dff2e5] opacity-60 lg:block"
+              aria-hidden="true"
+            />
+          </div>
+        </Reveal>
+      </section>
+      <section className=" text-[#111111]" aria-label="More ways to connect">
+        <div className="mx-auto max-w-[1280px] px-0 lg:px-8">
+          <div className="px-4 pb-5 pt-8 sm:px-5 lg:px-0 lg:pb-2 lg:pt-10">
+            <div className="mb-7">
+              <h2 className="text-[28px] font-normal tracking-[-0.04em] text-[#17202a] sm:text-[30px]">
+                Advice &amp; Tools
+              </h2>
+              <div
+                className="mt-3 h-1 w-12 rounded-full bg-[#11b6c9]"
+                aria-hidden="true"
+              />
+            </div>
+            <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-5 lg:overflow-visible lg:px-0">
+              {[
+                {
+                  title: "EMI Calculator",
+                  description:
+                    "Know how much you'll have to pay every month on your loan",
+                  icon: Calculator,
+                },
+                {
+                  title: "Best Home Loan Offers",
+                  description:
+                    "Get the best bank offers curated just for your profile",
+                  icon: Building2,
+                },
+                {
+                  title: "Interiors Budget Estimator",
+                  description:
+                    "Know the cost of getting your full/partial home interiors done",
+                  icon: House,
+                },
+                {
+                  title: "Rates & Trends",
+                  description:
+                    "Know all about Property Rates & Trends in your city",
+                  icon: ChartNoAxesColumnIncreasing,
+                },
+              ].map(({ title, description, icon: Icon }) => (
+                <Link
+                  href="#contact"
+                  key={title}
+                  className="group flex min-h-[310px] min-w-[300px] snap-start flex-col rounded-[10px] border border-[#d9d9d9] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#11b6c9] hover:shadow-[0_12px_26px_rgba(0,0,0,0.08)] sm:p-6 lg:min-h-[310px] lg:min-w-0"
+                >
+                  <span className="flex size-14 items-center justify-center text-[#303030]">
+                    <Icon className="size-12 stroke-[1.7]" aria-hidden="true" />
+                  </span>
+                  <h3 className="mt-7 text-[22px] font-semibold leading-tight tracking-[-0.035em] text-[#383838]">
+                    {title}
+                  </h3>
+                  <p className="mt-4 max-w-[290px] text-[17px] leading-[1.55] text-[#5a5a5a]">
+                    {description}
+                  </p>
+                  <span className="mt-auto pt-6 text-[18px] font-semibold text-[#e5232b]">
+                    View now{" "}
+                    <ArrowRight className="ml-1 inline size-5 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+  <div className="flex flex-col items-center justify-center gap-3 bg-[#eaf5ff] px-4 py-5 sm:flex-row sm:gap-4 lg:bg-transparent lg:px-0 lg:py-8">
+  {/* BUY — White animated outline */}
+  <Link
+  href="#properties"
+  className="group relative inline-flex min-h-[52px] w-full max-w-[240px] items-center justify-center gap-3 overflow-hidden rounded-full border border-[#0874d1] bg-[#0874d1] px-5 text-sm font-semibold text-white sm:min-h-[64px] sm:w-auto sm:min-w-[190px] sm:justify-between sm:gap-4 sm:px-6 sm:text-base"
+  >
+              <Building2 className="size-7 shrink-0" />
+              <span className="flex-1 whitespace-nowrap">Buy Property</span>
+              <ArrowRight className="size-6 shrink-0" />
+
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 rounded-full border-2 border-white [clip-path:inset(0_100%_0_0_round_999px)] transition-[clip-path] duration-500 ease-in-out group-hover:[clip-path:inset(0_0_0_0_round_999px)]"
+              />
+            </Link>
+
+            {/* SELL — Dark-blue animated outline */}
+            <Link
+              href="#contact"
+  className="group relative inline-flex min-h-[52px] w-full max-w-[240px] items-center justify-center gap-3 overflow-hidden rounded-full border border-white bg-white px-5 text-sm font-semibold text-[#0874d1] sm:min-h-[64px] sm:w-auto sm:min-w-[190px] sm:justify-between sm:gap-4 sm:px-6 sm:text-base"
+  >
+              <Building2 className="size-7 shrink-0" />
+              <span className="flex-1 whitespace-nowrap">Sell Property</span>
+              <ArrowRight className="size-6 shrink-0" />
+
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 rounded-full border-2 border-[#064b91] [clip-path:inset(0_100%_0_0_round_999px)] transition-[clip-path] duration-500 ease-in-out group-hover:[clip-path:inset(0_0_0_0_round_999px)]"
+              />
+            </Link>
+          </div>
+
+          <div className=" px-5 py-5 text-center lg:rounded-sm lg:px-8">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#5f6368]">
+              Why people choose us
+            </p>
+            <div className="mx-auto mt-3 grid max-w-md grid-cols-2 gap-2">
+              <div className="rounded-md border border-[#d7dde2] bg-white px-3 py-3">
+                <p className="text-xl font-semibold tracking-[-0.04em] text-[#0874d1]">
+                  100+
+                </p>
+                <p className="mt-0.5 text-[10px] font-medium text-[#5f6368]">
+                  Happy clients
+                </p>
+              </div>
+              <div className="rounded-md border border-[#d7dde2] bg-white px-3 py-3">
+                <p className="text-xl font-semibold tracking-[-0.04em] text-[#22a447]">
+                  100%
+                </p>
+                <p className="mt-0.5 text-[10px] font-medium text-[#5f6368]">
+                  Registered company
+                </p>
+              </div>
+            </div>
+            <section className="mx-auto max-w-[1280px] px-4 pb-8 pt-2 min-[360px]:px-5 sm:pb-12 lg:px-8">
+              <Reveal>
+                <div className="relative overflow-hidden rounded-[18px] bg-gradient-to-r from-[#e9fbff] via-[#f5fdff] to-white px-5 py-6 sm:px-8 sm:py-8 lg:px-10">
+                  <div className="relative z-10 flex flex-col items-start gap-5 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                      <p className="max-w-[700px] text-[clamp(1.35rem,3vw,2rem)] leading-[1.15] tracking-[-0.035em] text-[#243442]">
+                        Plan hassle-free{" "}
+                        <strong>Site Visits &amp; Evaluate Projects</strong>{" "}
+                        with <strong>ODP</strong>
+                      </p>
+
+                      <div className="mt-3 inline-flex items-center gap-3 rounded-xl border border-[#f3e4b9] bg-[#fff8e5] px-3 py-2.5 text-sm text-[#17202a] sm:text-base">
+                        <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-[#17202a] shadow-sm">
+                          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white shadow-sm">
+                            <CarFront
+                              size={24}
+                              strokeWidth={2}
+                              className="text-[#0874d1] drop-shadow-[2px_1px_0px_#ffad42]"
+                              aria-hidden="true"
+                            />
+                          </span>
+                        </span>
+
+                        <span>
+                          Get <strong>Free Cab</strong> for every site visit!
+                        </span>
+                      </div>
+                    </div>
+
+                    <Link
+                      href="#contact"
+                      className="group relative isolate inline-flex shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-[#e5232b] bg-[#e5232b] px-7 py-3 text-sm font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e5232b] sm:px-9 sm:text-base"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 z-10 rounded-full border-2 border-white [clip-path:inset(0_100%_0_0_round_999px)] transition-[clip-path] duration-500 ease-in-out group-hover:[clip-path:inset(0_0_0_0_round_999px)] motion-reduce:transition-none"
+                      />
+
+                      <span className="relative z-20 inline-flex items-center gap-2">
+                        Find out how
+                        <ArrowRight
+                          size={16}
+                          className="transition-transform duration-300 group-hover:translate-x-1"
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </Link>
+                  </div>
+                  <div
+                    className="pointer-events-none absolute -right-8 -top-12 h-52 w-72 rounded-full bg-[#dff7fb] opacity-60 blur-3xl"
+                    aria-hidden="true"
+                  />
+                </div>
+              </Reveal>
+            </section>
+          </div>
+
+          <div className="mb-10 mt-7 px-5 py-4 text-center lg:border-t lg:border-[#d8dadd]">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#5f6368]">
+              Follow us
+            </p>
+            <div className="mt-2 flex justify-center items-center gap-2">
+              <Link
+                aria-label="Facebook"
+                href="#contact"
+                className="flex size-6 items-center justify-center"
+              >
+                <img
+                  src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/facebook/default.svg"
+                  alt=""
+                  className="size-6"
+                />
+              </Link>
+              <Link
+                aria-label="Instagram"
+                href="#contact"
+                className="flex size-6 items-center justify-center"
+              >
+                <img
+                  src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/instagram/default.svg"
+                  alt=""
+                  className="size-6"
+                />
+              </Link>
+              <Link
+                aria-label="YouTube"
+                href="#contact"
+                className="flex size-6 items-center justify-center"
+              >
+                <img
+                  src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/youtube/default.svg"
+                  alt=""
+                  className="size-6"
+                />
+              </Link>
+              <Link
+                aria-label="X"
+                href="#contact"
+                className="flex size-6 items-center justify-center"
+              >
+                <img
+                  src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/x/default.svg"
+                  alt=""
+                  className="size-6"
+                />
+              </Link>
+              <Link
+                aria-label="WhatsApp"
+                href="#contact"
+                className="flex size-6 items-center justify-center"
+              >
+                <img
+                  src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/whatsapp/default.svg"
+                  alt=""
+                  className="size-6"
+                />
+              </Link>
+              <Link
+                aria-label="LinkedIn"
+                href="#contact"
+                className="flex size-6 items-center justify-center"
+              >
+                <img
+                  src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/linkedin/default.svg"
+                  alt=""
+                  className="size-6"
+                />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer
+        id="contact"
+        className="border-t border-[#0874d1] bg-[#0874d1] text-white"
+      >
+        <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
+          <div>
+            <Link
+              href="#top"
+              className="inline-flex items-center text-[#0874d1]"
+              aria-label="ODP home"
+            >
+              <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
+                odp
+              </span>
+            </Link>
+            <p className="mt-5 max-w-xs text-sm leading-6 text-[#5f6368]">
+              Thoughtfully selected homes for the way you want to live.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
+              Discover
+            </h3>
+            <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
+              <Link href="#properties">Buy Flats</Link>
+              <Link href="#properties">Properties</Link>
+              <Link href="#locations">Locations</Link>
+            </div>
+          </div>
+          <div>
+            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
+              Company
+            </h3>
+            <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
+              <Link href="#about">About Us</Link>
+              <Link href="#contact">Contact</Link>
+              <Link href="#contact">List Property</Link>
+            </div>
+          </div>
+          <div>
+            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
+              Get in touch
+            </h3>
+            <p className="mt-5 text-sm leading-6 text-[#5f6368]">
+              <a
+                href="mailto:help.onestepdreamproperty@gmail.com"
+                className="transition-colors hover:text-[#0874d1]"
+              >
+                help.onestepdreamproperty@gmail.com
+              </a>
+              <br />
+              <a
+                href="tel:+91 7411535782"
+                className="transition-colors hover:text-[#0874d1]"
+              >
+                +91 7411535782
+              </a>
+            </p>
+          </div>
+        </div>
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 border-t border-white/30 px-5 py-6 text-xs text-white lg:text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
+          <span>© 2026 OneStep Dream Property. All rights reserved.</span>
+          <span>Privacy · Terms</span>
+        </div>{" "}
+        <div className="mx-auto mt-4 w-full max-w-[1280px] border-t border-white/20 px-5 pb-8 pt-6 sm:mt-6 sm:px-8 sm:pb-10 sm:pt-8">
+          <p className="text-xs leading-6 text-white/80 sm:text-sm sm:leading-7">
+            <strong className="font-semibold text-white">Disclaimer:</strong>{" "}
+            ODP Services acts solely as an intermediary platform for advertising
+            properties and is not a party to or responsible for transactions
+            between buyers and sellers. All offers, discounts, and property
+            details are subject to verification with the respective seller or
+            developer.
+          </p>
+        </div>
+      </footer>
+
+      {/* chatbot */}
+
+      <div className="fixed inset-x-4 bottom-4 z-[75] flex flex-col items-end gap-4 sm:inset-x-auto sm:bottom-6 sm:right-7">
+        {chatOpen && (
+          <section
+            role="dialog"
+            aria-label="ODP property assistant"
+            className="
+        flex max-h-[min(560px,calc(100svh-7rem))]
+        w-full flex-col overflow-hidden rounded-2xl
+        border border-[#e3eaf1] bg-white
+        text-[#152b43]
+        shadow-[0_16px_55px_rgba(21,43,67,0.12)]
+        sm:w-[370px]
+      "
+          >
+            {/* Header */}
+            <div className="flex shrink-0 items-center justify-between border-b border-[#edf1f5] bg-[#dceaf6] px-5 py-4">
+              <div className="flex min-w-0 items-center gap-3  ">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-full text-[#0874d1]">
+                  <Bot className="size-5" strokeWidth={1.7} />
+                </div>
+
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold tracking-[-0.02em]">
+                    ODP Assistant
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                aria-label="Close chatbot"
+                onClick={() => setChatOpen(false)}
+                className="flex size-9 shrink-0 items-center justify-center text-[#8292a3] transition-colors hover:text-[#152b43]"
+              >
+                <X className="size-[18px]" strokeWidth={1.7} />
+              </button>
+            </div>
+
+            {/* Conversation */}
+            <div className="min-h-0 flex-1 space-y-5 overflow-y-auto bg-white p-5">
+              <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#9aa8b7]">
+                Welcome to ODP
+              </div>
+
+              <div className="max-w-[290px] rounded-r-xl rounded-bl-xl rounded-tl-sm bg-[#f4f8fc] px-4 py-3.5">
+                <p className="text-[13px] leading-[1.8] text-[#52677d]">
+                  Hello! Welcome to OneStep Dream Property. How can we help you
+                  find your next home?
+                </p>
+              </div>
+
+              <div className="pt-1">
+                <p className="mb-3 text-[11px] font-medium text-[#8292a3]">
+                  How can we help?
+                </p>
+
+                <div className="space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      document
+                        .getElementById("properties")
+                        ?.scrollIntoView({ behavior: "smooth" });
+                      setChatOpen(false);
+                    }}
+                    className="
+                group flex w-full items-center justify-between
+                rounded-lg border border-[#e3eaf1] bg-white
+                px-4 py-3.5 text-left
+                transition-colors duration-200
+                hover:border-[#a9cfee]
+              "
+                  >
+                    <span>
+                      <span className="block text-[13px] font-medium text-[#152b43]">
+                        Explore properties
+                      </span>
+                      <span className="mt-1 block text-[11px] text-[#8292a3]">
+                        Find a place that feels like home
+                      </span>
+                    </span>
+
+                    <ArrowRight
+                      className="size-4 shrink-0 text-[#8292a3] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#0874d1]"
+                      strokeWidth={1.7}
+                    />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      document
+                        .getElementById("contact")
+                        ?.scrollIntoView({ behavior: "smooth" });
+                      setChatOpen(false);
+                    }}
+                    className="
+                group flex w-full items-center justify-between
+                rounded-lg border border-[#e3eaf1] bg-white
+                px-4 py-3.5 text-left
+                transition-colors duration-200
+                hover:border-[#a9cfee]
+              "
+                  >
+                    <span>
+                      <span className="block text-[13px] font-medium text-[#152b43]">
+                        Speak with our team
+                      </span>
+                      <span className="mt-1 block text-[11px] text-[#8292a3]">
+                        Get help with your property search
+                      </span>
+                    </span>
+
+                    <ArrowRight
+                      className="size-4 shrink-0 text-[#8292a3] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#0874d1]"
+                      strokeWidth={1.7}
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="shrink-0 border-t border-[#edf1f5] bg-white px-5 py-3">
+              <p className="text-center text-[10px] tracking-wide text-[#9aa8b7]">
+                OneStep Dream Property
+              </p>
+            </div>
+          </section>
+        )}
+
+        {/* Floating launcher */}
+        <button
+          type="button"
+          aria-label={chatOpen ? "Close ODP assistant" : "Open ODP assistant"}
+          aria-expanded={chatOpen}
+          onClick={() => setChatOpen((open) => !open)}
+          className="
+      group flex size-12 shrink-0 items-center justify-center
+      self-end rounded-full border border-[#dceaf6]
+      bg-white text-[#0874d1]
+      shadow-[0_5px_22px_rgba(21,43,67,0.12)]
+      transition-all duration-300
+      hover:border-[#0874d1] hover:shadow-[0_8px_28px_rgba(21,43,67,0.16)]
+      sm:size-14
+    "
+        >
+          {chatOpen ? (
+            <X className="size-5" strokeWidth={1.7} />
+          ) : (
+            <Bot
+              className="size-[22px] transition-transform duration-300 group-hover:scale-105"
+              strokeWidth={1.6}
+            />
+          )}
+        </button>
+      </div>
+
+      {/* {cookieConsent === false && ( */}
+
+      {cookieConsent === false && (
+        <aside
+          role="dialog"
+          aria-label="Cookie preferences"
+          aria-modal="false"
+          className="
+      fixed inset-x-0 bottom-0 z-[80] p-3
+      sm:inset-x-4 sm:bottom-4 sm:rounded-2xl sm:border sm:p-4
+      lg:inset-x-8 lg:bottom-6
+    "
+        >
+          <div className="relative mx-auto max-w-[1280px] rounded-xl bg-white px-5 py-5 sm:px-6 sm:py-5">
+            {/* Close */}
+            <button
+              type="button"
+              aria-label="Close cookie preferences"
+              onClick={() => saveCookieConsent("essential")}
+              className="
+          absolute right-4 top-4 flex size-8 items-center
+          justify-center text-[#152b43]
+          transition-colors hover:text-[#0874d1]
+        "
+            >
+              <X className="size-5" />
+            </button>
+
+            {/* Heading */}
+            <h2 className="pr-10 text-lg font-semibold tracking-tight text-[#152b43] sm:text-xl">
+              Let&apos;s Talk Cookies 🍪
+            </h2>
+
+            {/* Description */}
+            <p className="mt-3 max-w-5xl pr-2 text-xs leading-[1.6] text-[#303b46] sm:text-[13px]">
+              We use cookies to enhance your browsing experience, personalize
+              content, and understand site performance. By clicking &quot;Accept
+              all&quot;, you consent to the use of cookies that help us deliver
+              tailored content and improve how our site works.
+            </p>
+
+            <p className="mt-2 text-xs leading-[1.6] text-[#303b46] sm:text-[13px]">
+              You can view our full{" "}
+              <Link
+                href="/privacy-policy"
+                className="font-semibold text-[#152b43] underline underline-offset-2 transition-colors hover:text-[#0874d1]"
+              >
+                Cookie Policy
+              </Link>{" "}
+              for more details and update or disable your preferences anytime in
+              your browser settings.
+            </p>
+
+            {/* Actions */}
+            <div className="mt-5 flex flex-wrap items-center justify-end gap-2.5 sm:gap-3">
+              <button
+                type="button"
+                onClick={() => saveCookieConsent("accepted")}
+                className="
+            inline-flex h-10 items-center justify-center
+            rounded-full bg-[#0874d1] px-5
+            text-xs font-semibold text-white
+            transition-colors duration-200 hover:bg-[#075da8]
+          "
+              >
+                Accept all
+              </button>
+
+              <button
+                type="button"
+                onClick={() => saveCookieConsent("essential")}
+                className="
+            inline-flex h-10 items-center justify-center
+            rounded-full border border-[#cbd5df]
+            bg-white px-5 text-xs font-medium text-[#152b43]
+            transition-colors duration-200
+            hover:border-[#0874d1] hover:text-[#0874d1]
+          "
+              >
+                Essential only
+              </button>
+
+              <button
+                type="button"
+                onClick={() => saveCookieConsent("essential")}
+                className="
+            inline-flex h-10 items-center justify-center gap-2
+            rounded-full border border-[#cbd5df]
+            bg-white px-5 text-xs font-medium text-[#152b43]
+            transition-colors duration-200
+            hover:border-[#0874d1] hover:text-[#0874d1]
+          "
+              >
+                <SlidersHorizontal className="size-3.5" />
+                Customize
+              </button>
+            </div>
+          </div>
+        </aside>
+      )}
+    </div>
+  );
+}
+
+export function SearchIcon() {
+  return <SlidersHorizontal size={15} />;
+}
+export function CheckIcon() {
+  return <Check size={15} />;
+}
+export function BedIcon() {
+  return <BedDouble size={15} />;
+}
