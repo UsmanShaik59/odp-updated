@@ -107,6 +107,8 @@ export function BookAssetHost({
           ref={frame}
           title={title}
           src={src}
+          aria-hidden={state !== "ready"}
+          tabIndex={state === "ready" ? 0 : -1}
           sandbox="allow-scripts"
           style={{
             position: "absolute",
@@ -118,26 +120,37 @@ export function BookAssetHost({
           }}
         />
       )}
-      {mounted && state === "loading" && (
+      {mounted && state !== "ready" && (
         <div
-          className="absolute inset-0 z-10 grid place-items-center p-6 text-center text-sm"
+          className="working-volume-fallback absolute inset-0 z-10"
           role="status"
           style={fallbackStyle}
         >
-          Loading the interactive 3D volume…
-        </div>
-      )}
-      {mounted && state === "error" && (
-        <div
-          className="absolute inset-0 z-10 grid place-items-center p-6 text-center"
-          role="status"
-          style={fallbackStyle}
-        >
-          <div>
-            <p className="font-semibold">3D preview unavailable</p>
-            <p className="mt-2 max-w-sm text-sm leading-6 opacity-75">
-              This browser could not start the interactive volume. The About Us
-              information continues below.
+          <div
+            className="working-volume-fallback__books"
+            aria-hidden="true"
+          >
+            <div className="working-volume-fallback__book working-volume-fallback__book--one">
+              <span>WORKING<br />VOLUME 01</span>
+            </div>
+            <div className="working-volume-fallback__book working-volume-fallback__book--two">
+              <span>WORKING<br />VOLUME 02</span>
+            </div>
+            <div className="working-volume-fallback__book working-volume-fallback__book--three">
+              <span>WORKING<br />VOLUME 03</span>
+            </div>
+            <div className="working-volume-fallback__book working-volume-fallback__book--four">
+              <span>WORKING<br />VOLUME 04</span>
+            </div>
+          </div>
+          <div className="text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em]">
+              Working Volumes
+            </p>
+            <p className="mt-1 text-xs opacity-70">
+              {state === "error"
+                ? "Showing the cover artwork while 3D is unavailable."
+                : "Loading the interactive preview…"}
             </p>
           </div>
         </div>
