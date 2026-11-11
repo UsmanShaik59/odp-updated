@@ -90,7 +90,7 @@ export function PropertyDetails({ property }: { property: Property }) {
 
   return (
     <div className="min-h-screen bg-white text-[#111111]">
-      <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-[#e8edf3] bg-white/95 text-[#152b43] shadow-[0_2px_16px_rgba(21,43,67,0.04)] backdrop-blur-xl">
+      <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-[#e8edf3] bg-white text-[#152b43] shadow-[0_2px_16px_rgba(21,43,67,0.04)]">
         <div className="mx-auto flex h-[64px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
           <button
             type="button"
