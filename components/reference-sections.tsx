@@ -35,7 +35,7 @@ export function ReferenceSections() {
               <span className="ml-3" aria-hidden="true">🚕</span>
             </p>
           </div>
-          <Link href="/contact" className="inline-flex shrink-0 items-center justify-center rounded-full bg-[#e3232d] px-7 py-3 text-sm font-bold text-white transition-transform hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e3232d]">
+          <Link href="#contact" className="inline-flex shrink-0 items-center justify-center rounded-full bg-[#e3232d] px-7 py-3 text-sm font-bold text-white transition-transform hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e3232d]">
             Find out how
           </Link>
         </div>
@@ -61,7 +61,7 @@ export function ReferenceSections() {
           </div>
           <div className="mt-7 flex flex-wrap items-center gap-5">
             <Link href="#properties" className="inline-flex items-center gap-2 text-sm font-semibold text-[#e3232d]">Explore Bank Offers <ArrowRight className="size-5" /></Link>
-            <Link href="/contact" className="rounded-full bg-[#e3232d] px-7 py-3 text-sm font-bold text-white transition-transform hover:scale-[1.03]">Check Your Eligibility</Link>
+            <Link href="#contact" className="rounded-full bg-[#e3232d] px-7 py-3 text-sm font-bold text-white transition-transform hover:scale-[1.03]">Check Your Eligibility</Link>
           </div>
         </div>
         <div className="pointer-events-none absolute -right-10 bottom-[-70px] h-52 w-72 rounded-full bg-[#d8efd1] blur-2xl" aria-hidden="true" />

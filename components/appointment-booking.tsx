@@ -1030,6 +1030,81 @@ function PageShell({ children }: { children: ReactNode }) {
 
       {children}
 
+      <footer
+        id="contact"
+        className="border-t border-[#0874d1] bg-[#0874d1] text-white"
+      >
+        <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
+          <div>
+            <Link
+              href="#top"
+              className="inline-flex items-center text-[#0874d1]"
+              aria-label="ODP home"
+            >
+              <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
+                odp
+              </span>
+            </Link>
+            <p className="mt-5 max-w-xs text-sm leading-6 text-[#5f6368]">
+              Thoughtfully selected homes for the way you want to live.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
+              Discover
+            </h3>
+            <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
+              <Link href="#properties">Buy Flats</Link>
+              <Link href="#properties">Properties</Link>
+              <Link href="#locations">Locations</Link>
+            </div>
+          </div>
+          <div>
+            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
+              Company
+            </h3>
+            <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
+              <Link href="#about">About Us</Link>
+              <Link href="#contact">Contact</Link>
+              <Link href="#contact">List Property</Link>
+            </div>
+          </div>
+          <div>
+            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
+              Get in touch
+            </h3>
+            <p className="mt-5 text-sm leading-6 text-[#5f6368]">
+              <a
+                href="mailto:help.onestepdreamproperty@gmail.com"
+                className="transition-colors hover:text-[#0874d1]"
+              >
+                help.onestepdreamproperty@gmail.com
+              </a>
+              <br />
+              <a
+                href="tel:+91 7411535782"
+                className="transition-colors hover:text-[#0874d1]"
+              >
+                +91 7411535782
+              </a>
+            </p>
+          </div>
+        </div>
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 border-t border-white/30 px-5 py-6 text-xs text-white lg:text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
+          <span>© 2026 OneStep Dream Property. All rights reserved.</span>
+          <span>Privacy · Terms</span>
+        </div>{" "}
+        <div className="mx-auto mt-4 w-full max-w-[1280px] border-t border-white/20 px-5 pb-8 pt-6 sm:mt-6 sm:px-8 sm:pb-10 sm:pt-8">
+          <p className="text-xs leading-6 text-white/80 sm:text-sm sm:leading-7">
+            <strong className="font-semibold text-white">Disclaimer:</strong>{" "}
+            ODP Services acts solely as an intermediary platform for advertising
+            properties and is not a party to or responsible for transactions
+            between buyers and sellers. All offers, discounts, and property
+            details are subject to verification with the respective seller or
+            developer.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
