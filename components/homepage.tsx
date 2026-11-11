@@ -1272,8 +1272,13 @@ export function HomePage() {
                 Our banking partners
               </p>
 
-              <div data-gsap-drag className="-mx-4 mt-4 grid grid-flow-col auto-cols-[min(78vw,220px)] snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
-                {[
+              <div
+                data-gsap-drag
+                role="region"
+                aria-label="Bank offers, scroll horizontally to view each bank"
+                tabIndex={0}
+                className="-mx-4 mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4"
+              >                {[
                   {
                     bank: "SBI",
                     rate: "Starts at 7.25%",
@@ -1301,7 +1306,7 @@ export function HomePage() {
                 ].map(({ bank, rate, logo, alt }) => (
                   <div
                     key={bank}
-                    className="group relative w-full min-w-0 snap-start overflow-hidden rounded-xl border border-[#e6e6e6] bg-white px-3 py-3 text-center transition-colors duration-300 hover:border-[#b8b8b8] sm:snap-none"
+                    className="group relative w-[min(78vw,220px)] shrink-0 snap-start overflow-hidden rounded-xl border border-[#e6e6e6] bg-white px-3 py-3 text-center transition-colors duration-300 hover:border-[#b8b8b8] sm:w-auto sm:min-w-0 sm:shrink sm:snap-none"
                   >
                     <span
                       aria-hidden="true"
