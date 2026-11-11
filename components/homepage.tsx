@@ -2,7 +2,14 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { gsap } from "gsap";
+import { Draggable } from "gsap/Draggable";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import { Flip } from "gsap/Flip";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+import { Observer } from "gsap/Observer";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import { properties } from "@/lib/properties";
@@ -38,7 +45,17 @@ import {
   X,
 } from "lucide-react";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(
+  useGSAP,
+  Draggable,
+  DrawSVGPlugin,
+  Flip,
+  MotionPathPlugin,
+  Observer,
+  ScrollToPlugin,
+  ScrollTrigger,
+  SplitText,
+);
 
 const locations = [
   { name: "Bengaluru", count: "128 properties" },
@@ -66,25 +83,62 @@ function Reveal({
 
     const isHeroCopy = element.classList.contains("hero-copy");
     const heroItems = isHeroCopy ? element.firstElementChild?.children : null;
-    const targets = heroItems?.length ? heroItems : element;
+    const propertyCards = element.querySelectorAll<HTMLElement>("[data-gsap-card]");
+    const scrollTrigger = { trigger: element, start: "top 88%", once: true };
 
-    gsap.fromTo(
-      targets,
-      { autoAlpha: 0, y: 26 },
-      {
-        autoAlpha: 1,
-        y: 0,
-        duration: 0.78,
-        delay: delay / 1000,
-        ease: "power3.out",
-        stagger: isHeroCopy ? 0.085 : 0,
-        scrollTrigger: {
-          trigger: element,
-          start: "top 88%",
-          once: true,
+    if (propertyCards.length) {
+      gsap.fromTo(
+        propertyCards,
+        { autoAlpha: 0, y: 58, scale: 0.94, rotateX: 5, transformPerspective: 900 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          rotateX: 0,
+          duration: 0.95,
+          ease: "power3.out",
+          stagger: 0.12,
+          scrollTrigger,
         },
-      },
-    );
+      );
+    } else {
+      gsap.fromTo(
+        heroItems?.length ? heroItems : element,
+        { autoAlpha: 0, y: 38, scale: isHeroCopy ? 1 : 0.985 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.9,
+          delay: delay / 1000,
+          ease: "power3.out",
+          stagger: isHeroCopy ? 0.1 : 0,
+          scrollTrigger,
+        },
+      );
+    }
+
+    if (isHeroCopy) {
+      const title = element.querySelector<HTMLElement>("[data-gsap-title]");
+      if (title) {
+        SplitText.create(title, {
+          type: "words",
+          wordsClass: "gsap-hero-word",
+          aria: "auto",
+          onSplit: (split) =>
+            gsap.from(split.words, {
+              autoAlpha: 0,
+              yPercent: 115,
+              rotateX: -35,
+              transformOrigin: "50% 100%",
+              duration: 0.95,
+              delay: 0.18,
+              ease: "power4.out",
+              stagger: 0.075,
+            }),
+        });
+      }
+    }
   }, { scope: ref });
 
   return (
@@ -469,6 +523,202 @@ export function HomePage() {
     window.addEventListener("hashchange", scrollToHash);
     return () => window.removeEventListener("hashchange", scrollToHash);
   }, []);
+  useGSAP(() => {
+    const root = pageRef.current;
+    if (!root || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const draggables = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-gsap-drag]"),
+    )
+      .filter((rail) => rail.scrollWidth > rail.clientWidth + 8)
+      .flatMap((rail) =>
+        Draggable.create(rail, {
+          type: "scroll",
+          lockAxis: true,
+          edgeResistance: 0.82,
+          minimumMovement: 6,
+          dragClickables: false,
+          allowNativeTouchScrolling: true,
+          cursor: "grab",
+          activeCursor: "grabbing",
+        }),
+      );
+
+    const featureStack = root.querySelector<HTMLElement>("[data-feature-stack]");
+    const featureCards = featureStack?.querySelectorAll<HTMLElement>("[data-feature-card]");
+    if (featureStack && featureCards?.length) {
+      gsap.set(featureCards, {
+        x: (index) => (index % 2 === 0 ? 78 : -78),
+        y: (index) => (index < 2 ? 56 : -52),
+        rotation: (index) => (index % 2 === 0 ? 7 : -7),
+        scale: 0.9,
+      });
+      const featureState = Flip.getState(featureCards);
+      gsap.set(featureCards, { clearProps: "transform" });
+      gsap.set(featureCards, { autoAlpha: 0 });
+
+      const featureReveal = gsap.timeline({
+        scrollTrigger: {
+          trigger: featureStack,
+          start: "top 82%",
+          once: true,
+        },
+      });
+      featureReveal.add(
+        Flip.from(featureState, {
+          duration: 1.15,
+          stagger: 0.1,
+          ease: "power3.inOut",
+        }),
+        0,
+      );
+      featureReveal.to(
+        featureCards,
+        { autoAlpha: 1, duration: 0.5, stagger: 0.1, ease: "power2.out" },
+        0.12,
+      );
+    }
+
+    const path = root.querySelector<SVGPathElement>("[data-motion-path]");
+    const orbitDot = root.querySelector<SVGCircleElement>("[data-motion-dot]");
+    const heroStage = root.querySelector<HTMLElement>("[data-hero-stage]");
+    const heroArt = root.querySelector<HTMLElement>("[data-hero-art]");
+
+    if (path && orbitDot) {
+      gsap.fromTo(
+        path,
+        { drawSVG: "0%" },
+        {
+          drawSVG: "100%",
+          duration: 2.4,
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: heroStage ?? path,
+            start: "top 80%",
+            once: true,
+          },
+        },
+      );
+      gsap.to(orbitDot, {
+        motionPath: { path, align: path, alignOrigin: [0.5, 0.5] },
+        duration: 13,
+        repeat: -1,
+        ease: "none",
+      });
+    }
+
+    const progressBar = root.querySelector<HTMLElement>("[data-scroll-progress]");
+    if (progressBar) {
+      ScrollTrigger.create({
+        start: 0,
+        end: "max",
+        onUpdate: (trigger) => gsap.set(progressBar, { scaleX: trigger.progress }),
+      });
+    }
+
+    const cardCleanup: Array<() => void> = [];
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      root.querySelectorAll<HTMLElement>("[data-gsap-card]").forEach((card) => {
+        const image = card.querySelector<HTMLElement>("img");
+        const onEnter = () => {
+          gsap.to(card, { y: -8, duration: 0.34, ease: "power3.out", overwrite: true });
+          if (image) {
+            gsap.to(image, { scale: 1.075, duration: 0.65, ease: "power3.out", overwrite: true });
+          }
+        };
+        const onLeave = () => {
+          gsap.to(card, { y: 0, duration: 0.45, ease: "power3.out", overwrite: true });
+          if (image) {
+            gsap.to(image, { scale: 1, duration: 0.7, ease: "power3.out", overwrite: true });
+          }
+        };
+        card.addEventListener("pointerenter", onEnter);
+        card.addEventListener("pointerleave", onLeave);
+        cardCleanup.push(() => {
+          card.removeEventListener("pointerenter", onEnter);
+          card.removeEventListener("pointerleave", onLeave);
+        });
+      });
+
+      if (heroStage && heroArt) {
+        const resetHeroArt = () =>
+          gsap.to(heroArt, {
+            x: 0,
+            y: 0,
+            rotateX: 0,
+            rotateY: 0,
+            duration: 0.8,
+            ease: "elastic.out(1, 0.55)",
+            overwrite: true,
+          });
+        const pointerObserver = Observer.create({
+          target: heroStage,
+          type: "pointer",
+          onMove: (observer) => {
+            const bounds = heroStage.getBoundingClientRect();
+            const pointer = (observer as Observer & { event: PointerEvent }).event;
+            const x = gsap.utils.clamp(-1, 1, ((pointer.clientX - bounds.left) / bounds.width - 0.5) * 2);
+            const y = gsap.utils.clamp(-1, 1, ((pointer.clientY - bounds.top) / bounds.height - 0.5) * 2);
+            gsap.to(heroArt, {
+              x: x * 8,
+              y: y * 6,
+              rotateY: x * 2.2,
+              rotateX: y * -1.8,
+              duration: 0.55,
+              ease: "power3.out",
+              overwrite: true,
+            });
+          },
+        });
+        heroStage.addEventListener("pointerleave", resetHeroArt);
+        cardCleanup.push(() => {
+          pointerObserver.kill();
+          heroStage.removeEventListener("pointerleave", resetHeroArt);
+        });
+      }
+    }
+
+    const handleAnchorClick = (event: MouseEvent) => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey ||
+        !(event.target instanceof Element)
+      ) {
+        return;
+      }
+
+      const link = event.target.closest<HTMLAnchorElement>('a[href^="#"]');
+      const href = link?.getAttribute("href");
+      if (!href || href === "#") return;
+
+      const id = decodeURIComponent(href.slice(1));
+      const destination = document.getElementById(id);
+      if (!destination) return;
+
+      event.preventDefault();
+      window.history.pushState(null, "", href);
+      setMenuOpen(false);
+      gsap.to(window, {
+        duration: 0.9,
+        ease: "power3.inOut",
+        scrollTo: { y: destination, offsetY: 78, autoKill: true },
+      });
+    };
+    root.addEventListener("click", handleAnchorClick, true);
+
+    return () => {
+      draggables.forEach((draggable) => draggable.kill());
+      cardCleanup.forEach((cleanup) => cleanup());
+      root.removeEventListener("click", handleAnchorClick, true);
+    };
+  }, { scope: pageRef });
+
   return (
     <div ref={pageRef} className="odp-gradient-theme min-h-screen text-[#111111]">
       <GsapCursor />
@@ -594,6 +844,11 @@ export function HomePage() {
             })}
           </div>
         </nav>
+        <span
+          data-scroll-progress
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[60] h-[2px] origin-left scale-x-0 bg-gradient-to-r from-[#cf7544] via-[#f0a879] to-[#f8d8c4]"
+        />
       </header>
       {locationOpen && (
         <section
@@ -756,7 +1011,7 @@ export function HomePage() {
           </div>
         </section>
 
-        <section className="relative mx-auto grid w-full min-w-0 max-w-full items-center overflow-hidden rounded-none border-0 px-3 pb-8 pt-8 min-[360px]:px-4 sm:pb-16 sm:pt-16 md:grid-cols-2 md:gap-10 md:px-10 md:py-12 lg:gap-16 lg:px-14 lg:py-16 xl:gap-20 2xl:px-16">
+        <section data-hero-stage className="relative mx-auto grid w-full min-w-0 max-w-full items-center overflow-hidden rounded-none border-0 px-3 pb-8 pt-8 min-[360px]:px-4 sm:pb-16 sm:pt-16 md:grid-cols-2 md:gap-10 md:px-10 md:py-12 lg:gap-16 lg:px-14 lg:py-16 xl:gap-20 2xl:px-16">
           {/* LEFT — HERO INFORMATION */}
           <Reveal className="hero-copy relative z-10 order-1 flex h-full w-full items-center justify-center md:justify-self-start">
             <div className="mx-auto w-full min-w-0 max-w-[560px] overflow-hidden text-left">
@@ -776,7 +1031,7 @@ export function HomePage() {
                   />
                 </span>
 
-                <span className="mt-2 block leading-[1.08] text-[#152b43] sm:leading-20">
+                <span data-gsap-title className="mt-2 block leading-[1.08] text-[#152b43] sm:leading-20">
                   Find the right property.
                   <br />
                   Make your next move.
@@ -849,9 +1104,26 @@ export function HomePage() {
 
           {/* RIGHT — DESKTOP HOUSE ILLUSTRATION */}
           <Reveal className="hero-illustration relative z-10 order-2 hidden h-full min-h-[500px] w-full items-center justify-center md:flex">
-            <div className="relative h-[500px] w-full max-w-[680px] lg:h-[560px]">
-              <HeroScene />
-            </div>
+              <div data-hero-art className="relative h-[500px] w-full max-w-[680px] lg:h-[560px]">
+                <HeroScene />
+                <svg
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 z-10 hidden size-full overflow-visible md:block"
+                  viewBox="0 0 680 560"
+                  preserveAspectRatio="none"
+                >
+                  <path
+                    data-motion-path
+                    d="M 38 354 C 62 152 220 40 376 66 C 540 94 643 225 612 357 C 589 455 476 509 355 480"
+                    fill="none"
+                    stroke="#cf7544"
+                    strokeDasharray="4 9"
+                    strokeOpacity="0.34"
+                    strokeWidth="1.5"
+                  />
+                  <circle data-motion-dot r="5" fill="#cf7544" />
+                </svg>
+              </div>
           </Reveal>
         </section>
         <section
@@ -891,7 +1163,7 @@ export function HomePage() {
           </div>
           <Reveal className="grid grid-cols-2 gap-x-3 gap-y-7 min-[390px]:gap-x-4 min-[390px]:gap-y-8 sm:gap-x-5 sm:gap-y-10 lg:grid-cols-4">
             {properties.map((property, index) => (
-              <article key={property.title} className="group relative min-w-0">
+              <article data-gsap-card key={property.title} className="group relative min-w-0">
                 <Link
                   href={`/properties/${index}`}
                   className="relative block aspect-[1.1/1] overflow-hidden bg-[#f2f2f2]"
@@ -901,7 +1173,7 @@ export function HomePage() {
                     src={property.image}
                     alt={property.title}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    className="object-cover"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   />
                   <span className="absolute left-3 top-3 bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em]">
@@ -909,7 +1181,16 @@ export function HomePage() {
                   </span>
                 </Link>
                 <button
-                  onClick={() => toggleSaved(index)}
+                  onClick={(event) => {
+                    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                      gsap.fromTo(
+                        event.currentTarget,
+                        { scale: 0.72, rotation: -14 },
+                        { scale: 1, rotation: 0, duration: 0.48, ease: "back.out(3)", overwrite: true },
+                      );
+                    }
+                    toggleSaved(index);
+                  }}
                   aria-label={`${saved.includes(index) ? "Remove" : "Save"} ${property.title}`}
                   className="absolute right-3 top-3 flex size-8 items-center justify-center bg-white transition-colors hover:bg-[#f2f2f2]"
                 >
@@ -1170,7 +1451,7 @@ export function HomePage() {
               </div>
 
               {/* RIGHT: Floating, overlapping feature cards */}
-              <div className="relative mx-auto h-[430px] w-full max-w-[560px] sm:h-[520px] lg:h-[550px]">
+              <div data-feature-stack className="relative mx-auto h-[430px] w-full max-w-[560px] sm:h-[520px] lg:h-[550px]">
                 {/* Soft glow behind cards */}
                 <div
                   aria-hidden="true"
@@ -1220,6 +1501,7 @@ export function HomePage() {
 
                   return (
                     <div
+                      data-feature-card
                       key={item.number}
                       className={`group absolute min-w-0 ${item.position}`}
                     >
@@ -1297,7 +1579,7 @@ export function HomePage() {
                 Our banking partners
               </p>
 
-              <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
+              <div data-gsap-drag className="mt-4 flex gap-3 overflow-x-auto pb-2">
                 {[
                   {
                     bank: "SBI",
@@ -1404,7 +1686,7 @@ export function HomePage() {
                 aria-hidden="true"
               />
             </div>
-            <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-5 lg:overflow-visible lg:px-0">
+            <div data-gsap-drag className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-5 lg:overflow-visible lg:px-0">
               {[
                 {
                   title: "EMI Calculator",
