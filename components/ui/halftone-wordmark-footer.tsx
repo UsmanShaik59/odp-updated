@@ -230,6 +230,7 @@ export default function HalftoneWordmarkFooter({
     let pointerY = -1e5;
     let frame = 0;
     let pointerIdleTimer = 0;
+    let activeTouchPointerId: number | null = null;
     let visible = true;
     let awake = true;
     let shock = { x: 0, y: 0, time: -1 };
@@ -432,17 +433,35 @@ export default function HalftoneWordmarkFooter({
       pointerX = x;
       pointerY = y;
       if (pointerIdleTimer) window.clearTimeout(pointerIdleTimer);
-      pointerIdleTimer = window.setTimeout(clearPointer, 120);
+      pointerIdleTimer =
+        event.pointerType === "touch" && event.pointerId === activeTouchPointerId
+          ? 0
+          : window.setTimeout(clearPointer, 120);
       wake();
     };
     const onLeave = () => {
+      if (activeTouchPointerId !== null) return;
       if (pointerIdleTimer) window.clearTimeout(pointerIdleTimer);
       clearPointer();
     };
     const onDown = (event: PointerEvent) => {
       if (!options.current.interactive || reducedMotion) return;
-          const [x, y] = toLocal(event);
+      const [x, y] = toLocal(event);
+      pointerX = x;
+      pointerY = y;
+      if (event.pointerType === "touch") {
+        activeTouchPointerId = event.pointerId;
+        if (pointerIdleTimer) window.clearTimeout(pointerIdleTimer);
+        pointerIdleTimer = 0;
+      }
       shock = { x, y, time: performance.now() };
+      wake();
+    };
+    const onTouchEnd = (event: PointerEvent) => {
+      if (event.pointerId !== activeTouchPointerId) return;
+      activeTouchPointerId = null;
+      if (pointerIdleTimer) window.clearTimeout(pointerIdleTimer);
+      pointerIdleTimer = window.setTimeout(clearPointer, 350);
       wake();
     };
 
@@ -452,6 +471,8 @@ export default function HalftoneWordmarkFooter({
     root.addEventListener("pointermove", onMove);
     root.addEventListener("pointerleave", onLeave);
     root.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointerup", onTouchEnd);
+    window.addEventListener("pointercancel", onTouchEnd);
 
     const resizeObserver = new ResizeObserver(() => {
       layout();
@@ -483,6 +504,8 @@ export default function HalftoneWordmarkFooter({
       root.removeEventListener("pointermove", onMove);
       root.removeEventListener("pointerleave", onLeave);
       root.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointerup", onTouchEnd);
+      window.removeEventListener("pointercancel", onTouchEnd);
     };
   }, [key]);
 
