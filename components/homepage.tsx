@@ -17,6 +17,7 @@ import { HeroScene } from "./hero-scene";
 import { PropertyAssistant } from "./property-assistant";
 import { GsapCursor } from "./gsap-cursor";
 import HalftoneWordmarkFooter from "./ui/halftone-wordmark-footer";
+import KineticMatrix from "./ui/kinetic-matrix";
 import Link from "next/link";
 import { CarFront, Phone } from "lucide-react";
 import {
@@ -148,232 +149,6 @@ function Reveal({
   );
 }
 
-function PropertySearchForm() {
-  const [location, setLocation] = useState("");
-  const [propertyType, setPropertyType] = useState("Any Type");
-  const [budget, setBudget] = useState("Any Budget");
-  const [openDropdown, setOpenDropdown] = useState<"type" | "budget" | null>(
-    null,
-  );
-  const dropdownRef = useRef<HTMLFormElement>(null);
-
-  const propertyTypes = [
-    "Any Type",
-    "Apartment",
-    "Villa",
-    "Plot",
-    "Independent House",
-    "Commercial",
-  ];
-
-  const budgets = [
-    "Any Budget",
-    "Under ₹25 Lakh",
-    "₹25–50 Lakh",
-    "₹50 Lakh–₹1 Crore",
-    "₹1–2 Crore",
-    "₹2 Crore+",
-  ];
-
-  const ranges: Record<string, { min: number; max: number }> = {
-    "Any Budget": { min: 0, max: Infinity },
-    "Under ₹25 Lakh": { min: 0, max: 2500000 },
-    "₹25–50 Lakh": { min: 2500000, max: 5000000 },
-    "₹50 Lakh–₹1 Crore": { min: 5000000, max: 10000000 },
-    "₹1–2 Crore": { min: 10000000, max: 20000000 },
-    "₹2 Crore+": { min: 20000000, max: Infinity },
-  };
-
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setOpenDropdown(null);
-      }
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpenDropdown(null);
-    };
-
-    document.addEventListener("mousedown", handleOutsideClick);
-    document.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, []);
-
-  function handleSearch(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setOpenDropdown(null);
-
-    window.dispatchEvent(
-      new CustomEvent("property-search", {
-        detail: {
-          location: location.trim(),
-          propertyType,
-          minPrice: ranges[budget].min,
-          maxPrice: ranges[budget].max,
-        },
-      }),
-    );
-
-    document.getElementById("properties")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }
-
-  const dropdownPanel =
-    "absolute left-0 right-0 top-[calc(100%+8px)] z-[200] max-h-[min(320px,60vh)] overflow-y-auto rounded-xl border border-[#e5e7eb] bg-white p-1.5 text-left shadow-lg";
-
-  const optionClass = (active: boolean) =>
-    `flex min-h-10 w-full items-center rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-      active
-        ? "bg-[#eaf5ff] font-medium text-[#0874d1]"
-        : "text-[#374151] hover:bg-[#f7f8fa]"
-    }`;
-
-  return (
-    <form
-      ref={dropdownRef}
-      onSubmit={handleSearch}
-      className="mobile-property-search relative z-40 mx-auto mt-7 flex min-h-0 w-full min-w-0 flex-col items-stretch gap-0 rounded-[30px] border border-[#dbe8f4] bg-white p-3 shadow-[0_8px_24px_rgba(21,43,67,0.08)] sm:min-h-[110px] sm:flex-row sm:items-center sm:rounded-full sm:p-2"
-    >
-      {/* Keyword / Location */}
-      <div className="flex h-12 w-full min-w-0 flex-none items-center px-3 sm:h-10 sm:w-auto sm:flex-[1.6] sm:px-5">
-        <input
-          type="search"
-          aria-label="Search location"
-          placeholder="Enter city / locality / project"
-          value={location}
-          onChange={(event) => setLocation(event.target.value)}
-          className="w-full min-w-0 border-0 bg-transparent p-0 text-sm text-[#152b43] outline-none placeholder:text-[#75879a] focus:ring-0 sm:text-base"
-        />
-      </div>
-
-      <span className="mx-3 h-px shrink-0 bg-[#e5e7eb] sm:hidden" />
-      <span className="hidden h-6 w-px shrink-0 bg-[#e5e7eb] sm:block" />
-
-      <div className="flex w-full min-w-0 flex-col sm:contents">
-      {/* Property Type */}
-      <div className="relative flex h-11 w-full min-w-0 flex-none items-center px-3 sm:h-10 sm:w-auto sm:flex-1 sm:px-5">
-        <button
-          type="button"
-          aria-haspopup="listbox"
-          aria-expanded={openDropdown === "type"}
-          onClick={() =>
-            setOpenDropdown((current) => (current === "type" ? null : "type"))
-          }
-          className="flex w-full min-w-0 items-center justify-between gap-2 text-left text-sm text-[#75879a] outline-none sm:text-base"
-        >
-          <span className="truncate">
-            {propertyType === "Any Type"
-              ? "Select property type"
-              : propertyType}
-          </span>
-          <ChevronDown
-            size={15}
-            className={`shrink-0 text-[#64748b] transition-transform ${
-              openDropdown === "type" ? "rotate-180" : ""
-            }`}
-          />
-        </button>
-
-        {openDropdown === "type" && (
-          <div
-            className={dropdownPanel}
-            role="listbox"
-            aria-label="Property type"
-          >
-            {propertyTypes.map((type) => (
-              <button
-                key={type}
-                type="button"
-                role="option"
-                aria-selected={propertyType === type}
-                className={optionClass(propertyType === type)}
-                onClick={() => {
-                  setPropertyType(type);
-                  setOpenDropdown(null);
-                }}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <span className="mx-3 h-px shrink-0 bg-[#e5e7eb] sm:hidden" />
-      <span className="hidden h-6 w-px shrink-0 bg-[#e5e7eb] sm:block" />
-
-      {/* Budget */}
-      <div className="relative flex h-11 w-full min-w-0 flex-none items-center px-3 sm:h-10 sm:w-auto sm:flex-1 sm:px-4">
-        <button
-          type="button"
-          aria-haspopup="listbox"
-          aria-expanded={openDropdown === "budget"}
-          onClick={() =>
-            setOpenDropdown((current) =>
-              current === "budget" ? null : "budget",
-            )
-          }
-          className="flex w-full min-w-0 items-center justify-between gap-2 text-left text-sm text-[#75879a] outline-none sm:text-base"
-        >
-          <span className="truncate">
-            {budget === "Any Budget" ? "Select budget" : budget}
-          </span>
-          <ChevronDown
-            size={15}
-            className={`shrink-0 text-[#64748b] transition-transform ${
-              openDropdown === "budget" ? "rotate-180" : ""
-            }`}
-          />
-        </button>
-
-        {openDropdown === "budget" && (
-          <div
-            className={dropdownPanel}
-            role="listbox"
-            aria-label="Budget range"
-          >
-            {budgets.map((item) => (
-              <button
-                key={item}
-                type="button"
-                role="option"
-                aria-selected={budget === item}
-                className={optionClass(budget === item)}
-                onClick={() => {
-                  setBudget(item);
-                  setOpenDropdown(null);
-                }}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-      </div>
-
-      {/* Search */}
-
-      <button
-        type="submit"
-        className="mt-2 inline-flex h-12 w-full shrink-0 items-center justify-center gap-2 rounded-full bg-[#0874d1] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#0664b8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] sm:mt-0 sm:min-h-[90px] sm:w-auto sm:px-9"
-      >
-        <Search size={25} strokeWidth={2.2} aria-hidden="true" />
-        <span>Search</span>
-      </button>
-    </form>
-  );
-}
 
 export function HomePage() {
   const pageRef = useRef<HTMLDivElement>(null);
@@ -956,15 +731,12 @@ export function HomePage() {
       <main id="top" className="overflow-clip mt-15">
         <section
           id="property-search"
-          className="relative z-40 w-full overflow-visible bg-[#eaf5ff] px-4 pb-7 pt-6 min-[360px]:px-5 sm:px-6 sm:pb-8 sm:pt-7 md:px-8 lg:px-10"
+          className="relative z-40 w-full overflow-hidden bg-[#eaf5ff]"
         >
-          <div className="relative z-40 mx-auto w-full max-w-[1368px] text-center">
-            <h2 className="text-[clamp(1.8rem,4.1vw,3rem)] font-normal leading-tight tracking-[-0.045em] text-[#152b43]">
-              Start your journey with <strong>#OneStep Dream Property</strong>
-            </h2>
-
-            <PropertySearchForm />
-          </div>
+          <KineticMatrix
+            title="FIND HOME"
+            className="h-[360px] sm:h-[410px] lg:h-[450px]"
+          />
         </section>
 
   <section data-hero-stage className="relative mx-auto grid w-full min-w-0 max-w-full items-center overflow-hidden rounded-none border-0 bg-[#eaf5ff] px-3 pb-8 pt-8 min-[360px]:px-4 sm:pb-16 sm:pt-16 md:grid-cols-2 md:gap-10 md:px-10 md:py-12 lg:gap-16 lg:px-14 lg:py-16 xl:gap-20 2xl:px-16">
