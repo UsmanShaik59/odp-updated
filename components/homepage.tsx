@@ -9,6 +9,7 @@ import { properties } from "@/lib/properties";
 import { HeroScene } from "./hero-scene";
 import { PropertyAssistant } from "./property-assistant";
 import { GsapCursor } from "./gsap-cursor";
+import HalftoneWordmarkFooter from "./ui/halftone-wordmark-footer";
 import Link from "next/link";
 import { CarFront, Phone } from "lucide-react";
 import {
@@ -1639,8 +1640,9 @@ export function HomePage() {
           </div>
         </div>
       </section>
-      <footer
+      <section
         id="contact"
+        aria-label="Contact and legal information"
         className="border-t border-[#cf7544] bg-[#f0a879] text-[#542d18]"
       >
         <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
@@ -1699,13 +1701,13 @@ export function HomePage() {
             </p>
           </div>
         </div>
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 border-t border-white/30 px-5 py-6 text-xs text-white lg:text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 border-t border-white/30 px-5 py-6 text-xs text-[#542d18] lg:text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
           <span>© 2026 OneStep Dream Property. All rights reserved.</span>
           <span>Privacy · Terms</span>
         </div>{" "}
         <div className="mx-auto mt-4 w-full max-w-[1280px] border-t border-white/20 px-5 pb-8 pt-6 sm:mt-6 sm:px-8 sm:pb-10 sm:pt-8">
-          <p className="text-xs leading-6 text-white/80 sm:text-sm sm:leading-7">
-            <strong className="font-semibold text-white">Disclaimer:</strong>{" "}
+          <p className="text-xs leading-6 text-[#542d18] sm:text-sm sm:leading-7">
+            <strong className="font-semibold text-[#542d18]">Disclaimer:</strong>{" "}
             ODP Services acts solely as an intermediary platform for advertising
             properties and is not a party to or responsible for transactions
             between buyers and sellers. All offers, discounts, and property
@@ -1713,7 +1715,47 @@ export function HomePage() {
             developer.
           </p>
         </div>
-      </footer>
+      </section>
+      <HalftoneWordmarkFooter
+        wordmark="odp"
+        label="OneStep Dream Property"
+        meta="ODP Services · © 2026"
+        preset="ember"
+        palette={{ background: "#2b160d", ink: "#f7e4d0", warm: "#f0a879" }}
+        dotGap={6}
+        radius={88}
+        crop={0.16}
+        grain={0.28}
+        height="560px"
+        columns={[
+          {
+            title: "Explore",
+            links: [
+              { label: "Buy Flats", href: "#properties" },
+              { label: "Properties", href: "#properties" },
+              { label: "Locations", href: "#locations" },
+            ],
+          },
+          {
+            title: "Company",
+            links: [
+              { label: "About Us", href: "#about" },
+              { label: "Contact", href: "#contact" },
+              { label: "List Property", href: "#contact" },
+            ],
+          },
+          {
+            title: "Get in touch",
+            links: [
+              {
+                label: "help.onestepdreamproperty@gmail.com",
+                href: "mailto:help.onestepdreamproperty@gmail.com",
+              },
+              { label: "+91 7411535782", href: "tel:+917411535782" },
+            ],
+          },
+        ]}
+      />
 
       {/* chatbot */}
 

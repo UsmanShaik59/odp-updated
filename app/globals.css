@@ -597,17 +597,6 @@ body:has(.odp-gradient-theme) {
   border-bottom-color: transparent !important;
 }
 
-.odp-gradient-theme footer {
-  background: transparent !important;
-  border-color: transparent !important;
-  color: #263238 !important;
-}
-
-.odp-gradient-theme footer p,
-.odp-gradient-theme footer a {
-  color: #39464d !important;
-}
-
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
