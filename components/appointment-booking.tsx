@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 import { properties } from "@/lib/properties";
 import { createClient } from "@/lib/supabase/client";
-import { PropertyAssistant } from "./property-assistant";
 import SiteFooter from "./site-footer";
 import { SiteMobileNav } from "./site-mobile-nav";
 
