@@ -566,7 +566,11 @@ export function HomePage() {
                 <Link
                   key={item}
                   href={href}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    setLocationOpen(false);
+                    setSearchOpen(false);
+                  }}
                   style={{ transitionDelay: menuOpen ? `${index * 28}ms` : `${(5 - index) * 12}ms` }}
                   className={`group flex min-h-[64px] items-center gap-4 px-5 text-[15px] font-medium text-[#24384d] transition-[opacity,transform,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[#f8fbfe] active:bg-[#f2f7fb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1] motion-reduce:transition-none ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'}`}
                 >
@@ -591,16 +595,7 @@ export function HomePage() {
           aria-label="Location picker"
         >
           <main className="mx-auto max-w-[1280px] px-4 pb-8 pt-6 sm:px-8 sm:pb-12 sm:pt-10 lg:pb-16 lg:pt-14">
-            <button
-              type="button"
-              onClick={() => setLocationOpen(false)}
-              className="inline-flex min-h-10 items-center gap-2 rounded-full border border-location-border bg-location-surface px-4 text-sm font-semibold text-location-ink transition-colors hover:border-location-accent/40 hover:text-location-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-location-accent"
-            >
-              <ArrowRight aria-hidden="true" className="size-4 rotate-180" />
-              Back to home
-            </button>
-
-            <div className="mt-8 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:gap-16">
+            <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:gap-16">
               <div className="max-w-2xl">
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-location-accent sm:text-xs">
                   Bengaluru · Area guide
@@ -638,8 +633,8 @@ export function HomePage() {
               </div>
             </div>
 
-            <section aria-labelledby="popular-locations-title" className="mt-10 sm:mt-14">
-              <div className="mb-5 flex items-end justify-between gap-4">
+            <section aria-labelledby="popular-locations-title" className="mt-8 sm:mt-14">
+              <div className="mb-4 flex items-end justify-between gap-4">
                 <div>
                   <h2 id="popular-locations-title" className="text-xl font-semibold tracking-tight text-location-ink sm:text-2xl">
                     Popular locations
@@ -655,38 +650,39 @@ export function HomePage() {
               </div>
 
               {filteredLocations.length > 0 ? (
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <ul className="overflow-hidden rounded-2xl border border-location-border bg-location-surface">
                   {filteredLocations.map((location) => (
-                    <button
-                      type="button"
-                      key={location.name}
-                      onClick={() => {
-                        setSelectedLocation(
-                          location.name === "Bengaluru"
-                            ? location.name
-                            : `${location.name}, Bengaluru`,
-                        );
-                        setLocationOpen(false);
-                      }}
-                      className="group flex min-h-[84px] items-center gap-3 rounded-2xl border border-location-border bg-location-surface p-4 text-left shadow-[0_4px_20px_rgba(21,43,67,0.03)] transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-location-accent/50 hover:shadow-[0_12px_28px_rgba(21,43,67,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-location-accent sm:p-5"
-                    >
-                      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-location-accent/10 text-location-accent">
-                        <MapPin aria-hidden="true" className="size-[18px]" />
-                      </span>
-
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-sm font-semibold text-location-ink">
-                          {location.name}
+                    <li key={location.name} className="border-b border-location-border last:border-b-0">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedLocation(
+                            location.name === "Bengaluru"
+                              ? location.name
+                              : `${location.name}, Bengaluru`,
+                          );
+                          setLocationOpen(false);
+                        }}
+                        className="group flex min-h-[64px] w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-location-accent"
+                      >
+                        <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-location-accent/10 text-location-accent">
+                          <MapPin aria-hidden="true" className="size-4" />
                         </span>
-                        <span className="mt-1 block text-xs text-location-muted">
-                          {location.count}
-                        </span>
-                      </span>
 
-                      <ArrowRight aria-hidden="true" className="size-4 shrink-0 text-location-muted transition-transform duration-200 group-hover:translate-x-1 group-hover:text-location-accent" />
-                    </button>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-sm font-semibold text-location-ink">
+                            {location.name}
+                          </span>
+                          <span className="mt-0.5 block text-xs text-location-muted">
+                            {location.count}
+                          </span>
+                        </span>
+
+                        <ArrowRight aria-hidden="true" className="size-4 shrink-0 text-location-muted transition-transform duration-200 group-hover:translate-x-1 group-hover:text-location-accent" />
+                      </button>
+                    </li>
                   ))}
-                </div>
+                </ul>
               ) : (
                 <p aria-live="polite" className="rounded-2xl border border-dashed border-location-border bg-location-surface px-4 py-8 text-center text-sm text-location-muted">
                   No popular areas match that search. Try another neighbourhood.
