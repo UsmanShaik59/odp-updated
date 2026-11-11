@@ -16,7 +16,6 @@ import { properties } from "@/lib/properties";
 import { HeroScene } from "./hero-scene";
 import { PropertyAssistant } from "./property-assistant";
 import { GsapCursor } from "./gsap-cursor";
-import SiteFooter from "./site-footer";
 import KineticMatrix from "./ui/kinetic-matrix";
 import Link from "next/link";
 import { CarFront, Phone } from "lucide-react";
@@ -693,7 +692,6 @@ export function HomePage() {
               )}
             </section>
           </main>
-          <SiteFooter />
         </section>
       )}
       <main id="top" aria-hidden={locationOpen} inert={locationOpen ? true : undefined} className="overflow-clip mt-15">
@@ -771,7 +769,7 @@ export function HomePage() {
                 </Link>
 
                 <Link
-                  href="#contact"
+                  href="/contact"
                   className="group relative isolate inline-flex h-14 w-full max-w-[240px] min-w-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-[#c8dff4] bg-white px-3 text-xs font-semibold text-[#152b43] shadow-[0_4px_12px_rgba(21,43,67,0.05)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0874d1] min-[380px]:w-[min(220px,calc(50vw-24px))] min-[380px]:flex-none lg:h-16 lg:gap-3 lg:px-5 lg:text-sm"
                 >
                   <Phone
@@ -1337,7 +1335,7 @@ export function HomePage() {
 
               <div className="mt-7 flex flex-wrap items-center gap-7">
                 <Link
-                  href="#contact"
+                  href="/contact"
                   className="group inline-flex items-center gap-2 text-base font-semibold text-[#e5232b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e5232b]"
                 >
                   <span className="relative py-1">
@@ -1348,7 +1346,7 @@ export function HomePage() {
                 </Link>
 
                 <Link
-                  href="#contact"
+                  href="/contact"
                   className="group relative isolate inline-flex items-center justify-center overflow-hidden rounded-full border border-[#e5232b] bg-[#e5232b] px-7 py-3 text-sm font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e5232b] sm:px-9"
                 >
                   <span
@@ -1412,7 +1410,7 @@ export function HomePage() {
                 },
               ].map(({ title, description, icon: Icon }) => (
                 <Link
-                  href="#contact"
+                  href="/contact"
                   key={title}
                   className="group flex min-h-[310px] w-[min(84vw,320px)] shrink-0 snap-start flex-col rounded-[10px] border border-[#d9d9d9] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#11b6c9] hover:shadow-[0_12px_26px_rgba(0,0,0,0.08)] sm:w-auto sm:min-w-0 sm:shrink sm:snap-none sm:p-6"
                 >
@@ -1452,7 +1450,7 @@ export function HomePage() {
 
             {/* SELL — Dark-blue animated outline */}
             <Link
-              href="#contact"
+              href="/contact"
   className="group relative inline-flex min-h-[52px] w-full max-w-[240px] items-center justify-center gap-3 overflow-hidden rounded-full border border-white bg-white px-5 text-sm font-semibold text-[#0874d1] sm:min-h-[64px] sm:w-auto sm:min-w-[190px] sm:justify-between sm:gap-4 sm:px-6 sm:text-base"
   >
               <Building2 className="size-7 shrink-0" />
@@ -1518,7 +1516,7 @@ export function HomePage() {
                     </div>
 
                     <Link
-                      href="#contact"
+                      href="/contact"
                       className="group relative isolate inline-flex w-full max-w-[210px] shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-[#e5232b] bg-[#e5232b] px-7 py-3 text-sm font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e5232b] lg:w-auto sm:px-9 sm:text-base"
                     >
                       <span
@@ -1552,7 +1550,7 @@ export function HomePage() {
             <div className="mt-2 flex justify-center items-center gap-2">
               <Link
                 aria-label="Facebook"
-                href="#contact"
+                href="/contact"
                 className="flex size-6 items-center justify-center"
               >
                 <img
@@ -1563,7 +1561,7 @@ export function HomePage() {
               </Link>
               <Link
                 aria-label="Instagram"
-                href="#contact"
+                href="/contact"
                 className="flex size-6 items-center justify-center"
               >
                 <img
@@ -1574,7 +1572,7 @@ export function HomePage() {
               </Link>
               <Link
                 aria-label="YouTube"
-                href="#contact"
+                href="/contact"
                 className="flex size-6 items-center justify-center"
               >
                 <img
@@ -1585,7 +1583,7 @@ export function HomePage() {
               </Link>
               <Link
                 aria-label="X"
-                href="#contact"
+                href="/contact"
                 className="flex size-6 items-center justify-center"
               >
                 <img
@@ -1596,7 +1594,7 @@ export function HomePage() {
               </Link>
               <Link
                 aria-label="WhatsApp"
-                href="#contact"
+                href="/contact"
                 className="flex size-6 items-center justify-center"
               >
                 <img
@@ -1607,7 +1605,7 @@ export function HomePage() {
               </Link>
               <Link
                 aria-label="LinkedIn"
-                href="#contact"
+                href="/contact"
                 className="flex size-6 items-center justify-center"
               >
                 <img
@@ -1620,75 +1618,6 @@ export function HomePage() {
           </div>
         </div>
       </section>
-  <section
-  id="contact"
-  aria-hidden={locationOpen}
-  inert={locationOpen ? true : undefined}
-  aria-label="Contact and legal information"
-  className="border-t border-[#0874d1] bg-[#0874d1] text-white"
-  >
-        <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
-          <div>
-            <Link
-              href="#top"
-              className="inline-flex items-center text-white"
-              aria-label="ODP home"
-            >
-              <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
-                odp
-              </span>
-            </Link>
-            <p className="mt-5 max-w-xs text-sm leading-6 text-white">
-              Thoughtfully selected homes for the way you want to live.
-            </p>
-          </div>
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
-              Discover
-            </h3>
-            <div className="mt-5 flex flex-col gap-3 text-sm text-white">
-              <Link href="#properties">Buy Flats</Link>
-              <Link href="#properties">Properties</Link>
-              <Link href="#locations">Locations</Link>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
-              Company
-            </h3>
-            <div className="mt-5 flex flex-col gap-3 text-sm text-white">
-              <Link href="#about">About Us</Link>
-              <Link href="#contact">Contact</Link>
-              <Link href="#contact">List Property</Link>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
-              Get in touch
-            </h3>
-            <p className="mt-5 text-sm leading-6 text-white">
-              <a
-                href="mailto:help.onestepdreamproperty@gmail.com"
-                className="transition-colors hover:text-white/80"
-              >
-                help.onestepdreamproperty@gmail.com
-              </a>
-              <br />
-              <a
-                href="tel:+91 7411535782"
-                className="transition-colors hover:text-white/80"
-              >
-                +91 7411535782
-              </a>
-            </p>
-          </div>
-        </div>
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 border-t border-white/30 px-5 py-6 text-xs text-white/90 lg:text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
-          <span>© 2026 OneStep Dream Property. All rights reserved.</span>
-          <span>Privacy · Terms</span>
-        </div>{" "}
-      </section>
-      {!locationOpen && <SiteFooter />}
 
       {/* chatbot */}
 
