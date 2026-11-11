@@ -573,23 +573,6 @@ html::-webkit-scrollbar-thumb:hover {
   }
 }
 
-.odp-gradient-theme {
-  background: linear-gradient(125deg, #d1dbe1 0%, #e6e2df 44%, #f1b28f 100%);
-  background-attachment: fixed;
-}
-
-.odp-gradient-theme > header {
-  background: rgb(255 255 255 / 18%) !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
-
-.odp-gradient-theme main section {
-  background-color: transparent !important;
-  background-image: none !important;
-  border-top-color: transparent !important;
-  border-bottom-color: transparent !important;
-}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
