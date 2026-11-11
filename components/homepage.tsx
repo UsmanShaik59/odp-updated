@@ -445,7 +445,18 @@ export function HomePage() {
             aria-controls="mobile-navigation"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? <X aria-hidden="true" className="size-[22px]" strokeWidth={1.75} /> : <Menu aria-hidden="true" className="size-[22px]" strokeWidth={1.75} />}
+            <span className="relative size-[22px]">
+              <Menu
+                aria-hidden="true"
+                className={`absolute inset-0 size-[22px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${menuOpen ? 'rotate-45 scale-75 opacity-0' : 'rotate-0 scale-100 opacity-100'}`}
+                strokeWidth={1.75}
+              />
+              <X
+                aria-hidden="true"
+                className={`absolute inset-0 size-[22px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${menuOpen ? 'rotate-0 scale-100 opacity-100' : '-rotate-45 scale-75 opacity-0'}`}
+                strokeWidth={1.75}
+              />
+            </span>
           </button>
 
           <Link
@@ -506,7 +517,7 @@ export function HomePage() {
           aria-hidden={!menuOpen}
           tabIndex={menuOpen ? 0 : -1}
           onClick={() => setMenuOpen(false)}
-          className={`fixed inset-0 top-[64px] z-40 bg-[#152b43]/10 transition-opacity duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:hidden ${
+          className={`fixed inset-0 top-[64px] z-40 bg-[#152b43]/10 transition-opacity duration-[360ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:hidden ${
             menuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
           }`}
         />
@@ -516,10 +527,10 @@ export function HomePage() {
           id="mobile-navigation"
           aria-hidden={!menuOpen}
           inert={!menuOpen ? true : undefined}
-  className={`fixed inset-x-0 bottom-0 top-[64px] z-50 flex flex-col overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-sm text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:hidden ${
+  className={`fixed inset-x-0 bottom-0 top-[64px] z-50 flex flex-col overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-sm text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] transition-[opacity,transform] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:hidden ${
             menuOpen
-              ? "pointer-events-auto translate-y-0 opacity-100"
-              : "pointer-events-none -translate-y-2 opacity-0"
+              ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
+              : "pointer-events-none -translate-y-6 scale-[0.985] opacity-0"
           }`}
           aria-label="Mobile navigation"
         >
@@ -531,7 +542,7 @@ export function HomePage() {
   ["Locations", "/#locations"],
   ["About Us", "/about"],
   ["Contact", "/contact"],
-  ] as const).map(([item, href]) => {
+  ] as const).map(([item, href], index) => {
               const icons = {
                 Home: House,
                 "Buy Flats": BedDouble,
@@ -548,7 +559,8 @@ export function HomePage() {
                   key={item}
                   href={href}
                   onClick={() => setMenuOpen(false)}
-                  className="group flex min-h-[64px] items-center gap-4 px-5 text-[15px] font-medium text-[#24384d] transition-colors duration-200 hover:bg-[#f8fbfe] active:bg-[#f2f7fb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1] motion-reduce:transition-none"
+                  style={{ transitionDelay: menuOpen ? `${index * 28}ms` : `${(5 - index) * 12}ms` }}
+                  className={`group flex min-h-[64px] items-center gap-4 px-5 text-[15px] font-medium text-[#24384d] transition-[opacity,transform,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[#f8fbfe] active:bg-[#f2f7fb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1] motion-reduce:transition-none ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'}`}
                 >
                   <span className="flex size-6 shrink-0 items-center justify-center text-[#0874d1] transition-colors duration-200 group-hover:text-[#005da8]">
                     <Icon aria-hidden="true" className="size-5" strokeWidth={1.75} />

@@ -43,7 +43,18 @@ export function SiteMobileNav() {
         onClick={() => setOpen((current) => !current)}
         className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl text-[#152b43] transition-colors duration-200 hover:bg-[#f3f7fa] active:bg-[#eaf1f6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] motion-reduce:transition-none lg:hidden"
       >
-        {open ? <X aria-hidden="true" className="size-[22px]" strokeWidth={1.75} /> : <Menu aria-hidden="true" className="size-[22px]" strokeWidth={1.75} />}
+        <span className="relative size-[22px]">
+          <Menu
+            aria-hidden="true"
+            className={`absolute inset-0 size-[22px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${open ? 'rotate-45 scale-75 opacity-0' : 'rotate-0 scale-100 opacity-100'}`}
+            strokeWidth={1.75}
+          />
+          <X
+            aria-hidden="true"
+            className={`absolute inset-0 size-[22px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${open ? 'rotate-0 scale-100 opacity-100' : '-rotate-45 scale-75 opacity-0'}`}
+            strokeWidth={1.75}
+          />
+        </span>
       </button>
       <button
         type="button"
@@ -51,22 +62,23 @@ export function SiteMobileNav() {
         aria-hidden={!open}
         tabIndex={open ? 0 : -1}
         onClick={() => setOpen(false)}
-        className={`fixed inset-x-0 bottom-0 top-[70px] z-40 bg-[#152b43]/10 transition-opacity duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:hidden ${open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}
+        className={`fixed inset-x-0 bottom-0 top-[70px] z-40 bg-[#152b43]/10 transition-opacity duration-[360ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:hidden ${open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}
       />
       <nav
         id="site-mobile-navigation"
         aria-label="Mobile navigation"
         aria-hidden={!open}
         inert={!open ? true : undefined}
-        className={`fixed inset-x-0 bottom-0 top-[70px] z-50 overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:hidden ${open ? 'pointer-events-auto translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'}`}
+        className={`fixed inset-x-0 bottom-0 top-[70px] z-50 overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] transition-[opacity,transform] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:hidden ${open ? 'pointer-events-auto translate-y-0 scale-100 opacity-100' : 'pointer-events-none -translate-y-6 scale-[0.985] opacity-0'}`}
       >
         <div className="mx-auto w-full max-w-[520px] divide-y divide-[#edf1f5]">
-          {links.map(({ label, href, Icon }) => (
+          {links.map(({ label, href, Icon }, index) => (
             <Link
               key={label}
               href={href}
               onClick={() => setOpen(false)}
-              className="group flex min-h-[64px] items-center gap-4 px-5 text-[15px] font-medium text-[#24384d] transition-colors duration-200 hover:bg-[#f8fbfe] active:bg-[#f2f7fb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1] motion-reduce:transition-none"
+              style={{ transitionDelay: open ? `${index * 28}ms` : `${(links.length - index - 1) * 12}ms` }}
+              className={`group flex min-h-[64px] items-center gap-4 px-5 text-[15px] font-medium text-[#24384d] transition-[opacity,transform,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[#f8fbfe] active:bg-[#f2f7fb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1] motion-reduce:transition-none ${open ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'}`}
             >
               <Icon className="size-5 shrink-0 text-[#0874d1] transition-colors duration-200 group-hover:text-[#005da8]" strokeWidth={1.75} aria-hidden="true" />
               <span>{label}</span>
