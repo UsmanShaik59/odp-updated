@@ -348,9 +348,9 @@ export function HeroScene({ mobile = false }: { mobile?: boolean }) {
     >
       <Canvas
         camera={{ position: [0, 1.25, 8.2], fov: 35 }}
-        dpr={[1, 1.6]}
+        dpr={mobile ? [1, 1.25] : [1, 1.6]}
         gl={{ antialias: true, alpha: true }}
-        shadows
+        shadows={!mobile}
       >
         <SceneContent />
 

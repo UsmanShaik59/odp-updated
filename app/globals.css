@@ -332,6 +332,9 @@ footer h3 {
   color: white;
 }
 
+footer .grid > * { min-width: 0; }
+footer a, a[href^="mailto:"] { overflow-wrap: anywhere; }
+
 footer p {
   opacity: 0.82;
 }

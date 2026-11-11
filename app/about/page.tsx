@@ -126,7 +126,7 @@ export default function PropertyFeatureSection() {
             ))}
           </nav>
 
-          <div className="order-3 ml-0 flex min-w-0 shrink-0 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px]">
+          <div className="order-3 ml-0 flex min-w-0 flex-1 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px] lg:flex-none">
             <button
               type="button"
               aria-label="Choose location"

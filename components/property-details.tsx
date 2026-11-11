@@ -147,7 +147,7 @@ export function PropertyDetails({ property }: { property: Property }) {
             ))}
           </nav>
 
-          <div className="order-3 ml-0 flex min-w-0 shrink-0 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px]">
+          <div className="order-3 ml-0 flex min-w-0 flex-1 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px] lg:flex-none">
             <button
               type="button"
               aria-label="Choose location"
@@ -229,7 +229,7 @@ export function PropertyDetails({ property }: { property: Property }) {
       </header>
 
       <main>
-        <div className="mx-auto mt-8 w-full max-w-[1280px] overflow-hidden px-3 pb-12 pt-5 sm:px-6 sm:pb-16 sm:pt-7 lg:px-8 lg:pt-10">
+        <div className="mx-auto mt-8 w-full max-w-[1280px] overflow-hidden px-3 pb-12 pt-7 sm:px-6 sm:pb-16 sm:pt-7 lg:px-8 lg:pt-10">
           <div className="grid gap-7 lg:grid-cols-[1.18fr_.82fr] lg:gap-16">
             <section>
               <div className="relative aspect-[1.18/1] overflow-hidden bg-[#edf5fb] sm:aspect-[1.45/1]">

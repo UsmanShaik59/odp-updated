@@ -766,7 +766,7 @@ export function HomePage() {
             ))}
           </nav>
 
-          <div className="order-3 ml-0 flex min-w-0 shrink-0 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px]">
+          <div className="order-3 ml-0 flex min-w-0 flex-1 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px] lg:flex-none">
             <button
               type="button"
               aria-label="Choose location"
@@ -2008,7 +2008,6 @@ preset="sky"
         radius={88}
         crop={0.16}
         grain={0.28}
-        height="560px"
         columns={[
           {
             title: "Explore",
@@ -2041,7 +2040,7 @@ preset="sky"
 
       {/* chatbot */}
 
-      <div className="fixed inset-x-4 bottom-4 z-[75] flex flex-col items-end gap-4 sm:inset-x-auto sm:bottom-6 sm:right-7">
+      <div className="fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[75] flex flex-col items-end gap-4 sm:inset-x-auto sm:bottom-6 sm:right-7">
         {chatOpen && (
           <section
             role="dialog"

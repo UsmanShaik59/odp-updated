@@ -116,17 +116,20 @@ export function hwfFitSize(measured: number, width: number) {
 
 const HWF_CSS = `
 .hwf-root {
-  position: relative; width: 100%; overflow: hidden; isolation: isolate;
+  position: relative; width: 100%; min-height: clamp(380px, 48vw, 560px); overflow: hidden; isolation: isolate;
   background: var(--hwf-bg); color: var(--hwf-ink); -webkit-font-smoothing: antialiased;
 }
 .hwf-root canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; max-width: none; }
+.hwf-root p, .hwf-root h3, .hwf-root a, .hwf-root button { color: var(--hwf-ink); }
 .hwf-top {
   position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.25fr) repeat(3, minmax(0, 1fr));
-  gap: 24px; padding: clamp(22px, 3.4vw, 40px) clamp(20px, 3.4vw, 44px) 0;
-  font-family: var(--hwf-mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; line-height: 1.75;
+  gap: clamp(12px, 2vw, 24px); padding: clamp(22px, 3.4vw, 40px) clamp(16px, 3.4vw, 44px) 0;
+  font-family: var(--hwf-mono); font-size: clamp(10px, .82vw, 10.5px); letter-spacing: clamp(.08em, .15vw, .18em); text-transform: uppercase; line-height: 1.75;
 }
+.hwf-top > *, .hwf-brand, .hwf-col, .hwf-col li { min-width: 0; }
 .hwf-brand strong { display: block; font-weight: 500; }
 .hwf-brand span { opacity: .62; }
+.hwf-brand strong, .hwf-brand span, .hwf-col a { overflow-wrap: anywhere; }
 .hwf-col h3 { margin: 0; font: inherit; opacity: .62; font-weight: 500; }
 .hwf-col ul { list-style: none; margin: 0; padding: 0; }
 .hwf-col a, .hwf-up {
@@ -139,13 +142,13 @@ const HWF_CSS = `
 .hwf-col a:focus-visible, .hwf-up:focus-visible { outline: 1px solid currentColor; outline-offset: 3px; opacity: 1; }
 .hwf-rule {
   position: relative; z-index: 1; display: flex; justify-content: flex-end; align-items: center; gap: 16px;
-  margin: clamp(18px, 2.6vw, 30px) clamp(20px, 3.4vw, 44px) 0; padding-top: 12px;
+  margin: clamp(18px, 2.6vw, 30px) clamp(16px, 3.4vw, 44px) 0; padding-top: 12px;
   border-top: 0.5px solid color-mix(in srgb, var(--hwf-ink) 30%, transparent);
-  font-family: var(--hwf-mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase;
+  font-family: var(--hwf-mono); font-size: clamp(10px, .82vw, 10.5px); letter-spacing: clamp(.08em, .15vw, .18em); text-transform: uppercase;
 }
 .hwf-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (max-width: 720px) {
-  .hwf-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); row-gap: 18px; }
+  .hwf-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); row-gap: clamp(12px, 3vw, 18px); column-gap: clamp(12px, 4vw, 24px); }
   .hwf-brand { grid-column: 1 / -1; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -169,7 +172,7 @@ export default function HalftoneWordmarkFooter({
   fontFamily = SANS_STACK,
   fontWeight = 800,
   monoFamily = MONO_STACK,
-  height = "560px",
+  height = "auto",
   className = "",
 }: HalftoneWordmarkFooterProps) {
   const colors = { ...PRESETS[preset], ...palette };
@@ -244,6 +247,8 @@ export default function HalftoneWordmarkFooter({
       pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(width * pixelRatio);
       canvas.height = Math.round(height * pixelRatio);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
 
       const mask = document.createElement("canvas");
       mask.width = width;
@@ -263,7 +268,7 @@ export default function HalftoneWordmarkFooter({
       maskContext.fillText(word, (width - textMetrics.width) / 2, height + capHeight * cropAmount);
       const image = maskContext.getImageData(0, 0, width, height).data;
 
-      const gap = Math.max(3, current.dotGap);
+      const gap = Math.max(3, current.dotGap, Math.min(width / 160, 10));
       const columns = Math.ceil(width / gap);
       const rows = Math.ceil(height / gap);
       const values: number[] = [];
