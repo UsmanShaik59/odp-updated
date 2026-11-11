@@ -1626,14 +1626,14 @@ export function HomePage() {
           <div>
             <Link
               href="#top"
-              className="inline-flex items-center text-[#0874d1]"
+              className="inline-flex items-center text-white"
               aria-label="ODP home"
             >
               <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
                 odp
               </span>
             </Link>
-            <p className="mt-5 max-w-xs text-sm leading-6 text-[#5f6368]">
+            <p className="mt-5 max-w-xs text-sm leading-6 text-white">
               Thoughtfully selected homes for the way you want to live.
             </p>
           </div>
@@ -1641,7 +1641,7 @@ export function HomePage() {
             <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
               Discover
             </h3>
-            <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
+            <div className="mt-5 flex flex-col gap-3 text-sm text-white">
               <Link href="#properties">Buy Flats</Link>
               <Link href="#properties">Properties</Link>
               <Link href="#locations">Locations</Link>
@@ -1651,7 +1651,7 @@ export function HomePage() {
             <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
               Company
             </h3>
-            <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
+            <div className="mt-5 flex flex-col gap-3 text-sm text-white">
               <Link href="#about">About Us</Link>
               <Link href="#contact">Contact</Link>
               <Link href="#contact">List Property</Link>
@@ -1661,17 +1661,17 @@ export function HomePage() {
             <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
               Get in touch
             </h3>
-            <p className="mt-5 text-sm leading-6 text-[#5f6368]">
+            <p className="mt-5 text-sm leading-6 text-white">
               <a
                 href="mailto:help.onestepdreamproperty@gmail.com"
-                className="transition-colors hover:text-[#0874d1]"
+                className="transition-colors hover:text-white/80"
               >
                 help.onestepdreamproperty@gmail.com
               </a>
               <br />
               <a
                 href="tel:+91 7411535782"
-                className="transition-colors hover:text-[#0874d1]"
+                className="transition-colors hover:text-white/80"
               >
                 +91 7411535782
               </a>
