@@ -117,7 +117,7 @@ export function hwfFitSize(measured: number, width: number) {
 const HWF_CSS = `
 .hwf-root {
   position: relative; width: 100%; min-height: clamp(380px, 48vw, 560px); overflow: hidden; isolation: isolate;
-  background: var(--hwf-bg); color: var(--hwf-ink); -webkit-font-smoothing: antialiased;
+  background: var(--hwf-bg); color: var(--hwf-ink); -webkit-font-smoothing: antialiased; touch-action: pan-y;
 }
 .hwf-root canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; max-width: none; }
 .hwf-root p, .hwf-root h3, .hwf-root a, .hwf-root button { color: var(--hwf-ink); }
@@ -441,8 +441,7 @@ export default function HalftoneWordmarkFooter({
     };
     const onDown = (event: PointerEvent) => {
       if (!options.current.interactive || reducedMotion) return;
-      if (event.target instanceof Element && event.target.closest("a, button")) return;
-      const [x, y] = toLocal(event);
+          const [x, y] = toLocal(event);
       shock = { x, y, time: performance.now() };
       wake();
     };
