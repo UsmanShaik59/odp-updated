@@ -311,6 +311,32 @@ main, section, header, footer { min-width: 0; }
   .mobile-property-search > div { min-width: 0; }
 }
 
+.shader-frame {
+  position: relative;
+  width: 100%;
+  height: clamp(22rem, 66vh, 48rem);
+  height: clamp(22rem, 66svh, 48rem);
+  overflow: hidden;
+  border: 1px solid rgb(21 43 67 / 12%);
+  border-radius: 1.5rem;
+  background: #e5ded0;
+}
+
+@media (max-width: 639px) {
+  .shader-frame {
+    height: clamp(21rem, 60vh, 33rem);
+    height: clamp(21rem, 60svh, 33rem);
+    border-radius: 1.25rem;
+  }
+}
+
+@media (max-height: 480px) {
+  .shader-frame {
+    height: clamp(16rem, 58vh, 24rem);
+    height: clamp(16rem, 58svh, 24rem);
+  }
+}
+
 @media (max-width: 479px) {
   .hero-illustration { min-height: 250px; }
   .hero-3d { min-height: 250px; height: 250px; }

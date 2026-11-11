@@ -29,6 +29,7 @@ import {
   ShieldCheck,
   ArrowLeft,
 } from "lucide-react";
+import { WorkingVolumes } from "../../src/shaders/working-volumes/WorkingVolumes";
 
 export default function PropertyFeatureSection() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -208,6 +209,31 @@ export default function PropertyFeatureSection() {
           </div>
         </nav>
       </header>
+
+      <section
+        aria-labelledby="working-volumes-heading"
+        className="relative bg-[#f5f8fb] px-4 pb-10 pt-24 sm:px-8 sm:pb-14 sm:pt-28"
+      >
+        <div className="mx-auto max-w-[1280px]">
+          <div className="mx-auto mb-7 max-w-3xl text-center sm:mb-9">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0874d1]">
+              About OneStep
+            </p>
+            <h1
+              id="working-volumes-heading"
+              className="mt-3 text-3xl font-semibold leading-tight tracking-[-0.045em] text-[#152b43] sm:text-4xl md:text-5xl"
+            >
+              A different perspective on the journey home
+            </h1>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#617286] sm:text-base">
+              Explore the interactive Working Volumes showcase, then continue below to learn how OneStep helps you find the right home.
+            </p>
+          </div>
+          <div className="shader-frame mx-auto max-w-[1160px]">
+            <WorkingVolumes background="light" />
+          </div>
+        </div>
+      </section>
 
       {/* HERO + FEATURE CAROUSEL */}
 
