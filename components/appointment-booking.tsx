@@ -298,7 +298,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
 
             <Link
               href={propertyHref}
-              className="group relative mt-5 ml-25 inline-flex h-9 w-full max-w-[200px] min-w-0 items-center justify-center gap-1.5 rounded-full px-2.5 text-[11px] font-semibold text-[#152b43] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(207,117,68,0.10)] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cf7544] min-[380px]:w-[min(180px,calc(50vw-24px))] min-[380px]:flex-none lg:h-10 lg:gap-2 lg:px-3 lg:text-xs"
+              className="group relative mt-5 ml-25 inline-flex h-9 w-full max-w-[200px] min-w-0 items-center justify-center gap-1.5 rounded-full px-2.5 text-[11px] font-semibold text-[#152b43] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(8,116,209,0.10)] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0874d1] min-[380px]:w-[min(180px,calc(50vw-24px))] min-[380px]:flex-none lg:h-10 lg:gap-2 lg:px-3 lg:text-xs"
             >
               <svg
                 className="pointer-events-none absolute inset-0 h-full w-full"
@@ -323,11 +323,11 @@ export function AppointmentBooking({ property }: { property: Property }) {
                   height="38.5"
                   rx="19.25"
                   pathLength="100"
-                  stroke="#cf7544"
+                  stroke="#0874d1"
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeDasharray="18 82"
-                  className="[filter:drop-shadow(0_0_2px_#cf7544)]"
+                  className="[filter:drop-shadow(0_0_2px_#0874d1)]"
                 >
                   <animate
                     attributeName="stroke-dashoffset"
@@ -356,7 +356,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
       <main className="mx-auto max-w-[1280px] px-4 pb-16 pt-[82px] sm:px-6 sm:pt-24 lg:px-8 lg:pb-20 lg:pt-28">
         <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_0.82fr] lg:gap-16">
           <section>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#cf7544]">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0874d1]">
               One step ahead !
             </p>
             <h1 className="mt-3 max-w-xl text-4xl font-semibold leading-[1.02] tracking-[-0.055em] text-[#152b43] sm:text-6xl">
@@ -377,7 +377,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
                   placeholder="Enter your full name"
                   autoComplete="name"
                   required
-                  className="h-12 rounded-xl border border-[#cbd8e1] !bg-white px-4 font-normal !text-black caret-black outline-none transition-all duration-200 placeholder:!text-[#91a0af] focus:!bg-white focus:border-[#cf7544] focus:ring-2 focus:ring-[#cf7544]/15 autofill:!bg-white autofill:!text-black"
+                  className="h-12 rounded-xl border border-[#cbd8e1] !bg-white px-4 font-normal !text-black caret-black outline-none transition-all duration-200 placeholder:!text-[#91a0af] focus:!bg-white focus:border-[#0874d1] focus:ring-2 focus:ring-[#0874d1]/15 autofill:!bg-white autofill:!text-black"
                   style={{
                     WebkitTextFillColor: "#000000",
                     WebkitBoxShadow: "0 0 0 1000px #ffffff inset",
@@ -396,7 +396,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
                   inputMode="email"
                   required
                   maxLength={254}
-                  className="h-12 rounded-xl border border-[#cbd8e1] !bg-white px-4 font-normal !text-black caret-black outline-none transition-all duration-200 placeholder:!text-[#91a0af] focus:!bg-white focus:border-[#cf7544] focus:ring-2 focus:ring-[#cf7544]/15 autofill:!bg-white autofill:!text-black"
+                  className="h-12 rounded-xl border border-[#cbd8e1] !bg-white px-4 font-normal !text-black caret-black outline-none transition-all duration-200 placeholder:!text-[#91a0af] focus:!bg-white focus:border-[#0874d1] focus:ring-2 focus:ring-[#0874d1]/15 autofill:!bg-white autofill:!text-black"
                   style={{
                     WebkitTextFillColor: "#000000",
                     WebkitBoxShadow: "0 0 0 1000px #ffffff inset",
@@ -419,7 +419,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
                   inputMode="numeric"
                   maxLength={10}
                   required
-                  className="h-12 rounded-xl border border-[#cbd8e1] !bg-white px-4 font-normal !text-black caret-black outline-none transition-all duration-200 placeholder:!text-[#91a0af] focus:!bg-white focus:border-[#cf7544] focus:ring-2 focus:ring-[#cf7544]/15 autofill:!bg-white autofill:!text-black"
+                  className="h-12 rounded-xl border border-[#cbd8e1] !bg-white px-4 font-normal !text-black caret-black outline-none transition-all duration-200 placeholder:!text-[#91a0af] focus:!bg-white focus:border-[#0874d1] focus:ring-2 focus:ring-[#0874d1]/15 autofill:!bg-white autofill:!text-black"
                   style={{
                     WebkitTextFillColor: "#000000",
                     WebkitBoxShadow: "0 0 0 1000px #ffffff inset",
@@ -433,7 +433,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
               {/* Full Calendar */}
               <div className="rounded-2xl border border-[#dceaf7]  p-5  sm:p-6">
                 <div className="flex items-center gap-3">
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl text-[#cf7544]">
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl text-[#0874d1]">
                     <CalendarDays size={21} />
                   </span>
                   <div>
@@ -469,7 +469,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
                           ),
                         )
                       }
-                      className="flex size-9 items-center justify-center rounded-lg border border-[#dce5eb] text-[#152b43] transition-all duration-200 hover:border-[#cf7544] hover:bg-[#fff0e5] hover:text-[#cf7544] active:scale-95 disabled:cursor-not-allowed disabled:opacity-30"
+                      className="flex size-9 items-center justify-center rounded-lg border border-[#dce5eb] text-[#152b43] transition-all duration-200 hover:border-[#0874d1] hover:bg-[#eaf5ff] hover:text-[#0874d1] active:scale-95 disabled:cursor-not-allowed disabled:opacity-30"
                     >
                       <ChevronLeft size={18} />
                     </button>
@@ -486,7 +486,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
                           ),
                         )
                       }
-                      className="flex size-9 items-center justify-center rounded-lg border border-[#dce5eb] text-[#152b43] transition-all duration-200 hover:border-[#cf7544] hover:bg-[#fff0e5] hover:text-[#cf7544] active:scale-95"
+                      className="flex size-9 items-center justify-center rounded-lg border border-[#dce5eb] text-[#152b43] transition-all duration-200 hover:border-[#0874d1] hover:bg-[#eaf5ff] hover:text-[#0874d1] active:scale-95"
                     >
                       <ChevronRight size={18} />
                     </button>
@@ -567,17 +567,17 @@ export function AppointmentBooking({ property }: { property: Property }) {
                             }}
                             className={`relative flex size-full max-h-11 max-w-11 items-center justify-center rounded-xl text-sm transition-all duration-200 active:scale-90 ${
                               selected
-                                ? "scale-100 bg-[#f0a879] font-semibold text-[#542d18] shadow-[0_5px_14px_rgba(207,117,68,0.2)]"
+                                ? "scale-100 bg-[#0874d1] font-semibold text-white shadow-[0_5px_14px_rgba(8,116,209,0.24)]"
                                 : disabled
                                   ? "cursor-not-allowed text-[#c5ced7]"
                                   : isToday
-                                    ? "border border-[#cf7544] font-semibold text-[#cf7544] hover:bg-[#fff0e5]"
-                                    : "text-[#152b43] hover:bg-[#fff0e5] hover:text-[#cf7544]"
+                                    ? "border border-[#0874d1] font-semibold text-[#0874d1] hover:bg-[#eaf5ff]"
+                                    : "text-[#152b43] hover:bg-[#eaf5ff] hover:text-[#0874d1]"
                             }`}
                           >
                             {day}
                             {isToday && !selected && (
-                              <span className="absolute bottom-1 size-1 rounded-full bg-[#cf7544]" />
+                              <span className="absolute bottom-1 size-1 rounded-full bg-[#0874d1]" />
                             )}
                           </button>
                         </div>
@@ -588,11 +588,11 @@ export function AppointmentBooking({ property }: { property: Property }) {
 
                 <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-[#edf2f7] pt-4 text-xs text-[#718195]">
                   <span className="inline-flex items-center gap-2">
-                    <span className="size-3 rounded-md bg-[#cf7544]" />
+                    <span className="size-3 rounded-md bg-[#0874d1]" />
                     Selected
                   </span>
                   <span className="inline-flex items-center gap-2">
-                    <span className="size-3 rounded-md border border-[#cf7544]" />
+                    <span className="size-3 rounded-md border border-[#0874d1]" />
                     Today
                   </span>
                   <span className="ml-auto text-right font-medium text-[#152b43]">
@@ -610,7 +610,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
               {/* Time Slots and live clock */}
               <div className="min-w-0 rounded-2xl border border-[#dceaf7]  duration-300  sm:p-6">
                 <div className="flex items-center gap-3">
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl  text-[#cf7544]">
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl  text-[#0874d1]">
                     <Clock3 size={21} />
                   </span>
                   <div className="min-w-0">
@@ -641,7 +641,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
                           }}
                         />
                         <span
-                          className="absolute left-1/2 top-1/2 h-[34px] w-[3px] origin-bottom rounded-full bg-[#cf7544]"
+                          className="absolute left-1/2 top-1/2 h-[34px] w-[3px] origin-bottom rounded-full bg-[#0874d1]"
                           style={{
                             transform: `translate(-50%, -100%) rotate(${currentTime.getMinutes() * 6 + currentTime.getSeconds() * 0.1}deg)`,
                           }}
@@ -652,7 +652,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
                             transform: `translate(-50%, -100%) rotate(${currentTime.getSeconds() * 6}deg)`,
                           }}
                         />
-                        <span className="absolute left-1/2 top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#cf7544]" />
+                        <span className="absolute left-1/2 top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#0874d1]" />
                       </>
                     )}
                   </div>
@@ -685,7 +685,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
                     <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#718195]">
                       Available time slots
                     </p>
-                    <span className="rounded-full bg-[#fff0e5] px-2.5 py-1 text-xs font-semibold text-[#cf7544]">
+                    <span className="rounded-full bg-[#eaf5ff] px-2.5 py-1 text-xs font-semibold text-[#0874d1]">
                       {slots.length} slots
                     </span>
                   </div>
@@ -704,8 +704,8 @@ export function AppointmentBooking({ property }: { property: Property }) {
                           }}
                           className={`flex min-h-12 min-w-0 items-center justify-between gap-2 rounded-xl border px-3 text-sm transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.97] ${
                             selected
-                              ? "border-[#cf7544] bg-[#f0a879] font-semibold text-[#542d18] shadow-[0_6px_16px_rgba(207,117,68,0.2)]"
-                              : "border-[#dce5eb] bg-white font-medium text-[#152b43] hover:border-[#cf7544] hover:bg-[#f4f9fe] hover:text-[#cf7544]"
+                              ? "border-[#0874d1] bg-[#0874d1] font-semibold text-white shadow-[0_6px_16px_rgba(8,116,209,0.2)]"
+                              : "border-[#dce5eb] bg-white font-medium text-[#152b43] hover:border-[#0874d1] hover:bg-[#f4f9fe] hover:text-[#0874d1]"
                           }`}
                         >
                           <span className="flex min-w-0 items-center gap-2">
@@ -732,30 +732,30 @@ export function AppointmentBooking({ property }: { property: Property }) {
                 className="object-cover transition-transform duration-700 hover:scale-[1.03]"
                 sizes="(max-width: 1024px) 100vw, 40vw"
               />
-              <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#cf7544] shadow-sm">
+              <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#0874d1] shadow-sm">
                 {property.status}
               </span>
             </div>
-            <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-[#cf7544]">
+            <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-[#0874d1]">
               Selected property
             </p>
             <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-[#152b43]">
               {property.title}
             </h2>
             <p className="mt-2 flex items-start gap-2 text-sm leading-6 text-[#5f6368]">
-              <MapPin className="mt-0.5 size-4 shrink-0 text-[#cf7544]" />
+              <MapPin className="mt-0.5 size-4 shrink-0 text-[#0874d1]" />
               {property.location}
             </p>
             <div className="mt-5 flex items-center justify-between gap-4 border-t border-[#e5edf5] pt-4 text-sm">
               <span className="text-[#5f6368]">Starting price</span>
-              <strong className="text-right text-base text-[#cf7544]">
+              <strong className="text-right text-base text-[#0874d1]">
                 {property.price}
               </strong>
             </div>
             <div className="mt-8 overflow-hidden rounded-2xl  p-4 ">
               {/* Venue heading */}
               <div className="flex items-center gap-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl text-[#cf7544]">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl text-[#0874d1]">
                   <MapPin size={20} />
                 </span>
                 <div className="min-w-0">
@@ -784,7 +784,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Open venue in Google Maps"
-                  className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-lg border border-[#dce5eb] bg-white px-3 py-2 text-xs font-semibold text-black shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#cf7544] hover:shadow-md"
+                  className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-lg border border-[#dce5eb] bg-white px-3 py-2 text-xs font-semibold text-black shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0874d1] hover:shadow-md"
                 >
                   Open map
                   <ArrowUpRight size={14} />
@@ -793,7 +793,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
 
               {/* Venue address */}
               <p className="mt-4 flex items-start gap-2 text-sm leading-6 text-[#5f6368]">
-                <MapPin size={16} className="mt-1 shrink-0 text-[#cf7544]" />
+                <MapPin size={16} className="mt-1 shrink-0 text-[#0874d1]" />
                 <span>{property.location}</span>
               </p>
 
@@ -802,9 +802,9 @@ export function AppointmentBooking({ property }: { property: Property }) {
                 href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(property.location)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative mt-4 inline-flex items-center gap-2 overflow-hidden rounded-lg border border-[#cf7544] bg-white px-3 py-2 text-sm font-semibold text-black transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(207,117,68,0.10)] active:scale-[0.97]"
+                className="group relative mt-4 inline-flex items-center gap-2 overflow-hidden rounded-lg border border-[#0874d1] bg-white px-3 py-2 text-sm font-semibold text-black transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(8,116,209,0.10)] active:scale-[0.97]"
               >
-                <span className="pointer-events-none absolute inset-0 rounded-lg border-2 border-[#cf7544] [clip-path:inset(0_100%_0_0)] transition-all duration-500 ease-out group-hover:[clip-path:inset(0_0_0_0)]" />
+                <span className="pointer-events-none absolute inset-0 rounded-lg border-2 border-[#0874d1] [clip-path:inset(0_100%_0_0)] transition-all duration-500 ease-out group-hover:[clip-path:inset(0_0_0_0)]" />
                 <span className="relative z-10">Get directions</span>
                 <ArrowUpRight
                   size={16}
@@ -827,10 +827,10 @@ export function AppointmentBooking({ property }: { property: Property }) {
               className="
     group mt-8 flex h-14 w-60 ml-25 items-center
     justify-center gap-2 rounded-xl
-    border border-[#cf7544] bg-white px-5
-    text-sm font-semibold text-[#cf7544]
+    border border-[#0874d1] bg-white px-5
+    text-sm font-semibold text-[#0874d1]
     transition-all duration-300
-    hover:bg-[#cf7544] hover:text-white
+    hover:bg-[#0874d1] hover:text-white
     active:scale-[0.99] cursor-pointer 
     disabled:border-[#d5e2ec]
     disabled:bg-[#f4f8fb]
@@ -872,7 +872,7 @@ function Detail({
 }) {
   return (
     <div className="flex items-center gap-3 py-4">
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[#fff0e5] text-[#cf7544]">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[#eaf5ff] text-[#0874d1]">
         {icon}
       </span>
       <div className="min-w-0">
@@ -938,11 +938,11 @@ function PageShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-white text-[#152b43]">
-      <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#fff0e5] text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)]">
+      <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#eaf5ff] text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)]">
         <div className="mx-auto flex h-[58px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
           <button
             type="button"
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#edd0bb] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white lg:hidden"
+            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#cfe2f5] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white lg:hidden"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
@@ -953,7 +953,7 @@ function PageShell({ children }: { children: ReactNode }) {
 
           <Link
             href="/"
-            className="flex shrink-0 items-center text-[#cf7544] transition-transform duration-200 hover:scale-[1.03]"
+            className="flex shrink-0 items-center text-[#0874d1] transition-transform duration-200 hover:scale-[1.03]"
             aria-label="OneStep Dream Property home"
           >
             <span className="text-[25px] font-black leading-none tracking-[-0.12em] lg:text-[32px]">
@@ -970,7 +970,7 @@ function PageShell({ children }: { children: ReactNode }) {
                 key={item.label}
                 href={item.href}
                 onClick={(event) => handleNavClick(event, item.href)}
-                className="relative py-2 transition-colors duration-200 hover:text-[#cf7544] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:rounded-full after:bg-[#cf7544] after:transition-all after:duration-300 hover:after:w-full"
+                className="relative py-2 transition-colors duration-200 hover:text-[#0874d1] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:rounded-full after:bg-[#0874d1] after:transition-all after:duration-300 hover:after:w-full"
               >
                 {item.label}
               </Link>
@@ -981,11 +981,11 @@ function PageShell({ children }: { children: ReactNode }) {
             href="https://www.google.com/maps/search/?api=1&query=Koramangala%2C%20Bengaluru"
             target="_blank"
             rel="noopener noreferrer"
-            className="group ml-auto inline-flex min-w-0 items-center justify-end gap-1.5 rounded-lg px-2 py-2 text-[11px] font-semibold text-[#152b43] transition-all duration-200 hover:bg-white hover:text-[#cf7544] sm:text-xs lg:max-w-[230px]"
+            className="group ml-auto inline-flex min-w-0 items-center justify-end gap-1.5 rounded-lg px-2 py-2 text-[11px] font-semibold text-[#152b43] transition-all duration-200 hover:bg-white hover:text-[#0874d1] sm:text-xs lg:max-w-[230px]"
           >
             <MapPin
               aria-hidden="true"
-              className="size-4 shrink-0 text-[#cf7544] transition-transform duration-200 group-hover:-translate-y-0.5"
+              className="size-4 shrink-0 text-[#0874d1] transition-transform duration-200 group-hover:-translate-y-0.5"
             />
             <span className="truncate">Koramangala, Bengaluru</span>
             <ArrowUpRight
@@ -1000,13 +1000,13 @@ function PageShell({ children }: { children: ReactNode }) {
           aria-label="Mobile navigation"
           aria-hidden={!menuOpen}
           inert={!menuOpen ? true : undefined}
-          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#edd0bb] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
+          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#cfe2f5] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
             menuOpen
               ? "visible translate-y-0 scale-y-100 opacity-100"
               : "pointer-events-none invisible -translate-y-4 scale-y-95 opacity-0"
           }`}
         >
-          <div className="divide-y divide-[#edd0bb]">
+          <div className="divide-y divide-[#cfe2f5]">
             {mobileItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -1014,13 +1014,13 @@ function PageShell({ children }: { children: ReactNode }) {
                   key={item.label}
                   href={item.href}
                   onClick={(event) => handleNavClick(event, item.href)}
-                  className="group flex min-h-[70px] items-center gap-4 px-6 text-base font-medium text-[#152b43] transition-all duration-200 hover:bg-[#fff1e7] hover:pl-7"
+                  className="group flex min-h-[70px] items-center gap-4 px-6 text-base font-medium text-[#152b43] transition-all duration-200 hover:bg-[#f1f8ff] hover:pl-7"
                 >
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#cf7544] text-white transition-transform duration-200 group-hover:scale-105">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#0874d1] text-white transition-transform duration-200 group-hover:scale-105">
                     <Icon aria-hidden="true" className="size-[18px]" />
                   </span>
                   <span>{item.label}</span>
-                  <ArrowUpRight className="ml-auto size-4 text-[#cf7544] opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100" />
+                  <ArrowUpRight className="ml-auto size-4 text-[#0874d1] opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100" />
                 </Link>
               );
             })}
@@ -1032,13 +1032,13 @@ function PageShell({ children }: { children: ReactNode }) {
 
       <footer
         id="contact"
-        className="border-t border-[#cf7544] bg-[#f0a879] text-[#542d18]"
+        className="border-t border-[#0874d1] bg-[#0874d1] text-white"
       >
         <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
           <div>
             <Link
               href="#top"
-              className="inline-flex items-center text-[#cf7544]"
+              className="inline-flex items-center text-[#0874d1]"
               aria-label="ODP home"
             >
               <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
@@ -1076,14 +1076,14 @@ function PageShell({ children }: { children: ReactNode }) {
             <p className="mt-5 text-sm leading-6 text-[#5f6368]">
               <a
                 href="mailto:help.onestepdreamproperty@gmail.com"
-                className="transition-colors hover:text-[#cf7544]"
+                className="transition-colors hover:text-[#0874d1]"
               >
                 help.onestepdreamproperty@gmail.com
               </a>
               <br />
               <a
                 href="tel:+91 7411535782"
-                className="transition-colors hover:text-[#cf7544]"
+                className="transition-colors hover:text-[#0874d1]"
               >
                 +91 7411535782
               </a>

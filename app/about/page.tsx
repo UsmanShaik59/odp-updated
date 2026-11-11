@@ -69,11 +69,11 @@ export default function PropertyFeatureSection() {
   return (
     <main id="top" className="min-h-screen bg-white text-[#152b43]">
       {/* NAVBAR */}
-      <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#fff0e5] text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)]">
+      <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#eaf5ff] text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)]">
         <div className="mx-auto flex h-[58px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
           <button
             type="button"
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#edd0bb] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#cf7544] lg:hidden"
+            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#cfe2f5] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] lg:hidden"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
@@ -84,7 +84,7 @@ export default function PropertyFeatureSection() {
 
           <Link
             href="/"
-            className="flex shrink-0 items-center text-[#b85e2e]"
+            className="flex shrink-0 items-center text-[#0874d1]"
             aria-label="OneStep Dream Property home"
           >
             <span className="text-[25px] font-black leading-none tracking-[-0.12em] lg:text-[32px]">
@@ -119,7 +119,7 @@ export default function PropertyFeatureSection() {
                     window.history.replaceState(null, "", `/#${sectionId}`);
                   }
                 }}
-                className="transition-colors hover:text-[#cf7544]"
+                className="transition-colors hover:text-[#0874d1]"
               >
                 {item.label}
               </Link>
@@ -153,14 +153,14 @@ export default function PropertyFeatureSection() {
   id="mobile-navigation"
           aria-hidden={!menuOpen}
           inert={!menuOpen ? true : undefined}
-          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#edd0bb] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
+          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#cfe2f5] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
             menuOpen
               ? "visible translate-y-0 scale-y-100 opacity-100"
               : "pointer-events-none invisible -translate-y-4 scale-y-95 opacity-0"
           }`}
           aria-label="Mobile navigation"
         >
-          <div className="mx-auto w-full max-w-[520px] divide-y divide-[#edd0bb]">
+          <div className="mx-auto w-full max-w-[520px] divide-y divide-[#cfe2f5]">
             {[
               { label: "Home", href: "/", icon: Building2 },
               { label: "Buy Flats", href: "/#properties", icon: BedDouble },
@@ -172,14 +172,14 @@ export default function PropertyFeatureSection() {
               const Icon = item.icon;
               const content = (
                 <>
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#f0a879] text-[#542d18]">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#0874d1] text-white">
                     <Icon aria-hidden="true" className="size-[18px]" />
                   </span>
                   <span>{item.label}</span>
                 </>
               );
               const className =
-                "flex min-h-[70px] items-center gap-4 px-6 text-base font-medium text-[#152b43] transition-all duration-200 hover:bg-[#fff1e7] hover:pl-7 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#cf7544]";
+                "flex min-h-[70px] items-center gap-4 px-6 text-base font-medium text-[#152b43] transition-all duration-200 hover:bg-[#f1f8ff] hover:pl-7 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1]";
 
               return (
                 <Link
@@ -235,7 +235,7 @@ export default function PropertyFeatureSection() {
           <h2 className="max-w-4xl text-3xl font-semibold leading-tight tracking-[-0.045em] text-[#152b43] sm:text-4xl md:text-5xl lg:text-[58px]">
             Your next home starts
             <br className="hidden sm:block" /> with one{" "}
-            <span className="inline-block rounded-xl bg-[#cf7544] px-3 py-1 text-white">
+            <span className="inline-block rounded-xl bg-[#0874d1] px-3 py-1 text-white">
               step.
             </span>
           </h2>
@@ -250,7 +250,7 @@ export default function PropertyFeatureSection() {
         {/* Property buying features */}
         <div className="relative z-10 mx-auto max-w-[1440px]">
           <div className="mb-6">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#cf7544]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#0874d1]">
               Explore with OneStep
             </p>
             <h3 className="mt-2 text-xl font-semibold tracking-tight text-[#152b43] sm:text-2xl">
@@ -353,7 +353,7 @@ export default function PropertyFeatureSection() {
               type="button"
               onClick={() => scroll("left")}
               aria-label="Previous property features"
-              className="flex size-11 items-center justify-center rounded-full bg-[#fff0e5] text-[#152b43] transition hover:bg-[#d7eaff]"
+              className="flex size-11 items-center justify-center rounded-full bg-[#eaf5ff] text-[#152b43] transition hover:bg-[#d7eaff]"
             >
               <ArrowLeft size={19} />
             </button>
@@ -362,7 +362,7 @@ export default function PropertyFeatureSection() {
               type="button"
               onClick={() => scroll("right")}
               aria-label="Next property features"
-              className="flex size-11 items-center justify-center rounded-full bg-[#f0a879] text-[#542d18] transition hover:bg-[#075da8]"
+              className="flex size-11 items-center justify-center rounded-full bg-[#0874d1] text-white transition hover:bg-[#075da8]"
             >
               <ArrowRight size={19} />
             </button>
@@ -373,13 +373,13 @@ export default function PropertyFeatureSection() {
       {/* FOOTER */}
       <footer
         id="contact"
-        className="border-t border-[#cf7544] bg-[#f0a879] text-[#542d18]"
+        className="border-t border-[#0874d1] bg-[#0874d1] text-white"
       >
         <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
           <div>
             <Link
               href="/"
-              className="inline-flex items-center text-[#cf7544]"
+              className="inline-flex items-center text-[#0874d1]"
               aria-label="ODP home"
             >
               <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
@@ -423,14 +423,14 @@ export default function PropertyFeatureSection() {
             <p className="mt-5 text-sm leading-6 text-[#5f6368]">
               <a
                 href="mailto:help.onestepdreamproperty@gmail.com"
-                className="transition-colors hover:text-[#cf7544]"
+                className="transition-colors hover:text-[#0874d1]"
               >
                 help.onestepdreamproperty@gmail.com
               </a>
               <br />
               <a
                 href="tel:+91 7411535782"
-                className="transition-colors hover:text-[#cf7544]"
+                className="transition-colors hover:text-[#0874d1]"
               >
                 +91 7411535782
               </a>

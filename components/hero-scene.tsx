@@ -92,7 +92,7 @@ function SceneContent() {
         scale={[6, 3.8, 3.5]}
         size={2}
         speed={0.2}
-        color="#d78350"
+        color="#0874d1"
         opacity={0.35}
       />
 
@@ -148,7 +148,7 @@ function SceneContent() {
         >
           <coneGeometry args={[1.85, 1.35, 4]} />
           <meshStandardMaterial
-            color="#d78350"
+            color="#0874d1"
             roughness={0.3}
             metalness={0.12}
           />
@@ -263,7 +263,7 @@ function SceneContent() {
           castShadow
         >
           <meshStandardMaterial
-            color="#d78350"
+            color="#0874d1"
             roughness={0.3}
             metalness={0.1}
           />
@@ -313,7 +313,7 @@ function SceneContent() {
           rotation={[Math.PI / 2.4, 0.3, 0]}
         >
           <torusGeometry args={[2.25, 0.016, 10, 100]} />
-          <meshBasicMaterial color="#d78350" transparent opacity={0.32} />
+          <meshBasicMaterial color="#0874d1" transparent opacity={0.32} />
         </mesh>
 
         <mesh position={[1.5, 0.65, 0.35]}>
