@@ -562,9 +562,9 @@ html::-webkit-scrollbar-thumb:hover {
 }
 
 .odp-gradient-theme > header {
-  background: rgb(255 255 255 / 18%) !important;
+  background: linear-gradient(110deg, #ef9e6d 0%, #f3b28e 58%, #f7c6a8 100%) !important;
   border-color: transparent !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 10px rgb(146 73 34 / 12%) !important;
 }
 
 .odp-gradient-theme main section {

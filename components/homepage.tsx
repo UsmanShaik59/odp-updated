@@ -451,7 +451,7 @@ export function HomePage() {
 
           <Link
             href="#top"
-            className="flex shrink-0 items-center text-[#0874d1]"
+            className="flex shrink-0 items-center text-[#9b3f12]"
             aria-label="OneStep Dream Property home"
           >
             <span className="text-[25px] font-black leading-none tracking-[-0.12em] lg:text-[32px]">
@@ -1611,7 +1611,7 @@ export function HomePage() {
           <div>
             <Link
               href="#top"
-              className="inline-flex items-center text-[#0874d1]"
+              className="inline-flex items-center text-[#9b3f12]"
               aria-label="ODP home"
             >
               <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
