@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import { properties } from "@/lib/properties";
 import { HeroScene } from "./hero-scene";
 import { PropertyAssistant } from "./property-assistant";
+import { GsapCursor } from "./gsap-cursor";
 import Link from "next/link";
 import { CarFront, Phone } from "lucide-react";
 import {
@@ -33,6 +37,8 @@ import {
   X,
 } from "lucide-react";
 
+gsap.registerPlugin(useGSAP, ScrollTrigger);
+
 const locations = [
   { name: "Bengaluru", count: "128 properties" },
   { name: "Koramangala", count: "86 properties" },
@@ -50,30 +56,38 @@ function Reveal({
   delay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
+  useGSAP(() => {
     const element = ref.current;
-    if (!element) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
+    if (!element || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const isHeroCopy = element.classList.contains("hero-copy");
+    const heroItems = isHeroCopy ? element.firstElementChild?.children : null;
+    const targets = heroItems?.length ? heroItems : element;
+
+    gsap.fromTo(
+      targets,
+      { autoAlpha: 0, y: 26 },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.78,
+        delay: delay / 1000,
+        ease: "power3.out",
+        stagger: isHeroCopy ? 0.085 : 0,
+        scrollTrigger: {
+          trigger: element,
+          start: "top 88%",
+          once: true,
+        },
       },
-      { threshold: 0.12 },
     );
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
+  }, { scope: ref });
 
   return (
-    <div
-      ref={ref}
-      className={`reveal ${visible ? "reveal-visible" : ""} ${className}`}
-      style={{ "--reveal-delay": `${delay}ms` } as React.CSSProperties}
-    >
+    <div ref={ref} className={className}>
       {children}
     </div>
   );
@@ -351,6 +365,8 @@ function PropertySearchForm() {
 }
 
 export function HomePage() {
+  const pageRef = useRef<HTMLDivElement>(null);
+  const mobileNavRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
@@ -399,6 +415,24 @@ export function HomePage() {
     return () => window.clearTimeout(timer);
   }, []);
 
+  useGSAP(() => {
+    const nav = mobileNavRef.current;
+    if (!nav || !menuOpen || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    gsap.fromTo(
+      nav,
+      { autoAlpha: 0, y: -14, scaleY: 0.98 },
+      { autoAlpha: 1, y: 0, scaleY: 1, duration: 0.38, ease: "power3.out" },
+    );
+    gsap.fromTo(
+      nav.querySelectorAll("a"),
+      { autoAlpha: 0, y: 9 },
+      { autoAlpha: 1, y: 0, duration: 0.28, delay: 0.04, stagger: 0.045, ease: "power2.out" },
+    );
+  }, { scope: pageRef, dependencies: [menuOpen], revertOnUpdate: true });
+
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -435,7 +469,8 @@ export function HomePage() {
     return () => window.removeEventListener("hashchange", scrollToHash);
   }, []);
   return (
-    <div className="odp-gradient-theme min-h-screen text-[#111111]">
+    <div ref={pageRef} className="odp-gradient-theme min-h-screen text-[#111111]">
+      <GsapCursor />
       <header className="fixed inset-x-0 top-0 z-50 w-full text-[#152b43]">
         <div className="mx-auto flex h-[58px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
           <button
@@ -511,10 +546,11 @@ export function HomePage() {
         />
 
         <nav
+          ref={mobileNavRef}
           id="mobile-navigation"
           aria-hidden={!menuOpen}
           inert={!menuOpen ? true : undefined}
-          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#edd0bb] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
+          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#edd0bb] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] lg:hidden ${
             menuOpen
               ? "visible translate-y-0 scale-y-100 opacity-100"
               : "pointer-events-none invisible -translate-y-4 scale-y-95 opacity-0"
