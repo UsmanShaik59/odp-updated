@@ -517,8 +517,9 @@ export function HomePage() {
           aria-hidden={!menuOpen}
           tabIndex={menuOpen ? 0 : -1}
           onClick={() => setMenuOpen(false)}
-          className={`fixed inset-0 top-[64px] z-40 bg-[#152b43]/10 transition-opacity duration-[360ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:hidden ${
-            menuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+          data-open={menuOpen}
+          className={`mobile-drawer-backdrop fixed inset-0 top-[64px] z-40 bg-[#152b43]/10 lg:hidden ${
+            menuOpen ? "pointer-events-auto" : "pointer-events-none"
           }`}
         />
 
@@ -527,10 +528,9 @@ export function HomePage() {
           id="mobile-navigation"
           aria-hidden={!menuOpen}
           inert={!menuOpen ? true : undefined}
-  className={`fixed inset-x-0 bottom-0 top-[64px] z-50 flex flex-col overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-sm text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] transition-[opacity,transform] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:hidden ${
-            menuOpen
-              ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
-              : "pointer-events-none -translate-y-6 scale-[0.985] opacity-0"
+          data-open={menuOpen}
+          className={`mobile-drawer-panel fixed inset-x-0 bottom-0 top-[64px] z-50 flex flex-col overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-sm text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] lg:hidden ${
+            menuOpen ? "pointer-events-auto" : "pointer-events-none"
           }`}
           aria-label="Mobile navigation"
         >
@@ -1407,7 +1407,7 @@ export function HomePage() {
                 aria-hidden="true"
               />
             </div>
-            <div data-gsap-drag className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-5 lg:overflow-visible lg:px-0">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
               {[
                 {
                   title: "EMI Calculator",
@@ -1437,7 +1437,7 @@ export function HomePage() {
                 <Link
                   href="#contact"
                   key={title}
-                  className="group flex min-h-[310px] min-w-[300px] snap-start flex-col rounded-[10px] border border-[#d9d9d9] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#11b6c9] hover:shadow-[0_12px_26px_rgba(0,0,0,0.08)] sm:p-6 lg:min-h-[310px] lg:min-w-0"
+                  className="group flex min-h-[310px] min-w-0 flex-col rounded-[10px] border border-[#d9d9d9] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#11b6c9] hover:shadow-[0_12px_26px_rgba(0,0,0,0.08)] sm:p-6"
                 >
                   <span className="flex size-14 items-center justify-center text-[#303030]">
                     <Icon className="size-12 stroke-[1.7]" aria-hidden="true" />
