@@ -610,7 +610,7 @@ export function HomePage() {
                 </p>
               </div>
 
-              <div className="rounded-3xl border border-location-border bg-location-surface p-4 shadow-[0_18px_55px_rgba(21,43,67,0.06)] sm:p-6">
+              <div className="min-w-0">
                 <label htmlFor="location-search" className="mb-3 block text-sm font-semibold text-location-ink">
                   Search locations
                 </label>
