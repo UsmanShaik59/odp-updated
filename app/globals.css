@@ -556,12 +556,33 @@ html::-webkit-scrollbar-thumb:hover {
 }
 
 .odp-gradient-theme {
-  background: linear-gradient(125deg, #d1dbe1 0%, #e6e2df 44%, #f1b28f 100%);
+  min-height: 100vh;
+  background: linear-gradient(112deg, #efb08e 0%, #f7e7dc 48%, #f2b89a 100%);
   background-attachment: fixed;
 }
 
-.odp-warm-gradient {
-  background: linear-gradient(112deg, #efb08e 0%, #f4c2a3 48%, #f3d1b4 100%);
+.odp-gradient-theme > header {
+  background: rgb(255 255 255 / 18%) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.odp-gradient-theme main section {
+  background-color: transparent !important;
+  background-image: none !important;
+  border-top-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+.odp-gradient-theme footer {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: #263238 !important;
+}
+
+.odp-gradient-theme footer p,
+.odp-gradient-theme footer a {
+  color: #39464d !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
