@@ -440,7 +440,7 @@ export function HomePage() {
   };
 
   useEffect(() => {
-    const brand = "Start\nYour\nJourney";
+    const brand = "Start Your Journey";
     let index = 0;
     let deleting = false;
     let timer: number;
@@ -1019,9 +1019,9 @@ export function HomePage() {
                 Your next home starts here
               </p>
 
-              <h1 className="max-w-[560px] text-[clamp(2.5rem,8vw,4.5rem)] font-medium leading-[1.05] tracking-[-0.06em] sm:text-[clamp(3rem,5vw,4.2rem)] sm:leading-[0.98] lg:text-[4rem]">
+              <h1 className="max-w-[560px] font-medium leading-[1.05] tracking-[-0.06em]">
                 <span
-                  className="block min-h-[1.2em] whitespace-normal text-[clamp(1.25rem,7vw,4.5rem)] leading-tight tracking-tight text-[#0874d1]"
+                  className="block min-h-[1.2em] whitespace-nowrap text-[clamp(1.5rem,7vw,3rem)] leading-[1.1] tracking-[-0.055em] text-[#0874d1]"
                   aria-live="polite"
                 >
                   {typedBrand}
@@ -1031,7 +1031,7 @@ export function HomePage() {
                   />
                 </span>
 
-                <span data-gsap-title className="mt-2 block leading-[1.08] text-[#152b43] sm:leading-20">
+                <span data-gsap-title className="mt-2 block whitespace-nowrap text-[clamp(1.45rem,4.8vw,3.125rem)] leading-[1.08] text-[#152b43]">
                   Find the right property.
                   <br />
                   Make your next move.
