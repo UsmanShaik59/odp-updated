@@ -1682,16 +1682,6 @@ export function HomePage() {
           <span>© 2026 OneStep Dream Property. All rights reserved.</span>
           <span>Privacy · Terms</span>
         </div>{" "}
-        <div className="mx-auto mt-4 w-full max-w-[1280px] border-t border-white/20 px-5 pb-8 pt-6 sm:mt-6 sm:px-8 sm:pb-10 sm:pt-8">
-          <p className="text-xs leading-6 text-white/90 sm:text-sm sm:leading-7">
-            <strong className="font-semibold text-white/90">Disclaimer:</strong>{" "}
-            ODP Services acts solely as an intermediary platform for advertising
-            properties and is not a party to or responsible for transactions
-            between buyers and sellers. All offers, discounts, and property
-            details are subject to verification with the respective seller or
-            developer.
-          </p>
-        </div>
       </section>
       {!locationOpen && <SiteFooter />}
 
