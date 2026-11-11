@@ -234,7 +234,7 @@ function PropertySearchForm() {
   const optionClass = (active: boolean) =>
     `flex min-h-10 w-full items-center rounded-lg px-3 py-2 text-left text-sm transition-colors ${
       active
-        ? "bg-[#eff4ff] font-medium text-[#2855e8]"
+        ? "bg-[#eaf5ff] font-medium text-[#0874d1]"
         : "text-[#374151] hover:bg-[#f7f8fa]"
     }`;
 
@@ -242,24 +242,26 @@ function PropertySearchForm() {
     <form
       ref={dropdownRef}
       onSubmit={handleSearch}
-      className="mobile-property-search relative z-40 mx-auto mt-5 flex min-h-[76px] w-full min-w-0 items-center gap-0 rounded-full border border-[#e5e7eb] bg-white p-2 shadow-[0_3px_12px_rgba(15,23,42,0.05)]"
+      className="mobile-property-search relative z-40 mx-auto mt-7 flex min-h-0 w-full min-w-0 flex-col items-stretch gap-0 rounded-[30px] border border-[#dbe8f4] bg-white p-3 shadow-[0_8px_24px_rgba(21,43,67,0.08)] sm:min-h-[110px] sm:flex-row sm:items-center sm:rounded-full sm:p-2"
     >
       {/* Keyword / Location */}
-      <div className="flex h-10 min-w-0 flex-[1.6] items-center px-3 sm:px-5">
+      <div className="flex h-12 w-full min-w-0 flex-none items-center px-3 sm:h-10 sm:w-auto sm:flex-[1.6] sm:px-5">
         <input
           type="search"
           aria-label="Search location"
           placeholder="Enter city / locality / project"
           value={location}
           onChange={(event) => setLocation(event.target.value)}
-          className="w-full min-w-0 border-0 bg-transparent p-0 text-[13px] text-[#374151] outline-none placeholder:text-[#8993a8] focus:ring-0 sm:text-sm"
+          className="w-full min-w-0 border-0 bg-transparent p-0 text-sm text-[#152b43] outline-none placeholder:text-[#75879a] focus:ring-0 sm:text-base"
         />
       </div>
 
-      <span className="h-6 w-px shrink-0 bg-[#e5e7eb]" />
+      <span className="mx-3 h-px shrink-0 bg-[#e5e7eb] sm:hidden" />
+      <span className="hidden h-6 w-px shrink-0 bg-[#e5e7eb] sm:block" />
 
+      <div className="flex w-full min-w-0 flex-col sm:contents">
       {/* Property Type */}
-      <div className="relative flex h-10 min-w-0 flex-1 items-center px-3 sm:px-5">
+      <div className="relative flex h-11 w-full min-w-0 flex-none items-center px-3 sm:h-10 sm:w-auto sm:flex-1 sm:px-5">
         <button
           type="button"
           aria-haspopup="listbox"
@@ -267,7 +269,7 @@ function PropertySearchForm() {
           onClick={() =>
             setOpenDropdown((current) => (current === "type" ? null : "type"))
           }
-          className="flex w-full min-w-0 items-center justify-between gap-2 text-left text-[13px] text-[#8993a8] outline-none sm:text-sm"
+          className="flex w-full min-w-0 items-center justify-between gap-2 text-left text-sm text-[#75879a] outline-none sm:text-base"
         >
           <span className="truncate">
             {propertyType === "Any Type"
@@ -307,10 +309,11 @@ function PropertySearchForm() {
         )}
       </div>
 
+      <span className="mx-3 h-px shrink-0 bg-[#e5e7eb] sm:hidden" />
       <span className="hidden h-6 w-px shrink-0 bg-[#e5e7eb] sm:block" />
 
       {/* Budget */}
-      <div className="relative hidden h-10 min-w-0 flex-1 items-center px-3 sm:flex sm:px-4">
+      <div className="relative flex h-11 w-full min-w-0 flex-none items-center px-3 sm:h-10 sm:w-auto sm:flex-1 sm:px-4">
         <button
           type="button"
           aria-haspopup="listbox"
@@ -320,7 +323,7 @@ function PropertySearchForm() {
               current === "budget" ? null : "budget",
             )
           }
-          className="flex w-full min-w-0 items-center justify-between gap-2 text-left text-[13px] text-[#8993a8] outline-none sm:text-sm"
+          className="flex w-full min-w-0 items-center justify-between gap-2 text-left text-sm text-[#75879a] outline-none sm:text-base"
         >
           <span className="truncate">
             {budget === "Any Budget" ? "Select budget" : budget}
@@ -357,63 +360,16 @@ function PropertySearchForm() {
           </div>
         )}
       </div>
+      </div>
 
       {/* Search */}
 
       <button
         type="submit"
-        className="group relative inline-flex h-full min-h-[72px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#2855f6] px-7 text-sm font-semibold text-white transition-colors hover:bg-[#1e46dc] sm:self-stretch sm:px-8"
+        className="mt-2 inline-flex h-12 w-full shrink-0 items-center justify-center gap-2 rounded-full bg-[#0874d1] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#0664b8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] sm:mt-0 sm:min-h-[90px] sm:w-auto sm:px-9"
       >
-        <span className="relative inline-flex items-center cursor-pointer justify-center gap-2">
-          <Search
-            size={20}
-            strokeWidth={2.5}
-            className="animate-[searchSweep_3s_ease-in-out_infinite] shrink-0"
-            style={{
-              transformOrigin: "center",
-              cursor: "pointer",
-            }}
-          />
-
-          <span className="animate-[searchText_3s_ease-in-out_infinite]">
-            Search
-          </span>
-        </span>
-
-        <style jsx>{`
-          @keyframes searchSweep {
-            0%,
-            100% {
-              transform: translateX(0) scale(1);
-            }
-            15% {
-              transform: translateX(0) scale(1.35);
-            }
-            65% {
-              transform: translateX(4px) scale(1.2);
-            }
-            85% {
-              transform: translateX(0) scale(1);
-            }
-          }
-
-          @keyframes searchText {
-            0%,
-            10% {
-              letter-spacing: 0;
-              opacity: 0.7;
-            }
-            45%,
-            75% {
-              letter-spacing: 1.2px;
-              opacity: 1;
-            }
-            100% {
-              letter-spacing: 0;
-              opacity: 1;
-            }
-          }
-        `}</style>
+        <Search size={25} strokeWidth={2.2} aria-hidden="true" />
+        <span>Search</span>
       </button>
     </form>
   );
@@ -1000,10 +956,10 @@ export function HomePage() {
       <main id="top" className="overflow-clip mt-15">
         <section
           id="property-search"
-          className="relative z-40 w-full overflow-visible bg-[#eaf5ff] px-4 pb-8 pt-8 min-[360px]:px-5 sm:pb-10 sm:pt-10 md:px-10 lg:px-14"
+          className="relative z-40 w-full overflow-visible bg-[#eaf5ff] px-4 pb-7 pt-6 min-[360px]:px-5 sm:px-6 sm:pb-8 sm:pt-7 md:px-8 lg:px-10"
         >
-          <div className="relative z-40 mx-auto w-full max-w-[1280px] text-center">
-            <h2 className="text-[clamp(1.8rem,4vw,2.4rem)] tracking-[-0.04em] text-[#263542]">
+          <div className="relative z-40 mx-auto w-full max-w-[1368px] text-center">
+            <h2 className="text-[clamp(1.8rem,4.1vw,3rem)] font-normal leading-tight tracking-[-0.045em] text-[#152b43]">
               Start your journey with <strong>#OneStep Dream Property</strong>
             </h2>
 
