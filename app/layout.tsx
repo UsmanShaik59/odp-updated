@@ -1,6 +1,7 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "@designcodeio/threeui/style.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://odp-five.vercel.app"),

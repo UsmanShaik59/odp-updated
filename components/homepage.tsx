@@ -1,10 +1,23 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { gsap } from "gsap";
+import { Draggable } from "gsap/Draggable";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import { Flip } from "gsap/Flip";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+import { Observer } from "gsap/Observer";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
+import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import { properties } from "@/lib/properties";
 import { HeroScene } from "./hero-scene";
 import { PropertyAssistant } from "./property-assistant";
+import { GsapCursor } from "./gsap-cursor";
+import HalftoneWordmarkFooter from "./ui/halftone-wordmark-footer";
+import KineticMatrix from "./ui/kinetic-matrix";
 import Link from "next/link";
 import { CarFront, Phone } from "lucide-react";
 import {
@@ -23,15 +36,27 @@ import {
   FolderOpen,
   Headphones,
   Heart,
+  Info,
   House,
   MapPin,
   Menu,
   MessageCircle,
   Search,
   SlidersHorizontal,
-  Smartphone,
   X,
 } from "lucide-react";
+
+gsap.registerPlugin(
+  useGSAP,
+  Draggable,
+  DrawSVGPlugin,
+  Flip,
+  MotionPathPlugin,
+  Observer,
+  ScrollToPlugin,
+  ScrollTrigger,
+  SplitText,
+);
 
 const locations = [
   { name: "Bengaluru", count: "128 properties" },
@@ -50,307 +75,84 @@ function Reveal({
   delay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
+  useGSAP(() => {
     const element = ref.current;
-    if (!element) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.12 },
-    );
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
+    if (!element || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const isHeroCopy = element.classList.contains("hero-copy");
+    const heroItems = isHeroCopy ? element.firstElementChild?.children : null;
+    const propertyCards = element.querySelectorAll<HTMLElement>("[data-gsap-card]");
+    const scrollTrigger = { trigger: element, start: "top 88%", once: true };
+
+    if (propertyCards.length) {
+      gsap.fromTo(
+        propertyCards,
+        { autoAlpha: 0, y: 58, scale: 0.94, rotateX: 5, transformPerspective: 900 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          rotateX: 0,
+          duration: 0.95,
+          ease: "power3.out",
+          stagger: 0.12,
+          scrollTrigger,
+        },
+      );
+    } else {
+      gsap.fromTo(
+        heroItems?.length ? heroItems : element,
+        { autoAlpha: 0, y: 38, scale: isHeroCopy ? 1 : 0.985 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.9,
+          delay: delay / 1000,
+          ease: "power3.out",
+          stagger: isHeroCopy ? 0.1 : 0,
+          scrollTrigger,
+        },
+      );
+    }
+
+    if (isHeroCopy) {
+      const title = element.querySelector<HTMLElement>("[data-gsap-title]");
+      if (title) {
+        SplitText.create(title, {
+          type: "words",
+          wordsClass: "gsap-hero-word",
+          aria: "auto",
+          onSplit: (split) =>
+            gsap.from(split.words, {
+              autoAlpha: 0,
+              yPercent: 115,
+              rotateX: -35,
+              transformOrigin: "50% 100%",
+              duration: 0.95,
+              delay: 0.18,
+              ease: "power4.out",
+              stagger: 0.075,
+            }),
+        });
+      }
+    }
+  }, { scope: ref });
 
   return (
-    <div
-      ref={ref}
-      className={`reveal ${visible ? "reveal-visible" : ""} ${className}`}
-      style={{ "--reveal-delay": `${delay}ms` } as React.CSSProperties}
-    >
+    <div ref={ref} className={className}>
       {children}
     </div>
   );
 }
 
-function PropertySearchForm() {
-  const [location, setLocation] = useState("");
-  const [propertyType, setPropertyType] = useState("Any Type");
-  const [budget, setBudget] = useState("Any Budget");
-  const [openDropdown, setOpenDropdown] = useState<"type" | "budget" | null>(
-    null,
-  );
-  const dropdownRef = useRef<HTMLFormElement>(null);
-
-  const propertyTypes = [
-    "Any Type",
-    "Apartment",
-    "Villa",
-    "Plot",
-    "Independent House",
-    "Commercial",
-  ];
-
-  const budgets = [
-    "Any Budget",
-    "Under ₹25 Lakh",
-    "₹25–50 Lakh",
-    "₹50 Lakh–₹1 Crore",
-    "₹1–2 Crore",
-    "₹2 Crore+",
-  ];
-
-  const ranges: Record<string, { min: number; max: number }> = {
-    "Any Budget": { min: 0, max: Infinity },
-    "Under ₹25 Lakh": { min: 0, max: 2500000 },
-    "₹25–50 Lakh": { min: 2500000, max: 5000000 },
-    "₹50 Lakh–₹1 Crore": { min: 5000000, max: 10000000 },
-    "₹1–2 Crore": { min: 10000000, max: 20000000 },
-    "₹2 Crore+": { min: 20000000, max: Infinity },
-  };
-
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setOpenDropdown(null);
-      }
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpenDropdown(null);
-    };
-
-    document.addEventListener("mousedown", handleOutsideClick);
-    document.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, []);
-
-  function handleSearch(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setOpenDropdown(null);
-
-    window.dispatchEvent(
-      new CustomEvent("property-search", {
-        detail: {
-          location: location.trim(),
-          propertyType,
-          minPrice: ranges[budget].min,
-          maxPrice: ranges[budget].max,
-        },
-      }),
-    );
-
-    document.getElementById("properties")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }
-
-  const dropdownPanel =
-    "absolute left-0 right-0 top-[calc(100%+8px)] z-[200] max-h-[min(320px,60vh)] overflow-y-auto rounded-xl border border-[#e5e7eb] bg-white p-1.5 text-left shadow-lg";
-
-  const optionClass = (active: boolean) =>
-    `flex min-h-10 w-full items-center rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-      active
-        ? "bg-[#eff4ff] font-medium text-[#2855e8]"
-        : "text-[#374151] hover:bg-[#f7f8fa]"
-    }`;
-
-  return (
-    <form
-      ref={dropdownRef}
-      onSubmit={handleSearch}
-      className="mobile-property-search relative z-40 mx-auto mt-5 flex min-h-[76px] w-full min-w-0 items-center gap-0 rounded-full border border-[#e5e7eb] bg-white p-2 shadow-[0_3px_12px_rgba(15,23,42,0.05)]"
-    >
-      {/* Keyword / Location */}
-      <div className="flex h-10 min-w-0 flex-[1.6] items-center px-3 sm:px-5">
-        <input
-          type="search"
-          aria-label="Search location"
-          placeholder="Enter city / locality / project"
-          value={location}
-          onChange={(event) => setLocation(event.target.value)}
-          className="w-full min-w-0 border-0 bg-transparent p-0 text-[13px] text-[#374151] outline-none placeholder:text-[#8993a8] focus:ring-0 sm:text-sm"
-        />
-      </div>
-
-      <span className="h-6 w-px shrink-0 bg-[#e5e7eb]" />
-
-      {/* Property Type */}
-      <div className="relative flex h-10 min-w-0 flex-1 items-center px-3 sm:px-5">
-        <button
-          type="button"
-          aria-haspopup="listbox"
-          aria-expanded={openDropdown === "type"}
-          onClick={() =>
-            setOpenDropdown((current) => (current === "type" ? null : "type"))
-          }
-          className="flex w-full min-w-0 items-center justify-between gap-2 text-left text-[13px] text-[#8993a8] outline-none sm:text-sm"
-        >
-          <span className="truncate">
-            {propertyType === "Any Type"
-              ? "Select property type"
-              : propertyType}
-          </span>
-          <ChevronDown
-            size={15}
-            className={`shrink-0 text-[#64748b] transition-transform ${
-              openDropdown === "type" ? "rotate-180" : ""
-            }`}
-          />
-        </button>
-
-        {openDropdown === "type" && (
-          <div
-            className={dropdownPanel}
-            role="listbox"
-            aria-label="Property type"
-          >
-            {propertyTypes.map((type) => (
-              <button
-                key={type}
-                type="button"
-                role="option"
-                aria-selected={propertyType === type}
-                className={optionClass(propertyType === type)}
-                onClick={() => {
-                  setPropertyType(type);
-                  setOpenDropdown(null);
-                }}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <span className="hidden h-6 w-px shrink-0 bg-[#e5e7eb] sm:block" />
-
-      {/* Budget */}
-      <div className="relative hidden h-10 min-w-0 flex-1 items-center px-3 sm:flex sm:px-4">
-        <button
-          type="button"
-          aria-haspopup="listbox"
-          aria-expanded={openDropdown === "budget"}
-          onClick={() =>
-            setOpenDropdown((current) =>
-              current === "budget" ? null : "budget",
-            )
-          }
-          className="flex w-full min-w-0 items-center justify-between gap-2 text-left text-[13px] text-[#8993a8] outline-none sm:text-sm"
-        >
-          <span className="truncate">
-            {budget === "Any Budget" ? "Select budget" : budget}
-          </span>
-          <ChevronDown
-            size={15}
-            className={`shrink-0 text-[#64748b] transition-transform ${
-              openDropdown === "budget" ? "rotate-180" : ""
-            }`}
-          />
-        </button>
-
-        {openDropdown === "budget" && (
-          <div
-            className={dropdownPanel}
-            role="listbox"
-            aria-label="Budget range"
-          >
-            {budgets.map((item) => (
-              <button
-                key={item}
-                type="button"
-                role="option"
-                aria-selected={budget === item}
-                className={optionClass(budget === item)}
-                onClick={() => {
-                  setBudget(item);
-                  setOpenDropdown(null);
-                }}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Search */}
-
-      <button
-        type="submit"
-        className="group relative inline-flex h-full min-h-[72px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#2855f6] px-7 text-sm font-semibold text-white transition-colors hover:bg-[#1e46dc] sm:self-stretch sm:px-8"
-      >
-        <span className="relative inline-flex items-center cursor-pointer justify-center gap-2">
-          <Search
-            size={20}
-            strokeWidth={2.5}
-            className="animate-[searchSweep_3s_ease-in-out_infinite] shrink-0"
-            style={{
-              transformOrigin: "center",
-              cursor: "pointer",
-            }}
-          />
-
-          <span className="animate-[searchText_3s_ease-in-out_infinite]">
-            Search
-          </span>
-        </span>
-
-        <style jsx>{`
-          @keyframes searchSweep {
-            0%,
-            100% {
-              transform: translateX(0) scale(1);
-            }
-            15% {
-              transform: translateX(0) scale(1.35);
-            }
-            65% {
-              transform: translateX(4px) scale(1.2);
-            }
-            85% {
-              transform: translateX(0) scale(1);
-            }
-          }
-
-          @keyframes searchText {
-            0%,
-            10% {
-              letter-spacing: 0;
-              opacity: 0.7;
-            }
-            45%,
-            75% {
-              letter-spacing: 1.2px;
-              opacity: 1;
-            }
-            100% {
-              letter-spacing: 0;
-              opacity: 1;
-            }
-          }
-        `}</style>
-      </button>
-    </form>
-  );
-}
 
 export function HomePage() {
+  const pageRef = useRef<HTMLDivElement>(null);
+  const mobileNavRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
@@ -369,7 +171,7 @@ export function HomePage() {
   };
 
   useEffect(() => {
-    const brand = "Start\nYour\nJourney";
+    const brand = "Start Your Journey";
     let index = 0;
     let deleting = false;
     let timer: number;
@@ -434,19 +236,216 @@ export function HomePage() {
     window.addEventListener("hashchange", scrollToHash);
     return () => window.removeEventListener("hashchange", scrollToHash);
   }, []);
+  useGSAP(() => {
+    const root = pageRef.current;
+    if (!root || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const draggables = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-gsap-drag]"),
+    )
+      .filter((rail) => rail.scrollWidth > rail.clientWidth + 8)
+      .flatMap((rail) =>
+        Draggable.create(rail, {
+          type: "scroll",
+          lockAxis: true,
+          edgeResistance: 0.82,
+          minimumMovement: 6,
+          dragClickables: false,
+          allowNativeTouchScrolling: true,
+          cursor: "grab",
+          activeCursor: "grabbing",
+        }),
+      );
+
+    const featureStack = root.querySelector<HTMLElement>("[data-feature-stack]");
+    const featureCards = featureStack?.querySelectorAll<HTMLElement>("[data-feature-card]");
+    if (featureStack && featureCards?.length) {
+      gsap.set(featureCards, {
+        x: (index) => (index % 2 === 0 ? 78 : -78),
+        y: (index) => (index < 2 ? 56 : -52),
+        rotation: (index) => (index % 2 === 0 ? 7 : -7),
+        scale: 0.9,
+      });
+      const featureState = Flip.getState(featureCards);
+      gsap.set(featureCards, { clearProps: "transform" });
+      gsap.set(featureCards, { autoAlpha: 0 });
+
+      const featureReveal = gsap.timeline({
+        scrollTrigger: {
+          trigger: featureStack,
+          start: "top 82%",
+          once: true,
+        },
+      });
+      featureReveal.add(
+        Flip.from(featureState, {
+          duration: 1.15,
+          stagger: 0.1,
+          ease: "power3.inOut",
+        }),
+        0,
+      );
+      featureReveal.to(
+        featureCards,
+        { autoAlpha: 1, duration: 0.5, stagger: 0.1, ease: "power2.out" },
+        0.12,
+      );
+    }
+
+    const path = root.querySelector<SVGPathElement>("[data-motion-path]");
+    const orbitDot = root.querySelector<SVGCircleElement>("[data-motion-dot]");
+    const heroStage = root.querySelector<HTMLElement>("[data-hero-stage]");
+    const heroArt = root.querySelector<HTMLElement>("[data-hero-art]");
+
+    if (path && orbitDot) {
+      gsap.fromTo(
+        path,
+        { drawSVG: "0%" },
+        {
+          drawSVG: "100%",
+          duration: 2.4,
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: heroStage ?? path,
+            start: "top 80%",
+            once: true,
+          },
+        },
+      );
+      gsap.to(orbitDot, {
+        motionPath: { path, align: path, alignOrigin: [0.5, 0.5] },
+        duration: 13,
+        repeat: -1,
+        ease: "none",
+      });
+    }
+
+    const progressBar = root.querySelector<HTMLElement>("[data-scroll-progress]");
+    if (progressBar) {
+      ScrollTrigger.create({
+        start: 0,
+        end: "max",
+        onUpdate: (trigger) => gsap.set(progressBar, { scaleX: trigger.progress }),
+      });
+    }
+
+    const cardCleanup: Array<() => void> = [];
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      root.querySelectorAll<HTMLElement>("[data-gsap-card]").forEach((card) => {
+        const image = card.querySelector<HTMLElement>("img");
+        const onEnter = () => {
+          gsap.to(card, { y: -8, duration: 0.34, ease: "power3.out", overwrite: true });
+          if (image) {
+            gsap.to(image, { scale: 1.075, duration: 0.65, ease: "power3.out", overwrite: true });
+          }
+        };
+        const onLeave = () => {
+          gsap.to(card, { y: 0, duration: 0.45, ease: "power3.out", overwrite: true });
+          if (image) {
+            gsap.to(image, { scale: 1, duration: 0.7, ease: "power3.out", overwrite: true });
+          }
+        };
+        card.addEventListener("pointerenter", onEnter);
+        card.addEventListener("pointerleave", onLeave);
+        cardCleanup.push(() => {
+          card.removeEventListener("pointerenter", onEnter);
+          card.removeEventListener("pointerleave", onLeave);
+        });
+      });
+
+      if (heroStage && heroArt) {
+        const resetHeroArt = () =>
+          gsap.to(heroArt, {
+            x: 0,
+            y: 0,
+            rotateX: 0,
+            rotateY: 0,
+            duration: 0.8,
+            ease: "elastic.out(1, 0.55)",
+            overwrite: true,
+          });
+        const pointerObserver = Observer.create({
+          target: heroStage,
+          type: "pointer",
+          onMove: (observer) => {
+            const bounds = heroStage.getBoundingClientRect();
+            const pointer = (observer as Observer & { event: PointerEvent }).event;
+            const x = gsap.utils.clamp(-1, 1, ((pointer.clientX - bounds.left) / bounds.width - 0.5) * 2);
+            const y = gsap.utils.clamp(-1, 1, ((pointer.clientY - bounds.top) / bounds.height - 0.5) * 2);
+            gsap.to(heroArt, {
+              x: x * 8,
+              y: y * 6,
+              rotateY: x * 2.2,
+              rotateX: y * -1.8,
+              duration: 0.55,
+              ease: "power3.out",
+              overwrite: true,
+            });
+          },
+        });
+        heroStage.addEventListener("pointerleave", resetHeroArt);
+        cardCleanup.push(() => {
+          pointerObserver.kill();
+          heroStage.removeEventListener("pointerleave", resetHeroArt);
+        });
+      }
+    }
+
+    const handleAnchorClick = (event: MouseEvent) => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey ||
+        !(event.target instanceof Element)
+      ) {
+        return;
+      }
+
+      const link = event.target.closest<HTMLAnchorElement>('a[href^="#"]');
+      const href = link?.getAttribute("href");
+      if (!href || href === "#") return;
+
+      const id = decodeURIComponent(href.slice(1));
+      const destination = document.getElementById(id);
+      if (!destination) return;
+
+      event.preventDefault();
+      window.history.pushState(null, "", href);
+      setMenuOpen(false);
+      gsap.to(window, {
+        duration: 0.9,
+        ease: "power3.inOut",
+        scrollTo: { y: destination, offsetY: 78, autoKill: true },
+      });
+    };
+    root.addEventListener("click", handleAnchorClick, true);
+
+    return () => {
+      draggables.forEach((draggable) => draggable.kill());
+      cardCleanup.forEach((cleanup) => cleanup());
+      root.removeEventListener("click", handleAnchorClick, true);
+    };
+  }, { scope: pageRef });
+
   return (
-    <div className="min-h-screen bg-white text-[#111111]">
-      <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#eaf5ff] text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)]">
-        <div className="mx-auto flex h-[58px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
+  <div ref={pageRef} className="odp-gradient-theme min-h-screen bg-white text-[#111111]">
+  <GsapCursor />
+  <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-[#e8edf3] bg-white text-[#152b43] shadow-[0_2px_16px_rgba(21,43,67,0.04)]">
+        <div className="mx-auto flex h-[64px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
           <button
             type="button"
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#cfe2f5] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] lg:hidden"
+            className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl text-[#152b43] transition-colors duration-200 hover:bg-[#f3f7fa] active:bg-[#eaf1f6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] motion-reduce:transition-none lg:hidden"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+            {menuOpen ? <X aria-hidden="true" className="size-[22px]" strokeWidth={1.75} /> : <Menu aria-hidden="true" className="size-[22px]" strokeWidth={1.75} />}
           </button>
 
           <Link
@@ -480,7 +479,7 @@ export function HomePage() {
             ))}
           </nav>
 
-          <div className="order-3 ml-0 flex min-w-0 shrink-0 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px]">
+          <div className="order-3 ml-0 flex min-w-0 flex-1 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px] lg:flex-none">
             <button
               type="button"
               aria-label="Choose location"
@@ -504,24 +503,27 @@ export function HomePage() {
         <button
           type="button"
           aria-label="Close navigation"
+          aria-hidden={!menuOpen}
+          tabIndex={menuOpen ? 0 : -1}
           onClick={() => setMenuOpen(false)}
-          className={`fixed inset-0 top-[58px] z-40 bg-[#152b43]/30 backdrop-blur-[2px] transition-opacity duration-300 lg:hidden ${
-            menuOpen ? "visible opacity-100" : "pointer-events-none invisible opacity-0"
+          className={`fixed inset-0 top-[64px] z-40 bg-[#152b43]/10 transition-opacity duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:hidden ${
+            menuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
           }`}
         />
 
         <nav
+          ref={mobileNavRef}
           id="mobile-navigation"
           aria-hidden={!menuOpen}
           inert={!menuOpen ? true : undefined}
-          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#cfe2f5] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
+  className={`fixed inset-x-0 bottom-0 top-[64px] z-50 flex flex-col overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-sm text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:hidden ${
             menuOpen
-              ? "visible translate-y-0 scale-y-100 opacity-100"
-              : "pointer-events-none invisible -translate-y-4 scale-y-95 opacity-0"
+              ? "pointer-events-auto translate-y-0 opacity-100"
+              : "pointer-events-none -translate-y-2 opacity-0"
           }`}
           aria-label="Mobile navigation"
         >
-          <div className="mx-auto w-full max-w-[520px] divide-y divide-[#cfe2f5]">
+          <div className="mx-auto w-full max-w-[520px] divide-y divide-[#edf1f5]">
   {([
   ["Home", "/#top"],
   ["Buy Flats", "/#properties"],
@@ -531,11 +533,11 @@ export function HomePage() {
   ["Contact", "/contact"],
   ] as const).map(([item, href]) => {
               const icons = {
-                Home: Building2,
+                Home: House,
                 "Buy Flats": BedDouble,
                 Properties: Building2,
                 Locations: MapPin,
-                "About Us": Smartphone,
+                "About Us": Info,
                 Contact: Headphones,
               };
 
@@ -546,10 +548,10 @@ export function HomePage() {
                   key={item}
                   href={href}
                   onClick={() => setMenuOpen(false)}
-                  className="flex min-h-[70px] items-center gap-4 px-6 font-medium text-base text-[#152b43] transition-all duration-200 hover:bg-[#f1f8ff] hover:pl-7 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1]"
+                  className="group flex min-h-[64px] items-center gap-4 px-5 text-[15px] font-medium text-[#24384d] transition-colors duration-200 hover:bg-[#f8fbfe] active:bg-[#f2f7fb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1] motion-reduce:transition-none"
                 >
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#0874d1] text-white">
-                    <Icon aria-hidden="true" className="size-[18px]" />
+                  <span className="flex size-6 shrink-0 items-center justify-center text-[#0874d1] transition-colors duration-200 group-hover:text-[#005da8]">
+                    <Icon aria-hidden="true" className="size-5" strokeWidth={1.75} />
                   </span>
                   <span>{item}</span>
                 </Link>
@@ -557,6 +559,11 @@ export function HomePage() {
             })}
           </div>
         </nav>
+        <span
+          data-scroll-progress
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[60] h-[2px] origin-left scale-x-0 bg-gradient-to-r from-[#0874d1] via-[#5b9bd5] to-[#c7e1f7]"
+        />
       </header>
       {locationOpen && (
         <section
@@ -708,18 +715,12 @@ export function HomePage() {
       <main id="top" className="overflow-clip mt-15">
         <section
           id="property-search"
-          className="relative z-40 w-full overflow-visible bg-[#eaf5ff] px-4 pb-8 pt-8 min-[360px]:px-5 sm:pb-10 sm:pt-10 md:px-10 lg:px-14"
+          className="relative z-40 w-full overflow-hidden bg-[#eaf5ff]"
         >
-          <div className="relative z-40 mx-auto w-full max-w-[1280px] text-center">
-            <h2 className="text-[clamp(1.8rem,4vw,2.4rem)] tracking-[-0.04em] text-[#263542]">
-              Start your journey with <strong>#OneStep Dream Property</strong>
-            </h2>
-
-            <PropertySearchForm />
-          </div>
+          <KineticMatrix title="FIND HOME" />
         </section>
 
-        <section className="relative mx-auto grid w-full min-w-0 max-w-full items-center overflow-hidden rounded-none border-0 bg-[#eaf5ff] px-3 pb-8 pt-8 min-[360px]:px-4 sm:pb-16 sm:pt-16 md:grid-cols-2 md:gap-10 md:px-10 md:py-12 lg:gap-16 lg:px-14 lg:py-16 xl:gap-20 2xl:px-16">
+  <section data-hero-stage className="relative mx-auto grid w-full min-w-0 max-w-full items-center overflow-hidden rounded-none border-0 bg-[#eaf5ff] px-3 pb-8 pt-8 min-[360px]:px-4 sm:pb-16 sm:pt-16 md:grid-cols-2 md:gap-10 md:px-10 md:py-12 lg:gap-16 lg:px-14 lg:py-16 xl:gap-20 2xl:px-16">
           {/* LEFT — HERO INFORMATION */}
           <Reveal className="hero-copy relative z-10 order-1 flex h-full w-full items-center justify-center md:justify-self-start">
             <div className="mx-auto w-full min-w-0 max-w-[560px] overflow-hidden text-left">
@@ -727,9 +728,9 @@ export function HomePage() {
                 Your next home starts here
               </p>
 
-              <h1 className="max-w-[560px] text-[clamp(2.5rem,8vw,4.5rem)] font-medium leading-[1.05] tracking-[-0.06em] sm:text-[clamp(3rem,5vw,4.2rem)] sm:leading-[0.98] lg:text-[4rem]">
+              <h1 className="max-w-[560px] font-medium leading-[1.05] tracking-[-0.06em]">
                 <span
-                  className="block min-h-[1.2em] whitespace-normal text-[clamp(1.25rem,7vw,4.5rem)] leading-tight tracking-tight text-[#0874d1]"
+                  className="block min-h-[1.2em] whitespace-nowrap text-[clamp(1.5rem,7vw,3rem)] leading-[1.1] tracking-[-0.055em] text-[#0874d1]"
                   aria-live="polite"
                 >
                   {typedBrand}
@@ -739,7 +740,7 @@ export function HomePage() {
                   />
                 </span>
 
-                <span className="mt-2 block leading-[1.08] text-[#152b43] sm:leading-20">
+                <span data-gsap-title className="mt-2 block whitespace-nowrap text-[clamp(1.45rem,4.8vw,3.125rem)] leading-[1.08] text-[#152b43]">
                   Find the right property.
                   <br />
                   Make your next move.
@@ -812,9 +813,26 @@ export function HomePage() {
 
           {/* RIGHT — DESKTOP HOUSE ILLUSTRATION */}
           <Reveal className="hero-illustration relative z-10 order-2 hidden h-full min-h-[500px] w-full items-center justify-center md:flex">
-            <div className="relative h-[500px] w-full max-w-[680px] lg:h-[560px]">
-              <HeroScene />
-            </div>
+              <div data-hero-art className="relative h-[500px] w-full max-w-[680px] lg:h-[560px]">
+                <HeroScene />
+                <svg
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 z-10 hidden size-full overflow-visible md:block"
+                  viewBox="0 0 680 560"
+                  preserveAspectRatio="none"
+                >
+                  <path
+                    data-motion-path
+                    d="M 38 354 C 62 152 220 40 376 66 C 540 94 643 225 612 357 C 589 455 476 509 355 480"
+                    fill="none"
+                    stroke="#5b9bd5"
+                    strokeDasharray="4 9"
+                    strokeOpacity="0.34"
+                    strokeWidth="1.5"
+                  />
+                  <circle data-motion-dot r="5" fill="#5b9bd5" />
+                </svg>
+              </div>
           </Reveal>
         </section>
         <section
@@ -854,7 +872,7 @@ export function HomePage() {
           </div>
           <Reveal className="grid grid-cols-2 gap-x-3 gap-y-7 min-[390px]:gap-x-4 min-[390px]:gap-y-8 sm:gap-x-5 sm:gap-y-10 lg:grid-cols-4">
             {properties.map((property, index) => (
-              <article key={property.title} className="group relative min-w-0">
+              <article data-gsap-card key={property.title} className="group relative min-w-0">
                 <Link
                   href={`/properties/${index}`}
                   className="relative block aspect-[1.1/1] overflow-hidden bg-[#f2f2f2]"
@@ -864,7 +882,7 @@ export function HomePage() {
                     src={property.image}
                     alt={property.title}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    className="object-cover"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   />
                   <span className="absolute left-3 top-3 bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em]">
@@ -872,7 +890,16 @@ export function HomePage() {
                   </span>
                 </Link>
                 <button
-                  onClick={() => toggleSaved(index)}
+                  onClick={(event) => {
+                    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                      gsap.fromTo(
+                        event.currentTarget,
+                        { scale: 0.72, rotation: -14 },
+                        { scale: 1, rotation: 0, duration: 0.48, ease: "back.out(3)", overwrite: true },
+                      );
+                    }
+                    toggleSaved(index);
+                  }}
                   aria-label={`${saved.includes(index) ? "Remove" : "Save"} ${property.title}`}
                   className="absolute right-3 top-3 flex size-8 items-center justify-center bg-white transition-colors hover:bg-[#f2f2f2]"
                 >
@@ -1133,7 +1160,7 @@ export function HomePage() {
               </div>
 
               {/* RIGHT: Floating, overlapping feature cards */}
-              <div className="relative mx-auto h-[430px] w-full max-w-[560px] sm:h-[520px] lg:h-[550px]">
+              <div data-feature-stack className="relative mx-auto h-[430px] w-full max-w-[560px] sm:h-[520px] lg:h-[550px]">
                 {/* Soft glow behind cards */}
                 <div
                   aria-hidden="true"
@@ -1183,6 +1210,7 @@ export function HomePage() {
 
                   return (
                     <div
+                      data-feature-card
                       key={item.number}
                       className={`group absolute min-w-0 ${item.position}`}
                     >
@@ -1260,7 +1288,7 @@ export function HomePage() {
                 Our banking partners
               </p>
 
-              <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
+              <div data-gsap-drag className="mt-4 flex gap-3 overflow-x-auto pb-2">
                 {[
                   {
                     bank: "SBI",
@@ -1367,7 +1395,7 @@ export function HomePage() {
                 aria-hidden="true"
               />
             </div>
-            <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-5 lg:overflow-visible lg:px-0">
+            <div data-gsap-drag className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-5 lg:overflow-visible lg:px-0">
               {[
                 {
                   title: "EMI Calculator",
@@ -1488,7 +1516,7 @@ export function HomePage() {
                             <CarFront
                               size={24}
                               strokeWidth={2}
-                              className="text-[#0874d1] drop-shadow-[2px_1px_0px_#ffad42]"
+                              className="text-[#0874d1] drop-shadow-[2px_1px_0px_#5b9bd5]"
                               aria-hidden="true"
                             />
                           </span>
@@ -1603,10 +1631,11 @@ export function HomePage() {
           </div>
         </div>
       </section>
-      <footer
-        id="contact"
-        className="border-t border-[#0874d1] bg-[#0874d1] text-white"
-      >
+  <section
+  id="contact"
+  aria-label="Contact and legal information"
+  className="border-t border-[#0874d1] bg-[#0874d1] text-white"
+  >
         <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
           <div>
             <Link
@@ -1663,13 +1692,13 @@ export function HomePage() {
             </p>
           </div>
         </div>
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 border-t border-white/30 px-5 py-6 text-xs text-white lg:text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 border-t border-white/30 px-5 py-6 text-xs text-white/90 lg:text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
           <span>© 2026 OneStep Dream Property. All rights reserved.</span>
           <span>Privacy · Terms</span>
         </div>{" "}
         <div className="mx-auto mt-4 w-full max-w-[1280px] border-t border-white/20 px-5 pb-8 pt-6 sm:mt-6 sm:px-8 sm:pb-10 sm:pt-8">
-          <p className="text-xs leading-6 text-white/80 sm:text-sm sm:leading-7">
-            <strong className="font-semibold text-white">Disclaimer:</strong>{" "}
+          <p className="text-xs leading-6 text-white/90 sm:text-sm sm:leading-7">
+            <strong className="font-semibold text-white/90">Disclaimer:</strong>{" "}
             ODP Services acts solely as an intermediary platform for advertising
             properties and is not a party to or responsible for transactions
             between buyers and sellers. All offers, discounts, and property
@@ -1677,11 +1706,50 @@ export function HomePage() {
             developer.
           </p>
         </div>
-      </footer>
+      </section>
+      <HalftoneWordmarkFooter
+        wordmark="odp"
+        label="OneStep Dream Property"
+        meta="ODP Services · © 2026"
+preset="sky"
+  palette={{ background: "#f5faff", ink: "#152b43", warm: "#5b9bd5" }}
+        dotGap={6}
+        radius={88}
+        crop={0.16}
+        grain={0.28}
+        columns={[
+          {
+            title: "Explore",
+            links: [
+              { label: "Buy Flats", href: "#properties" },
+              { label: "Properties", href: "#properties" },
+              { label: "Locations", href: "#locations" },
+            ],
+          },
+          {
+            title: "Company",
+            links: [
+              { label: "About Us", href: "#about" },
+              { label: "Contact", href: "#contact" },
+              { label: "List Property", href: "#contact" },
+            ],
+          },
+          {
+            title: "Get in touch",
+            links: [
+              {
+                label: "help.onestepdreamproperty@gmail.com",
+                href: "mailto:help.onestepdreamproperty@gmail.com",
+              },
+              { label: "+91 7411535782", href: "tel:+917411535782" },
+            ],
+          },
+        ]}
+      />
 
       {/* chatbot */}
 
-      <div className="fixed inset-x-4 bottom-4 z-[75] flex flex-col items-end gap-4 sm:inset-x-auto sm:bottom-6 sm:right-7">
+      <div className="fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[75] flex flex-col items-end gap-4 sm:inset-x-auto sm:bottom-6 sm:right-7">
         {chatOpen && (
           <section
             role="dialog"

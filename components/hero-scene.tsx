@@ -174,7 +174,7 @@ function SceneContent() {
             color="#06477e"
             depthOffset={-1}
           >
-            ODP
+            odp
           </Text>
 
           <Text
@@ -189,7 +189,7 @@ function SceneContent() {
             color="#ffffff"
             depthOffset={-2}
           >
-            ODP
+            odp
             <meshStandardMaterial
               color="#ffffff"
               roughness={0.25}
@@ -348,9 +348,9 @@ export function HeroScene({ mobile = false }: { mobile?: boolean }) {
     >
       <Canvas
         camera={{ position: [0, 1.25, 8.2], fov: 35 }}
-        dpr={[1, 1.6]}
+        dpr={mobile ? [1, 1.25] : [1, 1.6]}
         gl={{ antialias: true, alpha: true }}
-        shadows
+        shadows={!mobile}
       >
         <SceneContent />
 

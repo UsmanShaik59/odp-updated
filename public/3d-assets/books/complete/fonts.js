@@ -1,0 +1,2 @@
+export const fonts=[{family:"Inter",style:"normal",weight:"400 600",url:"https://ublctyddhtbgaersvxxb.supabase.co/storage/v1/object/public/threeui-media/scene-images/embedded/c940764593d0fe5d596be327ca7558855e018039fb78509aa21921fd3644c3e4.woff2"}];
+export const standaloneFonts=[new URL('https://ublctyddhtbgaersvxxb.supabase.co/storage/v1/object/public/threeui-media/scene-images/embedded/c940764593d0fe5d596be327ca7558855e018039fb78509aa21921fd3644c3e4.woff2',import.meta.url).href];

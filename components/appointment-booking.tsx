@@ -298,7 +298,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
 
             <Link
               href={propertyHref}
-              className="group relative mt-5 ml-25 inline-flex h-9 w-full max-w-[200px] min-w-0 items-center justify-center gap-1.5 rounded-full px-2.5 text-[11px] font-semibold text-[#152b43] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(8,116,209,0.10)] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0874d1] min-[380px]:w-[min(180px,calc(50vw-24px))] min-[380px]:flex-none lg:h-10 lg:gap-2 lg:px-3 lg:text-xs"
+              className="group relative mx-auto mt-5 inline-flex h-9 w-full max-w-[200px] min-w-0 items-center justify-center gap-1.5 sm:mx-0 rounded-full px-2.5 text-[11px] font-semibold text-[#152b43] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(8,116,209,0.10)] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0874d1] min-[380px]:w-[min(180px,calc(50vw-24px))] min-[380px]:flex-none lg:h-10 lg:gap-2 lg:px-3 lg:text-xs"
             >
               <svg
                 className="pointer-events-none absolute inset-0 h-full w-full"
@@ -825,7 +825,7 @@ export function AppointmentBooking({ property }: { property: Property }) {
               disabled={!canConfirm || isSubmitting}
               onClick={confirmAppointment}
               className="
-    group mt-8 flex h-14 w-60 ml-25 items-center
+    group mx-auto mt-8 flex h-14 w-full max-w-[240px] items-center sm:mx-0
     justify-center gap-2 rounded-xl
     border border-[#0874d1] bg-white px-5
     text-sm font-semibold text-[#0874d1]

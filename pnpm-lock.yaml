@@ -11,6 +11,12 @@ importers:
       '@base-ui/react':
         specifier: ^1.5.0
         version: 1.5.0(@date-fns/tz@1.4.1)(@types/react@19.2.14)(date-fns@4.1.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@designcodeio/threeui':
+        specifier: ^1.2.0
+        version: 1.2.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(three@0.165.0)
+      '@gsap/react':
+        specifier: ^2.1.2
+        version: 2.1.2(gsap@3.15.1)(react@19.2.4)
       '@react-three/drei':
         specifier: ^10.7.9
         version: 10.7.9(@react-three/fiber@9.8.1(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(three@0.186.1))(@types/react@19.2.14)(@types/three@0.186.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(three@0.186.1)
@@ -35,6 +41,9 @@ importers:
       enhanced-resolve:
         specifier: ^5.26.0
         version: 5.26.0
+      gsap:
+        specifier: ^3.15.1
+        version: 3.15.1
       lucide-react:
         specifier: ^1.16.0
         version: 1.17.0(react@19.2.4)
@@ -254,6 +263,13 @@ packages:
   '@date-fns/tz@1.4.1':
     resolution: {integrity: sha512-P5LUNhtbj6YfI3iJjw5EL9eUAG6OitD0W3fWQcpQjDRc/QIsL0tRNuO1PcDvPccWL1fSTXXdE1ds+l95DV/OFA==}
 
+  '@designcodeio/threeui@1.2.0':
+    resolution: {integrity: sha512-E6F/+IPfLKYatB5W62H3gK1bp9WYvfO6xuWBaBh8oLVR7fbTeeEwgLqqy7ZPMA0zmDpAy03nKYOIswBXsstL2g==}
+    peerDependencies:
+      react: '>=18 <20'
+      react-dom: '>=18 <20'
+      three: '>=0.149 <1'
+
   '@dimforge/rapier3d-compat@0.12.0':
     resolution: {integrity: sha512-uekIGetywIgopfD97oDL5PfeezkFpNhwlzlaEYNOA0N6ghdsOvh/HYjSMek5Q2O1PYvRSDFcqFVJl4r4ZBwOow==}
 
@@ -284,6 +300,12 @@ packages:
 
   '@floating-ui/utils@0.2.11':
     resolution: {integrity: sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==}
+
+  '@gsap/react@2.1.2':
+    resolution: {integrity: sha512-JqliybO1837UcgH2hVOM4VO+38APk3ECNrsuSM4MuXp+rbf+/2IG2K1YJiqfTcXQHH7XlA0m3ykniFYstfq0Iw==}
+    peerDependencies:
+      gsap: ^3.12.5
+      react: '>=17'
 
   '@hono/node-server@1.19.14':
     resolution: {integrity: sha512-GwtvgtXxnWsucXvbQXkRgqksiH2Qed37H9xHZocE5sA3N8O8O8/8FA3uclQXxXVzc9XBZuEOMK7+r02FmSpHtw==}
@@ -1254,6 +1276,9 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
+  gsap@3.15.1:
+    resolution: {integrity: sha512-63yjWRFWj3QRP1UOuD8kcidCcy3nxb1mMRpwHr/xJRvPfm9GtWOXFAYUiL0ro1fgPq2nY53LR+98pAgy9BumBg==}
+
   has-symbols@1.1.0:
     resolution: {integrity: sha512-1cDNdwJ2Jaohmb3sg4OmKaMBwuC48sYni5HUw2DvsC8LjGTLK9h+eb1X6RyuOHe4hT0ULCW68iomhjUoKUqlPQ==}
     engines: {node: '>= 0.4'}
@@ -2006,6 +2031,12 @@ packages:
     peerDependencies:
       three: '>=0.128.0'
 
+  three@0.128.0:
+    resolution: {integrity: sha512-i0ap/E+OaSfzw7bD1TtYnPo3VEplkl70WX5fZqZnfZsE3k3aSFudqrrC9ldFZfYFkn1zwDmBcdGfiIm/hnbyZA==}
+
+  three@0.165.0:
+    resolution: {integrity: sha512-cc96IlVYGydeceu0e5xq70H8/yoVT/tXBxV/W8A/U6uOq7DXc4/s1Mkmnu6SqoYGhSRWWYFOhVwvq6V0VtbplA==}
+
   three@0.186.1:
     resolution: {integrity: sha512-blFeqb49wRCSGUGj7gtpfnSGHy2lwDk94RhUmS1c/hTby70kvChbWpkJ4Pm1390LqzzvTmzgXKHPEafJwCb8jA==}
 
@@ -2398,6 +2429,14 @@ snapshots:
   '@date-fns/tz@1.4.1':
     optional: true
 
+  '@designcodeio/threeui@1.2.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(three@0.165.0)':
+    dependencies:
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+      three: 0.165.0
+      three128: three@0.128.0
+      three165: three@0.165.0
+
   '@dimforge/rapier3d-compat@0.12.0': {}
 
   '@dotenvx/dotenvx@1.70.0':
@@ -2439,6 +2478,11 @@ snapshots:
       react-dom: 19.2.4(react@19.2.4)
 
   '@floating-ui/utils@0.2.11': {}
+
+  '@gsap/react@2.1.2(gsap@3.15.1)(react@19.2.4)':
+    dependencies:
+      gsap: 3.15.1
+      react: 19.2.4
 
   '@hono/node-server@1.19.14(hono@4.12.25)':
     dependencies:
@@ -3289,6 +3333,8 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
+  gsap@3.15.1: {}
+
   has-symbols@1.1.0: {}
 
   hasown@2.0.4:
@@ -3991,6 +4037,10 @@ snapshots:
       fflate: 0.6.11
       potpack: 1.0.2
       three: 0.186.1
+
+  three@0.128.0: {}
+
+  three@0.165.0: {}
 
   three@0.186.1: {}
 

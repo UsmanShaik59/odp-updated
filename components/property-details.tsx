@@ -35,10 +35,10 @@ import {
   FolderOpen,
   Headphones,
   House,
+  Info,
   MessageCircle,
   Search,
   SlidersHorizontal,
-  Smartphone,
   ShieldCheck,
 } from "lucide-react";
 import { properties } from "@/lib/properties";
@@ -90,17 +90,17 @@ export function PropertyDetails({ property }: { property: Property }) {
 
   return (
     <div className="min-h-screen bg-white text-[#111111]">
-      <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#eaf5ff] text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)]">
-        <div className="mx-auto flex h-[58px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
+      <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-[#e8edf3] bg-white text-[#152b43] shadow-[0_2px_16px_rgba(21,43,67,0.04)]">
+        <div className="mx-auto flex h-[64px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
           <button
             type="button"
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#cfe2f5] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white lg:hidden"
+            className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl text-[#152b43] transition-colors duration-200 hover:bg-[#f3f7fa] active:bg-[#eaf1f6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] motion-reduce:transition-none lg:hidden"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+            {menuOpen ? <X aria-hidden="true" className="size-[22px]" strokeWidth={1.75} /> : <Menu aria-hidden="true" className="size-[22px]" strokeWidth={1.75} />}
           </button>
 
           <Link
@@ -147,7 +147,7 @@ export function PropertyDetails({ property }: { property: Property }) {
             ))}
           </nav>
 
-          <div className="order-3 ml-0 flex min-w-0 shrink-0 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px]">
+          <div className="order-3 ml-0 flex min-w-0 flex-1 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px] lg:flex-none">
             <button
               type="button"
               aria-label="Choose location"
@@ -172,33 +172,33 @@ export function PropertyDetails({ property }: { property: Property }) {
           id="mobile-navigation"
           aria-hidden={!menuOpen}
           inert={!menuOpen ? true : undefined}
-          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#cfe2f5] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
+          className={`fixed inset-x-0 bottom-0 top-[64px] z-50 flex flex-col overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-sm text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none lg:hidden ${
             menuOpen
-              ? "visible translate-y-0 scale-y-100 opacity-100"
-              : "pointer-events-none invisible -translate-y-4 scale-y-95 opacity-0"
+              ? "pointer-events-auto translate-y-0 opacity-100"
+              : "pointer-events-none -translate-y-2 opacity-0"
           }`}
           aria-label="Mobile navigation"
         >
-          <div className="divide-y divide-[#cfe2f5]">
+          <div className="divide-y divide-[#edf1f5]">
             {[
-              { label: "Home", href: "/", icon: Building2 },
+              { label: "Home", href: "/", icon: House },
               { label: "Buy Flats", href: "/#properties", icon: BedDouble },
               { label: "Properties", href: "/#properties", icon: Building2 },
               { label: "Locations", href: "/#locations", icon: MapPin },
-              { label: "About Us", href: "/about", icon: Smartphone },
+              { label: "About Us", href: "/about", icon: Info },
               { label: "Contact", href: "/contact", icon: Headphones },
             ].map((item) => {
               const Icon = item.icon;
               const content = (
                 <>
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#0874d1] text-white">
-                    <Icon aria-hidden="true" className="size-[18px]" />
+                  <span className="flex size-6 shrink-0 items-center justify-center text-[#0874d1] transition-colors duration-200 group-hover:text-[#005da8]">
+                    <Icon aria-hidden="true" className="size-5" strokeWidth={1.75} />
                   </span>
                   <span>{item.label}</span>
                 </>
               );
               const className =
-                "flex min-h-14 items-center gap-4 px-5 font-medium text-[#152b43] transition-colors hover:bg-[#d6ebff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1]";
+                "group flex min-h-[64px] items-center gap-4 px-5 text-[15px] font-medium text-[#24384d] transition-colors duration-200 hover:bg-[#f8fbfe] active:bg-[#f2f7fb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1] motion-reduce:transition-none";
 
               return (
                 <Link
@@ -218,7 +218,7 @@ export function PropertyDetails({ property }: { property: Property }) {
                       window.history.replaceState(null, "", `/#${sectionId}`);
                     }
                   }}
-                  className={`${className} min-h-[70px] px-6 text-base hover:bg-[#f1f8ff] hover:pl-7`}
+                  className={className}
                 >
                   {content}
                 </Link>
@@ -229,7 +229,7 @@ export function PropertyDetails({ property }: { property: Property }) {
       </header>
 
       <main>
-        <div className="mx-auto mt-8 w-full max-w-[1280px] overflow-hidden px-3 pb-12 pt-5 sm:px-6 sm:pb-16 sm:pt-7 lg:px-8 lg:pt-10">
+        <div className="mx-auto mt-8 w-full max-w-[1280px] overflow-hidden px-3 pb-12 pt-7 sm:px-6 sm:pb-16 sm:pt-7 lg:px-8 lg:pt-10">
           <div className="grid gap-7 lg:grid-cols-[1.18fr_.82fr] lg:gap-16">
             <section>
               <div className="relative aspect-[1.18/1] overflow-hidden bg-[#edf5fb] sm:aspect-[1.45/1]">
