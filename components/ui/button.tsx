@@ -9,7 +9,7 @@ const buttonVariants = cva(
     "overflow-hidden rounded-full border text-sm font-semibold whitespace-nowrap",
     "outline-none select-none",
     "transition-[box-shadow,background-color,color,border-color] duration-300",
-    "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0874d1]",
+    "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cf7544]",
     "active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
     "aria-invalid:border-red-500 aria-invalid:ring-2 aria-invalid:ring-red-500/20",
     "[&_svg]:pointer-events-none [&_svg]:shrink-0",
@@ -25,30 +25,30 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: [
-          "border-[#0874d1] bg-[#0874d1] text-white",
-          "shadow-[0_5px_16px_rgba(8,116,209,0.16)]",
-          "after:border-white",
-          "hover:bg-[#0874d1]",
+          "border-[#cf7544] bg-[#f0a879] text-[#542d18]",
+          "shadow-[0_5px_16px_rgba(207,117,68,0.18)]",
+          "after:border-[#fff7f0]",
+          "hover:bg-[#f3b58e]",
         ].join(" "),
 
         outline: [
-          "border-white bg-white text-[#0874d1]",
+          "border-white bg-white text-[#cf7544]",
           "shadow-[0_5px_16px_rgba(21,43,67,0.06)]",
-          "after:border-[#064b91]",
-          "hover:bg-white hover:text-[#0874d1]",
+          "after:border-[#a9552c]",
+          "hover:bg-white hover:text-[#cf7544]",
         ].join(" "),
 
         secondary: [
-          "border-[#b8d8f4] bg-white text-[#152b43]",
+          "border-[#ebc4a6] bg-white text-[#152b43]",
           "shadow-[0_4px_12px_rgba(21,43,67,0.05)]",
-          "after:border-[#064b91]",
+          "after:border-[#a9552c]",
           "hover:bg-white hover:text-[#152b43]",
         ].join(" "),
 
         ghost: [
           "border-transparent bg-transparent text-[#152b43]",
-          "after:border-[#0874d1]",
-          "hover:bg-[#eaf5ff] hover:text-[#0874d1]",
+          "after:border-[#cf7544]",
+          "hover:bg-[#fff0e5] hover:text-[#cf7544]",
         ].join(" "),
 
         destructive: [
@@ -59,7 +59,7 @@ const buttonVariants = cva(
 
         link: [
           "h-auto rounded-none border-transparent bg-transparent p-0",
-          "text-[#0874d1] underline-offset-4 after:hidden",
+          "text-[#cf7544] underline-offset-4 after:hidden",
           "hover:bg-transparent hover:underline",
         ].join(" "),
       },

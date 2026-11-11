@@ -293,7 +293,7 @@ function PropertySearchForm() {
 
       <button
         type="submit"
-        className="group relative inline-flex h-full min-h-[72px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#2855f6] px-7 text-sm font-semibold text-white transition-colors hover:bg-[#1e46dc] sm:self-stretch sm:px-8"
+        className="group relative inline-flex h-full min-h-[72px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#f0a879] px-7 text-sm font-semibold text-[#542d18] transition-colors hover:bg-[#f3b58e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cf7544] sm:self-stretch sm:px-8"
       >
         <span className="relative inline-flex items-center cursor-pointer justify-center gap-2">
           <Search
@@ -436,11 +436,11 @@ export function HomePage() {
   }, []);
   return (
     <div className="odp-gradient-theme min-h-screen text-[#111111]">
-      <header className="fixed inset-x-0 top-0 z-50 w-full bg-white/70 text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)] backdrop-blur-xl">
+      <header className="fixed inset-x-0 top-0 z-50 w-full text-[#152b43]">
         <div className="mx-auto flex h-[58px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
           <button
             type="button"
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#cfe2f5] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] lg:hidden"
+            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#edd0bb] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#cf7544] lg:hidden"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
@@ -451,7 +451,7 @@ export function HomePage() {
 
           <Link
             href="#top"
-            className="flex shrink-0 items-center text-[#9b3f12]"
+            className="flex shrink-0 items-center text-[#b85e2e]"
             aria-label="OneStep Dream Property home"
           >
             <span className="text-[25px] font-black leading-none tracking-[-0.12em] lg:text-[32px]">
@@ -473,7 +473,7 @@ export function HomePage() {
               <Link
                 key={item.label}
                 href={item.href}
-                className="transition-colors hover:text-[#0874d1]"
+                className="transition-colors hover:text-[#cf7544]"
               >
                 {item.label}
               </Link>
@@ -514,14 +514,14 @@ export function HomePage() {
           id="mobile-navigation"
           aria-hidden={!menuOpen}
           inert={!menuOpen ? true : undefined}
-          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#cfe2f5] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
+          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#edd0bb] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
             menuOpen
               ? "visible translate-y-0 scale-y-100 opacity-100"
               : "pointer-events-none invisible -translate-y-4 scale-y-95 opacity-0"
           }`}
           aria-label="Mobile navigation"
         >
-          <div className="mx-auto w-full max-w-[520px] divide-y divide-[#cfe2f5]">
+          <div className="mx-auto w-full max-w-[520px] divide-y divide-[#edd0bb]">
   {([
   ["Home", "/#top"],
   ["Buy Flats", "/#properties"],
@@ -546,9 +546,9 @@ export function HomePage() {
                   key={item}
                   href={href}
                   onClick={() => setMenuOpen(false)}
-                  className="flex min-h-[70px] items-center gap-4 px-6 font-medium text-base text-[#152b43] transition-all duration-200 hover:bg-[#f1f8ff] hover:pl-7 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1]"
+                  className="flex min-h-[70px] items-center gap-4 px-6 font-medium text-base text-[#152b43] transition-all duration-200 hover:bg-[#fff1e7] hover:pl-7 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#cf7544]"
                 >
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#0874d1] text-white">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#f0a879] text-[#542d18]">
                     <Icon aria-hidden="true" className="size-[18px]" />
                   </span>
                   <span>{item}</span>
@@ -571,7 +571,7 @@ export function HomePage() {
                   type="button"
                   onClick={() => setLocationOpen(false)}
                   aria-label="Close location picker"
-                  className="flex size-10 items-center justify-center rounded-full border border-[#e1eaf3] text-[#152b43] transition hover:bg-[#f4f9fe] hover:text-[#0874d1]"
+                  className="flex size-10 items-center justify-center rounded-full border border-[#e1eaf3] text-[#152b43] transition hover:bg-[#f4f9fe] hover:text-[#cf7544]"
                 >
                   <ArrowRight className="size-5 rotate-180" />
                 </button>
@@ -588,13 +588,13 @@ export function HomePage() {
           <div className="mx-auto max-w-[1040px] px-5 pb-16 pt-9 sm:px-8 sm:pt-14">
             {/* Intro */}
             <div className="max-w-2xl">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0874d1]">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#cf7544]">
                 Find your area
               </p>
 
               <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-[-0.045em] sm:text-4xl">
                 Where would you like
-                <span className="block text-[#0874d1]">
+                <span className="block text-[#cf7544]">
                   to find a property?
                 </span>
               </h2>
@@ -614,8 +614,8 @@ export function HomePage() {
                 Search locations
               </label>
 
-              <div className="flex h-[58px] items-center gap-3 rounded-2xl border border-[#d5e3f0] bg-white px-4 transition focus-within:border-[#0874d1] focus-within:ring-4 focus-within:ring-[#0874d1]/10">
-                {/* <Search className="size-5 shrink-0 text-[#0874d1]" /> */}
+              <div className="flex h-[58px] items-center gap-3 rounded-2xl border border-[#d5e3f0] bg-white px-4 transition focus-within:border-[#cf7544] focus-within:ring-4 focus-within:ring-[#cf7544]/10">
+                {/* <Search className="size-5 shrink-0 text-[#cf7544]" /> */}
 
                 <input
                   id="location-search"
@@ -642,7 +642,7 @@ export function HomePage() {
                   </p>
                 </div>
 
-                <span className="shrink-0 text-xs font-medium text-[#0874d1]">
+                <span className="shrink-0 text-xs font-medium text-[#cf7544]">
                   4 areas
                 </span>
               </div>
@@ -667,7 +667,7 @@ export function HomePage() {
     sm:p-5
   "
                   >
-                    <span className="flex size-11 shrink-0 items-center justify-center text-[#0874d1]">
+                    <span className="flex size-11 shrink-0 items-center justify-center text-[#cf7544]">
                       <MapPin className="size-5" />
                     </span>
 
@@ -685,7 +685,7 @@ export function HomePage() {
       size-4 shrink-0 text-[#a6b3c0]
       transition-transform duration-200
       group-hover:translate-x-1
-      group-hover:text-[#0874d1]
+      group-hover:text-[#cf7544]
     "
                     />
                   </button>
@@ -729,7 +729,7 @@ export function HomePage() {
 
               <h1 className="max-w-[560px] text-[clamp(2.5rem,8vw,4.5rem)] font-medium leading-[1.05] tracking-[-0.06em] sm:text-[clamp(3rem,5vw,4.2rem)] sm:leading-[0.98] lg:text-[4rem]">
                 <span
-                  className="block min-h-[1.2em] whitespace-normal text-[clamp(1.25rem,7vw,4.5rem)] leading-tight tracking-tight text-[#0874d1]"
+                  className="block min-h-[1.2em] whitespace-normal text-[clamp(1.25rem,7vw,4.5rem)] leading-tight tracking-tight text-[#cf7544]"
                   aria-live="polite"
                 >
                   {typedBrand}
@@ -765,7 +765,7 @@ export function HomePage() {
               <div className="mt-7 flex w-full min-w-0 max-w-[560px] flex-col items-center gap-3 min-[380px]:mt-9 min-[380px]:flex-row min-[380px]:items-center min-[380px]:justify-center">
                 <Link
                   href="#properties"
-                  className="group relative isolate inline-flex h-14 w-full max-w-[240px] min-w-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-[#0874d1] bg-[#0874d1] px-3 text-xs font-semibold text-white shadow-[0_5px_16px_rgba(8,116,209,0.16)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0874d1] min-[380px]:w-[min(220px,calc(50vw-24px))] min-[380px]:flex-none lg:h-16 lg:gap-3 lg:px-5 lg:text-sm"
+                  className="group relative isolate inline-flex h-14 w-full max-w-[240px] min-w-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-[#cf7544] bg-[#f0a879] px-3 text-xs font-semibold text-[#542d18] shadow-[0_5px_16px_rgba(207,117,68,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cf7544] min-[380px]:w-[min(220px,calc(50vw-24px))] min-[380px]:flex-none lg:h-16 lg:gap-3 lg:px-5 lg:text-sm"
                 >
                   <Building2
                     size={19}
@@ -787,7 +787,7 @@ export function HomePage() {
 
                 <Link
                   href="#contact"
-                  className="group relative isolate inline-flex h-14 w-full max-w-[240px] min-w-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-[#c8dff4] bg-white px-3 text-xs font-semibold text-[#152b43] shadow-[0_4px_12px_rgba(21,43,67,0.05)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0874d1] min-[380px]:w-[min(220px,calc(50vw-24px))] min-[380px]:flex-none lg:h-16 lg:gap-3 lg:px-5 lg:text-sm"
+                  className="group relative isolate inline-flex h-14 w-full max-w-[240px] min-w-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-[#c8dff4] bg-white px-3 text-xs font-semibold text-[#152b43] shadow-[0_4px_12px_rgba(21,43,67,0.05)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cf7544] min-[380px]:w-[min(220px,calc(50vw-24px))] min-[380px]:flex-none lg:h-16 lg:gap-3 lg:px-5 lg:text-sm"
                 >
                   <Phone
                     size={18}
@@ -803,7 +803,7 @@ export function HomePage() {
                   />
                   <span
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 z-10 rounded-full border-2 border-[#064b91] [clip-path:inset(0_100%_0_0_round_999px)] transition-[clip-path] duration-500 ease-in-out group-hover:[clip-path:inset(0_0_0_0_round_999px)] motion-reduce:transition-none"
+                    className="pointer-events-none absolute inset-0 z-10 rounded-full border-2 border-[#a9552c] [clip-path:inset(0_100%_0_0_round_999px)] transition-[clip-path] duration-500 ease-in-out group-hover:[clip-path:inset(0_0_0_0_round_999px)] motion-reduce:transition-none"
                   />
                 </Link>
               </div>
@@ -842,13 +842,13 @@ export function HomePage() {
               <Building2
                 size={17}
                 strokeWidth={1.8}
-                className="text-[#0874d1]"
+                className="text-[#cf7544]"
                 aria-hidden="true"
               />
 
               <span className="relative py-1">
                 View all properties
-                <span className="absolute inset-x-0 -bottom-0.5 h-[2px] origin-left scale-x-0 rounded-full bg-[#0874d1] transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                <span className="absolute inset-x-0 -bottom-0.5 h-[2px] origin-left scale-x-0 rounded-full bg-[#cf7544] transition-transform duration-300 ease-out group-hover:scale-x-100" />
               </span>
             </Link>
           </div>
@@ -901,11 +901,11 @@ export function HomePage() {
 
                     <Link
                       href={`/properties/${index}`}
-                      className="group inline-flex w-fit items-center gap-2 text-[12px] font-semibold text-[#0874d1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0874d1]"
+                      className="group inline-flex w-fit items-center gap-2 text-[12px] font-semibold text-[#cf7544] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cf7544]"
                     >
                       <span className="relative py-1">
                         View Details
-                        <span className="absolute inset-x-0 -bottom-0.5 h-[2px] origin-left scale-x-0 rounded-full bg-[#0874d1] transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                        <span className="absolute inset-x-0 -bottom-0.5 h-[2px] origin-left scale-x-0 rounded-full bg-[#cf7544] transition-transform duration-300 ease-out group-hover:scale-x-100" />
                       </span>
 
                       <ArrowRight
@@ -1024,7 +1024,7 @@ export function HomePage() {
           {/* Subtle background decoration */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -right-32 top-10 -z-10 h-80 w-80 rounded-full bg-[#eaf5ff] blur-3xl"
+            className="pointer-events-none absolute -right-32 top-10 -z-10 h-80 w-80 rounded-full bg-[#fff0e5] blur-3xl"
           />
 
           <section
@@ -1034,7 +1034,7 @@ export function HomePage() {
             {/* Background decoration */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute -right-32 top-10 -z-10 size-80 rounded-full bg-[#eaf5ff] blur-3xl"
+              className="pointer-events-none absolute -right-32 top-10 -z-10 size-80 rounded-full bg-[#fff0e5] blur-3xl"
             />
             <div
               aria-hidden="true"
@@ -1045,15 +1045,15 @@ export function HomePage() {
               {/* LEFT: Brand introduction */}
               <div className="relative z-10">
                 <div className="mb-5 inline-flex items-center gap-3">
-                  <span className="h-[2px] w-8 rounded-full bg-[#0874d1]" />
-                  <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#0874d1]">
+                  <span className="h-[2px] w-8 rounded-full bg-[#cf7544]" />
+                  <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#cf7544]">
                     The OneStep Difference
                   </p>
                 </div>
 
                 <h2 className="max-w-xl text-[34px] font-semibold leading-[1.12] tracking-[-0.045em] text-[#152b43] min-[420px]:text-[39px] sm:text-5xl lg:text-[52px]">
                   Your next property.
-                  <span className="block text-[#0874d1]">One step closer.</span>
+                  <span className="block text-[#cf7544]">One step closer.</span>
                 </h2>
 
                 <p className="mt-6 max-w-md text-sm leading-7 text-[#617286] sm:text-[15px]">
@@ -1065,7 +1065,7 @@ export function HomePage() {
                 {/* Primary action */}
                 <Link
                   href="#properties"
-                  className="group relative isolate mt-8 inline-flex h-12 items-center gap-3 overflow-hidden rounded-full border border-[#0874d1] bg-[#0874d1] px-5 text-sm font-semibold text-white shadow-[0_8px_22px_rgba(8,116,209,0.16)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0874d1] sm:h-14 sm:px-6"
+                  className="group relative isolate mt-8 inline-flex h-12 items-center gap-3 overflow-hidden rounded-full border border-[#cf7544] bg-[#f0a879] px-5 text-sm font-semibold text-[#542d18] shadow-[0_8px_22px_rgba(207,117,68,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cf7544] sm:h-14 sm:px-6"
                 >
                   <span
                     aria-hidden="true"
@@ -1088,7 +1088,7 @@ export function HomePage() {
                 {/* Brand principles */}
                 <div className="mt-10 flex items-center gap-3 border-t border-[#e5edf5] pt-6 sm:mt-12">
                   <div className="flex shrink-0 -space-x-2" aria-hidden="true">
-                    <span className="flex size-10 items-center justify-center rounded-full border-2 border-white bg-[#eaf5ff] text-[#0874d1]">
+                    <span className="flex size-10 items-center justify-center rounded-full border-2 border-white bg-[#fff0e5] text-[#cf7544]">
                       <House size={16} />
                     </span>
                     <span className="flex size-10 items-center justify-center rounded-full border-2 border-white bg-[#d8eafa] text-[#152b43]">
@@ -1121,7 +1121,7 @@ export function HomePage() {
                       key={step.number}
                       className="border-l-2 border-[#c7e2f9] pl-3"
                     >
-                      <span className="block text-[10px] font-semibold tracking-[0.12em] text-[#0874d1]">
+                      <span className="block text-[10px] font-semibold tracking-[0.12em] text-[#cf7544]">
                         {step.number}
                       </span>
                       <span className="mt-1 block text-xs font-medium text-[#152b43] sm:text-sm">
@@ -1137,7 +1137,7 @@ export function HomePage() {
                 {/* Soft glow behind cards */}
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute left-[20%] top-[20%] -z-10 size-64 rounded-full bg-[#eaf5ff] blur-3xl"
+                  className="pointer-events-none absolute left-[20%] top-[20%] -z-10 size-64 rounded-full bg-[#fff0e5] blur-3xl"
                 />
 
                 {[
@@ -1195,10 +1195,10 @@ export function HomePage() {
                         <div className="relative z-10">
                           <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-2">
-                              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#eaf5ff] text-[#0874d1] sm:size-10">
+                              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#fff0e5] text-[#cf7544] sm:size-10">
                                 <FeatureIcon size={19} strokeWidth={1.8} />
                               </span>
-                              <span className="text-[9px] font-bold tracking-[0.12em] text-[#0874d1] sm:text-[10px]">
+                              <span className="text-[9px] font-bold tracking-[0.12em] text-[#cf7544] sm:text-[10px]">
                                 ONESTEP
                               </span>
                             </div>
@@ -1417,11 +1417,11 @@ export function HomePage() {
             </div>
           </div>
 
-  <div className="flex flex-col items-center justify-center gap-3 bg-[#eaf5ff] px-4 py-5 sm:flex-row sm:gap-4 lg:bg-transparent lg:px-0 lg:py-8">
+  <div className="flex flex-col items-center justify-center gap-3 bg-[#fff0e5] px-4 py-5 sm:flex-row sm:gap-4 lg:bg-transparent lg:px-0 lg:py-8">
   {/* BUY — White animated outline */}
   <Link
   href="#properties"
-  className="group relative inline-flex min-h-[52px] w-full max-w-[240px] items-center justify-center gap-3 overflow-hidden rounded-full border border-[#0874d1] bg-[#0874d1] px-5 text-sm font-semibold text-white sm:min-h-[64px] sm:w-auto sm:min-w-[190px] sm:justify-between sm:gap-4 sm:px-6 sm:text-base"
+  className="group relative inline-flex min-h-[52px] w-full max-w-[240px] items-center justify-center gap-3 overflow-hidden rounded-full border border-[#cf7544] bg-[#f0a879] px-5 text-sm font-semibold text-[#542d18] sm:min-h-[64px] sm:w-auto sm:min-w-[190px] sm:justify-between sm:gap-4 sm:px-6 sm:text-base"
   >
               <Building2 className="size-7 shrink-0" />
               <span className="flex-1 whitespace-nowrap">Buy Property</span>
@@ -1436,7 +1436,7 @@ export function HomePage() {
             {/* SELL — Dark-blue animated outline */}
             <Link
               href="#contact"
-  className="group relative inline-flex min-h-[52px] w-full max-w-[240px] items-center justify-center gap-3 overflow-hidden rounded-full border border-white bg-white px-5 text-sm font-semibold text-[#0874d1] sm:min-h-[64px] sm:w-auto sm:min-w-[190px] sm:justify-between sm:gap-4 sm:px-6 sm:text-base"
+  className="group relative inline-flex min-h-[52px] w-full max-w-[240px] items-center justify-center gap-3 overflow-hidden rounded-full border border-white bg-white px-5 text-sm font-semibold text-[#cf7544] sm:min-h-[64px] sm:w-auto sm:min-w-[190px] sm:justify-between sm:gap-4 sm:px-6 sm:text-base"
   >
               <Building2 className="size-7 shrink-0" />
               <span className="flex-1 whitespace-nowrap">Sell Property</span>
@@ -1444,7 +1444,7 @@ export function HomePage() {
 
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 rounded-full border-2 border-[#064b91] [clip-path:inset(0_100%_0_0_round_999px)] transition-[clip-path] duration-500 ease-in-out group-hover:[clip-path:inset(0_0_0_0_round_999px)]"
+                className="pointer-events-none absolute inset-0 rounded-full border-2 border-[#a9552c] [clip-path:inset(0_100%_0_0_round_999px)] transition-[clip-path] duration-500 ease-in-out group-hover:[clip-path:inset(0_0_0_0_round_999px)]"
               />
             </Link>
           </div>
@@ -1455,7 +1455,7 @@ export function HomePage() {
             </p>
             <div className="mx-auto mt-3 grid max-w-md grid-cols-2 gap-2">
               <div className="rounded-md border border-[#d7dde2] bg-white px-3 py-3">
-                <p className="text-xl font-semibold tracking-[-0.04em] text-[#0874d1]">
+                <p className="text-xl font-semibold tracking-[-0.04em] text-[#cf7544]">
                   100+
                 </p>
                 <p className="mt-0.5 text-[10px] font-medium text-[#5f6368]">
@@ -1488,7 +1488,7 @@ export function HomePage() {
                             <CarFront
                               size={24}
                               strokeWidth={2}
-                              className="text-[#0874d1] drop-shadow-[2px_1px_0px_#ffad42]"
+                              className="text-[#cf7544] drop-shadow-[2px_1px_0px_#ffad42]"
                               aria-hidden="true"
                             />
                           </span>
@@ -1605,13 +1605,13 @@ export function HomePage() {
       </section>
       <footer
         id="contact"
-        className="border-t border-[#0874d1] bg-[#0874d1] text-white"
+        className="border-t border-[#cf7544] bg-[#f0a879] text-[#542d18]"
       >
         <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
           <div>
             <Link
               href="#top"
-              className="inline-flex items-center text-[#9b3f12]"
+              className="inline-flex items-center text-[#b85e2e]"
               aria-label="ODP home"
             >
               <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
@@ -1649,14 +1649,14 @@ export function HomePage() {
             <p className="mt-5 text-sm leading-6 text-[#5f6368]">
               <a
                 href="mailto:help.onestepdreamproperty@gmail.com"
-                className="transition-colors hover:text-[#0874d1]"
+                className="transition-colors hover:text-[#cf7544]"
               >
                 help.onestepdreamproperty@gmail.com
               </a>
               <br />
               <a
                 href="tel:+91 7411535782"
-                className="transition-colors hover:text-[#0874d1]"
+                className="transition-colors hover:text-[#cf7544]"
               >
                 +91 7411535782
               </a>
@@ -1698,7 +1698,7 @@ export function HomePage() {
             {/* Header */}
             <div className="flex shrink-0 items-center justify-between border-b border-[#edf1f5] bg-[#dceaf6] px-5 py-4">
               <div className="flex min-w-0 items-center gap-3  ">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-full text-[#0874d1]">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-full text-[#cf7544]">
                   <Bot className="size-5" strokeWidth={1.7} />
                 </div>
 
@@ -1764,7 +1764,7 @@ export function HomePage() {
                     </span>
 
                     <ArrowRight
-                      className="size-4 shrink-0 text-[#8292a3] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#0874d1]"
+                      className="size-4 shrink-0 text-[#8292a3] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#cf7544]"
                       strokeWidth={1.7}
                     />
                   </button>
@@ -1795,7 +1795,7 @@ export function HomePage() {
                     </span>
 
                     <ArrowRight
-                      className="size-4 shrink-0 text-[#8292a3] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#0874d1]"
+                      className="size-4 shrink-0 text-[#8292a3] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#cf7544]"
                       strokeWidth={1.7}
                     />
                   </button>
@@ -1821,10 +1821,10 @@ export function HomePage() {
           className="
       group flex size-12 shrink-0 items-center justify-center
       self-end rounded-full border border-[#dceaf6]
-      bg-white text-[#0874d1]
+      bg-white text-[#cf7544]
       shadow-[0_5px_22px_rgba(21,43,67,0.12)]
       transition-all duration-300
-      hover:border-[#0874d1] hover:shadow-[0_8px_28px_rgba(21,43,67,0.16)]
+      hover:border-[#cf7544] hover:shadow-[0_8px_28px_rgba(21,43,67,0.16)]
       sm:size-14
     "
         >
@@ -1861,7 +1861,7 @@ export function HomePage() {
               className="
           absolute right-4 top-4 flex size-8 items-center
           justify-center text-[#152b43]
-          transition-colors hover:text-[#0874d1]
+          transition-colors hover:text-[#cf7544]
         "
             >
               <X className="size-5" />
@@ -1884,7 +1884,7 @@ export function HomePage() {
               You can view our full{" "}
               <Link
                 href="/privacy-policy"
-                className="font-semibold text-[#152b43] underline underline-offset-2 transition-colors hover:text-[#0874d1]"
+                className="font-semibold text-[#152b43] underline underline-offset-2 transition-colors hover:text-[#cf7544]"
               >
                 Cookie Policy
               </Link>{" "}
@@ -1899,9 +1899,9 @@ export function HomePage() {
                 onClick={() => saveCookieConsent("accepted")}
                 className="
             inline-flex h-10 items-center justify-center
-            rounded-full bg-[#0874d1] px-5
-            text-xs font-semibold text-white
-            transition-colors duration-200 hover:bg-[#075da8]
+            rounded-full bg-[#f0a879] px-5
+            text-xs font-semibold text-[#542d18]
+            transition-colors duration-200 hover:bg-[#f3b58e]
           "
               >
                 Accept all
@@ -1915,7 +1915,7 @@ export function HomePage() {
             rounded-full border border-[#cbd5df]
             bg-white px-5 text-xs font-medium text-[#152b43]
             transition-colors duration-200
-            hover:border-[#0874d1] hover:text-[#0874d1]
+            hover:border-[#cf7544] hover:text-[#cf7544]
           "
               >
                 Essential only
@@ -1929,7 +1929,7 @@ export function HomePage() {
             rounded-full border border-[#cbd5df]
             bg-white px-5 text-xs font-medium text-[#152b43]
             transition-colors duration-200
-            hover:border-[#0874d1] hover:text-[#0874d1]
+            hover:border-[#cf7544] hover:text-[#cf7544]
           "
               >
                 <SlidersHorizontal className="size-3.5" />

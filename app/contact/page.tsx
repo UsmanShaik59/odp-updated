@@ -98,11 +98,11 @@ export default function ContactPage() {
   return (
     <main id="top" className="min-h-screen bg-white text-[#152b43]">
       {/* Navbar */}
-      <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#eaf5ff] text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)]">
+      <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#fff0e5] text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)]">
         <div className="mx-auto flex h-[58px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
           <button
             type="button"
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#cfe2f5] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] lg:hidden"
+            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#edd0bb] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#cf7544] lg:hidden"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
@@ -113,7 +113,7 @@ export default function ContactPage() {
 
           <Link
             href="/"
-            className="flex shrink-0 items-center text-[#0874d1]"
+            className="flex shrink-0 items-center text-[#b85e2e]"
             aria-label="OneStep Dream Property home"
           >
             <span className="text-[25px] font-black leading-none tracking-[-0.12em] lg:text-[32px]">
@@ -148,7 +148,7 @@ export default function ContactPage() {
                     window.history.replaceState(null, "", `/#${sectionId}`);
                   }
                 }}
-                className="transition-colors hover:text-[#0874d1]"
+                className="transition-colors hover:text-[#cf7544]"
               >
                 {item.label}
               </Link>
@@ -182,14 +182,14 @@ export default function ContactPage() {
   id="mobile-navigation"
           aria-hidden={!menuOpen}
           inert={!menuOpen ? true : undefined}
-          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#cfe2f5] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
+          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#edd0bb] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
             menuOpen
               ? "visible translate-y-0 scale-y-100 opacity-100"
               : "pointer-events-none invisible -translate-y-4 scale-y-95 opacity-0"
           }`}
           aria-label="Mobile navigation"
         >
-          <div className="mx-auto w-full max-w-[520px] divide-y divide-[#cfe2f5]">
+          <div className="mx-auto w-full max-w-[520px] divide-y divide-[#edd0bb]">
             {[
               { label: "Home", href: "/", icon: Building2 },
               { label: "Buy Flats", href: "/#properties", icon: BedDouble },
@@ -201,14 +201,14 @@ export default function ContactPage() {
               const Icon = item.icon;
               const content = (
                 <>
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#0874d1] text-white">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#f0a879] text-[#542d18]">
                     <Icon aria-hidden="true" className="size-[18px]" />
                   </span>
                   <span>{item.label}</span>
                 </>
               );
               const className =
-                "flex min-h-[70px] items-center gap-4 px-6 text-base font-medium text-[#152b43] transition-all duration-200 hover:bg-[#f1f8ff] hover:pl-7 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1]";
+                "flex min-h-[70px] items-center gap-4 px-6 text-base font-medium text-[#152b43] transition-all duration-200 hover:bg-[#fff1e7] hover:pl-7 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#cf7544]";
 
               return (
                 <Link
@@ -239,13 +239,13 @@ export default function ContactPage() {
       </header>
 
       {/* Contact Section — Two Aligned Columns */}
-      <section className="bg-[#eaf5ff] px-4 pb-16 pt-20 sm:px-5 sm:pb-20 sm:pt-36 lg:px-8">
+      <section className="bg-[#fff0e5] px-4 pb-16 pt-20 sm:px-5 sm:pb-20 sm:pt-36 lg:px-8">
         <div className="mx-auto grid max-w-[1280px] items-start gap-12 lg:grid-cols-2 lg:gap-16">
           {/* LEFT SIDE — Contact Heading */}
           <div>
             <h1 className="mt-0 text-4xl font-semibold leading-[1.08] tracking-[-0.055em] sm:text-5xl lg:mt-35 lg:text-6xl">
               Let&apos;s talk about
-              <span className="block text-[#0874d1]">your next property.</span>
+              <span className="block text-[#cf7544]">your next property.</span>
             </h1>
 
             <p className="mt-6 max-w-xl text-base leading-8 text-[#617286] sm:text-lg">
@@ -259,7 +259,7 @@ export default function ContactPage() {
           <div className="relative overflow-hidden rounded-3xl border border-[#dce8f4] bg-white p-6 shadow-[0_20px_60px_rgba(21,43,67,0.06)] sm:p-8 lg:p-9">
             {/* Heading */}
             <div className="border-b border-[#e8eff6] pb-6">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0874d1]">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#cf7544]">
                 Get in touch
               </p>
 
@@ -275,7 +275,7 @@ export default function ContactPage() {
                 href="mailto:help.onestepdreamproperty@gmail.com"
                 className="group flex items-center gap-4 py-5"
               >
-                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#eaf5ff] text-[#0874d1] transition-colors group-hover:bg-[#0874d1] group-hover:text-white">
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#fff0e5] text-[#cf7544] transition-colors group-hover:bg-[#cf7544] group-hover:text-white">
                   <Mail size={21} />
                 </span>
 
@@ -283,12 +283,12 @@ export default function ContactPage() {
                   <span className="block text-xs font-medium uppercase tracking-wider text-[#8292a3]">
                     Email address
                   </span>
-                  <span className="mt-1 block break-all text-sm font-semibold text-[#152b43] transition-colors group-hover:text-[#0874d1] sm:text-base">
+                  <span className="mt-1 block break-all text-sm font-semibold text-[#152b43] transition-colors group-hover:text-[#cf7544] sm:text-base">
                     help.onestepdreamproperty@gmail.com
                   </span>
                 </span>
 
-                <ArrowUpRight className="size-5 shrink-0 text-[#9aabba] transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#0874d1]" />
+                <ArrowUpRight className="size-5 shrink-0 text-[#9aabba] transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#cf7544]" />
               </a>
 
               {/* Phone */}
@@ -296,7 +296,7 @@ export default function ContactPage() {
                 href="tel:+917411535782"
                 className="group flex items-center gap-4 py-5"
               >
-                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#eaf5ff] text-[#0874d1] transition-colors group-hover:bg-[#0874d1] group-hover:text-white">
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#fff0e5] text-[#cf7544] transition-colors group-hover:bg-[#cf7544] group-hover:text-white">
                   <Phone size={21} />
                 </span>
 
@@ -304,17 +304,17 @@ export default function ContactPage() {
                   <span className="block text-xs font-medium uppercase tracking-wider text-[#8292a3]">
                     Phone number
                   </span>
-                  <span className="mt-1 block text-base font-semibold text-[#152b43] transition-colors group-hover:text-[#0874d1]">
+                  <span className="mt-1 block text-base font-semibold text-[#152b43] transition-colors group-hover:text-[#cf7544]">
                     +91 7411535782
                   </span>
                 </span>
 
-                <ArrowUpRight className="size-5 shrink-0 text-[#9aabba] transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#0874d1]" />
+                <ArrowUpRight className="size-5 shrink-0 text-[#9aabba] transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#cf7544]" />
               </a>
 
               {/* Enquiries */}
               <div className="flex items-center gap-4 py-5">
-                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#eaf5ff] text-[#0874d1]">
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#fff0e5] text-[#cf7544]">
                   <Clock3 size={21} />
                 </span>
 
@@ -342,13 +342,13 @@ function Footer() {
   return (
     <footer
       id="contact"
-      className="border-t border-[#0874d1] bg-[#0874d1] text-white"
+      className="border-t border-[#cf7544] bg-[#f0a879] text-[#542d18]"
     >
       <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
         <div>
           <Link
             href="/"
-            className="inline-flex items-center text-[#0874d1]"
+            className="inline-flex items-center text-[#cf7544]"
             aria-label="ODP home"
           >
             <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
@@ -392,14 +392,14 @@ function Footer() {
           <p className="mt-5 text-sm leading-6 text-[#5f6368]">
             <a
               href="mailto:help.onestepdreamproperty@gmail.com"
-              className="transition-colors hover:text-[#0874d1]"
+              className="transition-colors hover:text-[#cf7544]"
             >
               help.onestepdreamproperty@gmail.com
             </a>
             <br />
             <a
               href="tel:+91 7411535782"
-              className="transition-colors hover:text-[#0874d1]"
+              className="transition-colors hover:text-[#cf7544]"
             >
               +91 7411535782
             </a>

@@ -90,11 +90,11 @@ export function PropertyDetails({ property }: { property: Property }) {
 
   return (
     <div className="min-h-screen bg-white text-[#111111]">
-      <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#eaf5ff] text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)]">
+      <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#fff0e5] text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)]">
         <div className="mx-auto flex h-[58px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
           <button
             type="button"
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#cfe2f5] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white lg:hidden"
+            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#edd0bb] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white lg:hidden"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
@@ -105,7 +105,7 @@ export function PropertyDetails({ property }: { property: Property }) {
 
           <Link
             href="/"
-            className="flex shrink-0 items-center text-[#0874d1]"
+            className="flex shrink-0 items-center text-[#b85e2e]"
             aria-label="OneStep Dream Property home"
           >
             <span className="text-[25px] font-black leading-none tracking-[-0.12em] lg:text-[32px]">
@@ -140,7 +140,7 @@ export function PropertyDetails({ property }: { property: Property }) {
                     window.history.replaceState(null, "", `/#${sectionId}`);
                   }
                 }}
-                className="transition-colors hover:text-[#0874d1]"
+                className="transition-colors hover:text-[#cf7544]"
               >
                 {item.label}
               </Link>
@@ -172,14 +172,14 @@ export function PropertyDetails({ property }: { property: Property }) {
           id="mobile-navigation"
           aria-hidden={!menuOpen}
           inert={!menuOpen ? true : undefined}
-          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#cfe2f5] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
+          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#edd0bb] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
             menuOpen
               ? "visible translate-y-0 scale-y-100 opacity-100"
               : "pointer-events-none invisible -translate-y-4 scale-y-95 opacity-0"
           }`}
           aria-label="Mobile navigation"
         >
-          <div className="divide-y divide-[#cfe2f5]">
+          <div className="divide-y divide-[#edd0bb]">
             {[
               { label: "Home", href: "/", icon: Building2 },
               { label: "Buy Flats", href: "/#properties", icon: BedDouble },
@@ -191,14 +191,14 @@ export function PropertyDetails({ property }: { property: Property }) {
               const Icon = item.icon;
               const content = (
                 <>
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#0874d1] text-white">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#f0a879] text-[#542d18]">
                     <Icon aria-hidden="true" className="size-[18px]" />
                   </span>
                   <span>{item.label}</span>
                 </>
               );
               const className =
-                "flex min-h-14 items-center gap-4 px-5 font-medium text-[#152b43] transition-colors hover:bg-[#d6ebff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1]";
+                "flex min-h-14 items-center gap-4 px-5 font-medium text-[#152b43] transition-colors hover:bg-[#d6ebff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#cf7544]";
 
               return (
                 <Link
@@ -218,7 +218,7 @@ export function PropertyDetails({ property }: { property: Property }) {
                       window.history.replaceState(null, "", `/#${sectionId}`);
                     }
                   }}
-                  className={`${className} min-h-[70px] px-6 text-base hover:bg-[#f1f8ff] hover:pl-7`}
+                  className={`${className} min-h-[70px] px-6 text-base hover:bg-[#fff1e7] hover:pl-7`}
                 >
                   {content}
                 </Link>
@@ -284,7 +284,7 @@ export function PropertyDetails({ property }: { property: Property }) {
                     type="button"
                     key={image}
                     onClick={() => setActiveImage(index)}
-                    className={`relative aspect-[1.4/1] overflow-hidden ${activeImage === index ? "ring-2 ring-[#0874d1] ring-offset-2" : "opacity-65 hover:opacity-100"}`}
+                    className={`relative aspect-[1.4/1] overflow-hidden ${activeImage === index ? "ring-2 ring-[#cf7544] ring-offset-2" : "opacity-65 hover:opacity-100"}`}
                     aria-label={`View photo ${index + 1}`}
                   >
                     <Image
@@ -301,14 +301,14 @@ export function PropertyDetails({ property }: { property: Property }) {
             <section className="flex flex-col">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  {/* <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0874d1]">
+                  {/* <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#cf7544]">
                     {property.status}
                   </p> */}
                   <h1 className="mt-3 break-words text-[2.35rem] font-medium leading-[1.02] tracking-[-0.055em] sm:text-5xl">
                     {property.title}
                   </h1>
                   <p className="mt-4 flex items-center gap-2 text-sm text-[#5f6368]">
-                    <MapPin className="size-4 text-[#0874d1]" />{" "}
+                    <MapPin className="size-4 text-[#cf7544]" />{" "}
                     {property.location}
                   </p>
                 </div>
@@ -324,14 +324,14 @@ export function PropertyDetails({ property }: { property: Property }) {
                 <p className="text-xs uppercase tracking-[0.14em] text-[#5f6368]">
                   Starting price
                 </p>
-                <p className="mt-1 text-3xl font-semibold tracking-[-0.04em] text-[#0874d1]">
+                <p className="mt-1 text-3xl font-semibold tracking-[-0.04em] text-[#cf7544]">
                   {property.price}
                 </p>
               </div>
 
               <Link
                 href={`/properties/${properties.findIndex((item) => item.title === property.title)}/appointment`}
-                className="mx-auto mt-7 flex h-12 w-full max-w-[280px] items-center justify-center gap-2 rounded-xl bg-[#0874d1] px-3 text-xs font-semibold text-white shadow-[0_10px_24px_rgba(8,116,209,.2)] transition hover:bg-[#0667bb] sm:mx-0 sm:h-14 sm:max-w-none sm:px-5 sm:text-sm"
+                className="mx-auto mt-7 flex h-12 w-full max-w-[280px] items-center justify-center gap-2 rounded-xl bg-[#f0a879] px-3 text-xs font-semibold text-[#542d18] shadow-[0_10px_24px_rgba(207,117,68,.18)] transition hover:bg-[#f3b58e] sm:mx-0 sm:h-14 sm:max-w-none sm:px-5 sm:text-sm"
               >
                 <CalendarDays data-icon="inline-start" /> Book an Appointment
               </Link>
@@ -351,7 +351,7 @@ export function PropertyDetails({ property }: { property: Property }) {
           <div className="mt-12 border-t border-[#dceaf7] pt-8 sm:mt-20 sm:pt-14">
             {/* Section heading */}
             <div className="mb-8">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0874d1]">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#cf7544]">
                 Property details
               </p>
               <h2 className="mt-3 text-3xl font-semibold tracking-[-0.045em] text-[#152b43] sm:text-4xl">
@@ -380,7 +380,7 @@ export function PropertyDetails({ property }: { property: Property }) {
 
                   <div className="mt-7 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
                     <div className="rounded-xl p-2.5 sm:p-4">
-                      <BedDouble className="size-5 text-[#0874d1]" />
+                      <BedDouble className="size-5 text-[#cf7544]" />
                       <p className="mt-3 break-words text-base font-semibold leading-tight text-[#152b43] sm:text-lg">
                         {bhk}
                       </p>
@@ -388,7 +388,7 @@ export function PropertyDetails({ property }: { property: Property }) {
                     </div>
 
                     <div className="rounded-xl p-2.5 sm:p-4">
-                      <Bath className="size-5 text-[#0874d1]" />
+                      <Bath className="size-5 text-[#cf7544]" />
                       <p className="mt-3 break-words text-base font-semibold leading-tight text-[#152b43] sm:text-lg">
                         {bathrooms}
                       </p>
@@ -396,7 +396,7 @@ export function PropertyDetails({ property }: { property: Property }) {
                     </div>
 
                     <div className="col-span-2 rounded-xl p-2.5 sm:col-span-1 sm:p-4">
-                      <Ruler className="size-5 text-[#0874d1]" />
+                      <Ruler className="size-5 text-[#cf7544]" />
                       <p className="mt-3 break-words text-base font-semibold leading-tight text-[#152b43] sm:text-lg">
                         {area}
                       </p>
@@ -412,9 +412,9 @@ export function PropertyDetails({ property }: { property: Property }) {
                       href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(property.location)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group relative mt-4 inline-flex items-center gap-2 overflow-hidden rounded-lg border border-[#0874d1] bg-white px-3 py-2 text-sm font-semibold text-black transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(8,116,209,0.10)] active:scale-[0.97]"
+                      className="group relative mt-4 inline-flex items-center gap-2 overflow-hidden rounded-lg border border-[#cf7544] bg-white px-3 py-2 text-sm font-semibold text-black transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(207,117,68,0.10)] active:scale-[0.97]"
                     >
-                      <span className="pointer-events-none absolute inset-0 rounded-lg border-2 border-[#0874d1] [clip-path:inset(0_100%_0_0)] transition-all duration-500 ease-out group-hover:[clip-path:inset(0_0_0_0)]" />
+                      <span className="pointer-events-none absolute inset-0 rounded-lg border-2 border-[#cf7544] [clip-path:inset(0_100%_0_0)] transition-all duration-500 ease-out group-hover:[clip-path:inset(0_0_0_0)]" />
                       <span className="relative z-10">Get directions</span>
                       <ArrowUpRight
                         size={16}
@@ -447,7 +447,7 @@ export function PropertyDetails({ property }: { property: Property }) {
                         key={place}
                         className="flex min-w-0 items-center gap-2.5 py-3 first:pt-0 last:pb-0 sm:gap-3 sm:py-4"
                       >
-                        <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[#f4f9fe] text-[#0874d1]">
+                        <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[#f4f9fe] text-[#cf7544]">
                           <MapPin size={17} />
                         </span>
 
@@ -470,13 +470,13 @@ export function PropertyDetails({ property }: { property: Property }) {
 
       <footer
         id="contact"
-        className="border-t border-[#0874d1] bg-[#0874d1] text-white"
+        className="border-t border-[#cf7544] bg-[#f0a879] text-[#542d18]"
       >
         <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
           <div>
             <Link
               href="/"
-              className="inline-flex items-center text-[#0874d1]"
+              className="inline-flex items-center text-[#cf7544]"
               aria-label="ODP home"
             >
               <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
@@ -520,14 +520,14 @@ export function PropertyDetails({ property }: { property: Property }) {
             <p className="mt-5 text-sm leading-6 text-[#5f6368]">
               <a
                 href="mailto:help.onestepdreamproperty@gmail.com"
-                className="transition-colors hover:text-[#0874d1]"
+                className="transition-colors hover:text-[#cf7544]"
               >
                 help.onestepdreamproperty@gmail.com
               </a>
               <br />
               <a
                 href="tel:+91 7411535782"
-                className="transition-colors hover:text-[#0874d1]"
+                className="transition-colors hover:text-[#cf7544]"
               >
                 +91 7411535782
               </a>

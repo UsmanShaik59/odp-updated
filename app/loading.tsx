@@ -7,7 +7,7 @@ export default function Loading() {
     >
       {/* ODP Text Logo */}
       <div className="flex flex-col items-center">
-        <span className="text-[25px] font-black leading-none tracking-[-0.12em] text-[#0874d1] lg:text-[32px]">
+        <span className="text-[25px] font-black leading-none tracking-[-0.12em] text-[#b85e2e] lg:text-[32px]">
           odp
         </span>
 
@@ -19,7 +19,7 @@ export default function Loading() {
           {[0, 1, 2].map((dot) => (
             <span
               key={dot}
-              className="size-2 rounded-full bg-[#0874d1] animate-bounce"
+              className="size-2 rounded-full bg-[#b85e2e] animate-bounce"
               style={{
                 animationDelay: `${dot * 160}ms`,
                 animationDuration: "800ms",
