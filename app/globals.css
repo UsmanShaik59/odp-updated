@@ -555,6 +555,15 @@ html::-webkit-scrollbar-thumb:hover {
   to { opacity: 1; transform: translateY(0); }
 }
 
+.odp-gradient-theme {
+  background: linear-gradient(125deg, #d1dbe1 0%, #e6e2df 44%, #f1b28f 100%);
+  background-attachment: fixed;
+}
+
+.odp-warm-gradient {
+  background: linear-gradient(112deg, #efb08e 0%, #f4c2a3 48%, #f3d1b4 100%);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
