@@ -16,7 +16,7 @@ import { properties } from "@/lib/properties";
 import { HeroScene } from "./hero-scene";
 import { PropertyAssistant } from "./property-assistant";
 import { GsapCursor } from "./gsap-cursor";
-import HalftoneWordmarkFooter from "./ui/halftone-wordmark-footer";
+import SiteFooter from "./site-footer";
 import KineticMatrix from "./ui/kinetic-matrix";
 import Link from "next/link";
 import { CarFront, Phone } from "lucide-react";
@@ -156,10 +156,15 @@ export function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
+  const [locationQuery, setLocationQuery] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("Koramangala, Bengaluru");
   const [saved, setSaved] = useState<number[]>([]);
   const [cookieConsent, setCookieConsent] = useState<boolean | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
   const [typedBrand, setTypedBrand] = useState("");
+  const filteredLocations = locations.filter(({ name }) =>
+    name.toLocaleLowerCase().includes(locationQuery.trim().toLocaleLowerCase()),
+  );
 
   useEffect(() => {
     setCookieConsent(document.cookie.includes("odp_cookie_consent=accepted"));
@@ -417,6 +422,7 @@ export function HomePage() {
       event.preventDefault();
       window.history.pushState(null, "", href);
       setMenuOpen(false);
+      setLocationOpen(false);
       gsap.to(window, {
         duration: 0.9,
         ease: "power3.inOut",
@@ -495,6 +501,7 @@ export function HomePage() {
               type="button"
               aria-label="Choose location"
               onClick={() => {
+                setLocationQuery("");
                 setLocationOpen(true);
                 setMenuOpen(false);
                 setSearchOpen(false);
@@ -502,7 +509,7 @@ export function HomePage() {
               className="flex min-w-0 flex-1 items-center justify-end gap-1 truncate text-[11px] font-semibold"
             >
               <MapPin aria-hidden="true" className="size-4 shrink-0" />
-              <span className="truncate">Koramangala, Bengaluru</span>
+              <span className="truncate">{selectedLocation}</span>
               <ChevronDown
                 aria-hidden="true"
                 className="size-3 shrink-0 text-[#496b73]"
@@ -579,152 +586,117 @@ export function HomePage() {
       </header>
       {locationOpen && (
         <section
-          className="fixed inset-0 z-[60] overflow-y-auto bg-white text-[#152b43]"
+          className="fixed inset-x-0 bottom-0 top-[64px] z-[49] overflow-y-auto bg-location-background text-location-ink lg:top-[72px]"
           aria-label="Location picker"
         >
-          {/* Header */}
-          <header className="sticky top-0 z-20 border-b border-[#e6edf5] bg-white/95 backdrop-blur-xl">
-            <div className="mx-auto flex h-[76px] max-w-[1280px] items-center justify-between px-5 sm:px-8">
-              <div className="flex items-center gap-4">
-                <button
-                  type="button"
-                  onClick={() => setLocationOpen(false)}
-                  aria-label="Close location picker"
-                  className="flex size-10 items-center justify-center rounded-full border border-[#e1eaf3] text-[#152b43] transition hover:bg-[#f4f9fe] hover:text-[#0874d1]"
-                >
-                  <ArrowRight className="size-5 rotate-180" />
-                </button>
+          <main className="mx-auto max-w-[1280px] px-4 pb-8 pt-6 sm:px-8 sm:pb-12 sm:pt-10 lg:pb-16 lg:pt-14">
+            <button
+              type="button"
+              onClick={() => setLocationOpen(false)}
+              className="inline-flex min-h-10 items-center gap-2 rounded-full border border-location-border bg-location-surface px-4 text-sm font-semibold text-location-ink transition-colors hover:border-location-accent/40 hover:text-location-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-location-accent"
+            >
+              <ArrowRight aria-hidden="true" className="size-4 rotate-180" />
+              Back to home
+            </button>
 
-                <div>
-                  <h1 className="text-base font-semibold tracking-tight sm:text-lg">
-                    Go Back
-                  </h1>
+            <div className="mt-8 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:gap-16">
+              <div className="max-w-2xl">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-location-accent sm:text-xs">
+                  Bengaluru · Area guide
+                </p>
+
+                <h1 className="mt-4 max-w-[720px] text-[clamp(2rem,8.5vw,3.75rem)] font-semibold leading-[1.03] tracking-[-0.055em]">
+                  Find a place that <span className="text-location-accent">feels like home.</span>
+                </h1>
+
+                <p className="mt-4 max-w-xl text-sm leading-6 text-location-muted sm:mt-5 sm:text-base sm:leading-7">
+                  Explore properties in Bengaluru&apos;s most loved neighbourhoods, and find the area that fits your next move.
+                </p>
+              </div>
+
+              <div className="rounded-3xl border border-location-border bg-location-surface p-4 shadow-[0_18px_55px_rgba(21,43,67,0.06)] sm:p-6">
+                <label htmlFor="location-search" className="mb-3 block text-sm font-semibold text-location-ink">
+                  Search locations
+                </label>
+
+                <div className="flex h-13 items-center gap-3 rounded-2xl border border-location-border bg-white px-4 transition-colors focus-within:border-location-accent focus-within:ring-4 focus-within:ring-location-accent/10">
+                  <Search aria-hidden="true" className="size-5 shrink-0 text-location-muted" />
+                  <input
+                    id="location-search"
+                    type="search"
+                    value={locationQuery}
+                    onChange={(event) => setLocationQuery(event.target.value)}
+                    placeholder="Try Koramangala or HSR"
+                    className="h-full min-w-0 flex-1 bg-transparent text-sm text-location-ink outline-none placeholder:text-location-muted/70 sm:text-base"
+                  />
                 </div>
-              </div>
-            </div>
-          </header>
 
-          <div className="mx-auto max-w-[1040px] px-5 pb-16 pt-9 sm:px-8 sm:pt-14">
-            {/* Intro */}
-            <div className="max-w-2xl">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0874d1]">
-                Find your area
-              </p>
-
-              <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-[-0.045em] sm:text-4xl">
-                Where would you like
-                <span className="block text-[#0874d1]">
-                  to find a property?
-                </span>
-              </h2>
-
-              <p className="mt-4 max-w-xl text-sm leading-7 text-[#718195] sm:text-base">
-                Search a city or neighbourhood, or choose one of the popular
-                areas to explore available properties.
-              </p>
-            </div>
-
-            {/* Search */}
-            <div className="mt-8 max-w-3xl">
-              <label
-                htmlFor="location-search"
-                className="mb-2.5 block text-sm font-semibold"
-              >
-                Search locations
-              </label>
-
-              <div className="flex h-[58px] items-center gap-3 rounded-2xl border border-[#d5e3f0] bg-white px-4 transition focus-within:border-[#0874d1] focus-within:ring-4 focus-within:ring-[#0874d1]/10">
-                {/* <Search className="size-5 shrink-0 text-[#0874d1]" /> */}
-
-                <input
-                  id="location-search"
-                  type="search"
-                  placeholder="Enter city, area or locality"
-                  className="h-full min-w-0 flex-1 bg-transparent text-sm text-[#152b43] outline-none placeholder:text-[#9aa8b7] sm:text-base"
-                />
-
-                <MapPin className="hidden size-5 shrink-0 text-[#9aa8b7] sm:block" />
+                <p className="mt-3 text-xs leading-5 text-location-muted sm:text-sm">
+                  Search by city or neighbourhood to find the right place.
+                </p>
               </div>
             </div>
 
-            {/* Current location */}
-
-            {/* Popular locations */}
-            <div className="mt-10">
+            <section aria-labelledby="popular-locations-title" className="mt-10 sm:mt-14">
               <div className="mb-5 flex items-end justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-semibold tracking-tight sm:text-xl">
+                  <h2 id="popular-locations-title" className="text-xl font-semibold tracking-tight text-location-ink sm:text-2xl">
                     Popular locations
-                  </h3>
-                  <p className="mt-1.5 text-sm text-[#8292a3]">
-                    Explore sought-after areas in Bengaluru
+                  </h2>
+                  <p className="mt-1.5 text-sm text-location-muted">
+                    A few great places to start your search.
                   </p>
                 </div>
 
-                <span className="shrink-0 text-xs font-medium text-[#0874d1]">
-                  4 areas
+                <span className="shrink-0 text-xs font-semibold text-location-muted">
+                  {filteredLocations.length} {filteredLocations.length === 1 ? "area" : "areas"}
                 </span>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-2">
-                {[
-                  "Whitefield",
-                  "Indiranagar",
-                  "Koramangala",
-                  "Electronic City",
-                ].map((place) => (
-                  <button
-                    type="button"
-                    key={place}
-                    onClick={() => setLocationOpen(false)}
-                    className="
-    group flex min-h-[84px] items-center gap-4
-    rounded-2xl border border-[#e2eaf3]
-    bg-white p-4 text-left
-    transition-colors duration-200
-    hover:border-[#a9cfee]
-    sm:p-5
-  "
-                  >
-                    <span className="flex size-11 shrink-0 items-center justify-center text-[#0874d1]">
-                      <MapPin className="size-5" />
-                    </span>
-
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-semibold text-[#152b43]">
-                        {place}
+              {filteredLocations.length > 0 ? (
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {filteredLocations.map((location) => (
+                    <button
+                      type="button"
+                      key={location.name}
+                      onClick={() => {
+                        setSelectedLocation(
+                          location.name === "Bengaluru"
+                            ? location.name
+                            : `${location.name}, Bengaluru`,
+                        );
+                        setLocationOpen(false);
+                      }}
+                      className="group flex min-h-[84px] items-center gap-3 rounded-2xl border border-location-border bg-location-surface p-4 text-left shadow-[0_4px_20px_rgba(21,43,67,0.03)] transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-location-accent/50 hover:shadow-[0_12px_28px_rgba(21,43,67,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-location-accent sm:p-5"
+                    >
+                      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-location-accent/10 text-location-accent">
+                        <MapPin aria-hidden="true" className="size-[18px]" />
                       </span>
-                      <span className="mt-1 block text-xs text-[#8292a3]">
-                        Bengaluru, Karnataka
+
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-semibold text-location-ink">
+                          {location.name}
+                        </span>
+                        <span className="mt-1 block text-xs text-location-muted">
+                          {location.count}
+                        </span>
                       </span>
-                    </span>
 
-                    <ArrowRight
-                      className="
-      size-4 shrink-0 text-[#a6b3c0]
-      transition-transform duration-200
-      group-hover:translate-x-1
-      group-hover:text-[#0874d1]
-    "
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="mt-12 border-t border-[#e6edf5] pt-5">
-              <p className="text-xs leading-6 text-[#8292a3]">
-                <span className="font-semibold text-[#52677d]">
-                  OneStep Dream Property
-                </span>{" "}
-                · One step closer to your dream property.
-              </p>
-            </div>
-          </div>
+                      <ArrowRight aria-hidden="true" className="size-4 shrink-0 text-location-muted transition-transform duration-200 group-hover:translate-x-1 group-hover:text-location-accent" />
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p aria-live="polite" className="rounded-2xl border border-dashed border-location-border bg-location-surface px-4 py-8 text-center text-sm text-location-muted">
+                  No popular areas match that search. Try another neighbourhood.
+                </p>
+              )}
+            </section>
+          </main>
+          <SiteFooter />
         </section>
       )}
-      <main id="top" className="overflow-clip mt-15">
+      <main id="top" aria-hidden={locationOpen} inert={locationOpen ? true : undefined} className="overflow-clip mt-15">
         <section
           id="property-search"
           className="relative z-40 w-full overflow-hidden bg-[#eaf5ff]"
@@ -1276,7 +1248,7 @@ export function HomePage() {
           </section>
         </section>
       </main>
-      <section className="mx-auto max-w-[1280px] px-4 py-8 min-[360px]:px-5 sm:py-12 lg:px-8">
+      <section aria-hidden={locationOpen} inert={locationOpen ? true : undefined} className="mx-auto max-w-[1280px] px-4 py-8 min-[360px]:px-5 sm:py-12 lg:px-8">
         <Reveal>
           <div className="relative overflow-hidden rounded-[18px] border border-[#f3c95f] bg-gradient-to-r from-[#fffdf8] via-[#fffefa] to-[#effaf2] px-5 py-7 sm:px-10 sm:py-9">
             <div className="relative z-10 max-w-[760px]">
@@ -1395,7 +1367,7 @@ export function HomePage() {
           </div>
         </Reveal>
       </section>
-      <section className=" text-[#111111]" aria-label="More ways to connect">
+      <section aria-hidden={locationOpen} inert={locationOpen ? true : undefined} className=" text-[#111111]" aria-label="More ways to connect">
         <div className="mx-auto max-w-[1280px] px-0 lg:px-8">
           <div className="px-4 pb-5 pt-8 sm:px-5 lg:px-0 lg:pb-2 lg:pt-10">
             <div className="mb-7">
@@ -1511,7 +1483,7 @@ export function HomePage() {
                 </p>
               </div>
             </div>
-            <section className="mx-auto max-w-[1280px] px-4 pb-8 pt-2 min-[360px]:px-5 sm:pb-12 lg:px-8">
+            <section aria-hidden={locationOpen} inert={locationOpen ? true : undefined} className="mx-auto max-w-[1280px] px-4 pb-8 pt-2 min-[360px]:px-5 sm:pb-12 lg:px-8">
               <Reveal>
                 <div className="relative overflow-hidden rounded-[18px] bg-gradient-to-r from-[#e9fbff] via-[#f5fdff] to-white px-5 py-6 sm:px-8 sm:py-8 lg:px-10">
                   <div className="relative z-10 flex flex-col items-start gap-5 lg:flex-row lg:items-center lg:justify-between">
@@ -1645,6 +1617,8 @@ export function HomePage() {
       </section>
   <section
   id="contact"
+  aria-hidden={locationOpen}
+  inert={locationOpen ? true : undefined}
   aria-label="Contact and legal information"
   className="border-t border-[#0874d1] bg-[#0874d1] text-white"
   >
@@ -1719,45 +1693,7 @@ export function HomePage() {
           </p>
         </div>
       </section>
-      <HalftoneWordmarkFooter
-        wordmark="odp"
-        label="OneStep Dream Property"
-        meta="ODP Services · © 2026"
-preset="sky"
-  palette={{ background: "#f5faff", ink: "#152b43", warm: "#5b9bd5" }}
-        dotGap={6}
-        radius={88}
-        crop={0.16}
-        grain={0.28}
-        columns={[
-          {
-            title: "Explore",
-            links: [
-              { label: "Buy Flats", href: "#properties" },
-              { label: "Properties", href: "#properties" },
-              { label: "Locations", href: "#locations" },
-            ],
-          },
-          {
-            title: "Company",
-            links: [
-              { label: "About Us", href: "#about" },
-              { label: "Contact", href: "#contact" },
-              { label: "List Property", href: "#contact" },
-            ],
-          },
-          {
-            title: "Get in touch",
-            links: [
-              {
-                label: "help.onestepdreamproperty@gmail.com",
-                href: "mailto:help.onestepdreamproperty@gmail.com",
-              },
-              { label: "+91 7411535782", href: "tel:+917411535782" },
-            ],
-          },
-        ]}
-      />
+      {!locationOpen && <SiteFooter />}
 
       {/* chatbot */}
 
