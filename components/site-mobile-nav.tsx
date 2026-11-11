@@ -51,14 +51,14 @@ export function SiteMobileNav() {
         aria-hidden={!open}
         tabIndex={open ? 0 : -1}
         onClick={() => setOpen(false)}
-        className={`fixed inset-x-0 bottom-0 top-[70px] z-40 bg-[#152b43]/10 transition-opacity duration-200 motion-reduce:transition-none lg:hidden ${open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}
+        className={`fixed inset-x-0 bottom-0 top-[70px] z-40 bg-[#152b43]/10 transition-opacity duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:hidden ${open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}
       />
       <nav
         id="site-mobile-navigation"
         aria-label="Mobile navigation"
         aria-hidden={!open}
         inert={!open ? true : undefined}
-        className={`fixed inset-x-0 bottom-0 top-[70px] z-50 overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none lg:hidden ${open ? 'pointer-events-auto translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'}`}
+        className={`fixed inset-x-0 bottom-0 top-[70px] z-50 overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:hidden ${open ? 'pointer-events-auto translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'}`}
       >
         <div className="mx-auto w-full max-w-[520px] divide-y divide-[#edf1f5]">
           {links.map(({ label, href, Icon }) => (

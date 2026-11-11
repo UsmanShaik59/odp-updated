@@ -174,7 +174,7 @@ function SceneContent() {
             color="#06477e"
             depthOffset={-1}
           >
-            ODP
+            odp
           </Text>
 
           <Text
@@ -189,7 +189,7 @@ function SceneContent() {
             color="#ffffff"
             depthOffset={-2}
           >
-            ODP
+            odp
             <meshStandardMaterial
               color="#ffffff"
               roughness={0.25}
