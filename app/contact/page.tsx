@@ -269,20 +269,20 @@ function Footer() {
   return (
     <footer
       id="contact"
-      className="border-t border-[#0874d1] bg-[#0874d1] text-white"
+      className="relative left-1/2 w-screen max-w-none -translate-x-1/2 border-t border-[#0874d1] bg-[#0874d1] text-white"
     >
       <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
         <div>
           <Link
             href="/"
-            className="inline-flex items-center text-[#0874d1]"
+            className="inline-flex items-center text-white"
             aria-label="ODP home"
           >
             <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
               odp
             </span>
           </Link>
-          <p className="mt-5 max-w-xs text-sm leading-6 text-[#5f6368]">
+          <p className="mt-5 max-w-xs text-sm leading-6 text-white/90">
             Thoughtfully selected homes for the way you want to live.
           </p>
         </div>
@@ -290,7 +290,7 @@ function Footer() {
           <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
             Discover
           </h3>
-          <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
+          <div className="mt-5 flex flex-col gap-3 text-sm text-white/90">
             <Link href="/#properties" scroll={false}>
               Buy Flats
             </Link>
@@ -306,7 +306,7 @@ function Footer() {
           <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
             Company
           </h3>
-          <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
+          <div className="mt-5 flex flex-col gap-3 text-sm text-white/90">
             <Link href="/about">About Us</Link>
             <Link href="/contact">Contact</Link>
             <Link href="/contact">List Property</Link>
@@ -316,7 +316,7 @@ function Footer() {
           <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
             Get in touch
           </h3>
-          <p className="mt-5 text-sm leading-6 text-[#5f6368]">
+          <p className="mt-5 text-sm leading-6 text-white/90">
             <a
               href="mailto:help.onestepdreamproperty@gmail.com"
               className="transition-colors hover:text-[#0874d1]"

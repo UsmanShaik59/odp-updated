@@ -15,7 +15,8 @@ export default function SiteFooter({
       {includeBlueSection && (
         <section
           aria-label="Contact and legal information"
-          className="border-t border-[#0874d1] bg-[#0874d1] text-white"
+          id="contact"
+          className="relative left-1/2 w-screen max-w-none -translate-x-1/2 border-t border-[#0874d1] bg-[#0874d1] text-white"
         >
           <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
             <div>
