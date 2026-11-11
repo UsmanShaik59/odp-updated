@@ -8,7 +8,7 @@ export interface HalftonePalette {
   warm: string;
 }
 
-export type HalftonePreset = "night" | "paper" | "ember" | "cobalt";
+export type HalftonePreset = "night" | "paper" | "ember" | "cobalt" | "sky";
 
 export interface FooterLink {
   label: string;
@@ -45,6 +45,7 @@ const PRESETS: Record<HalftonePreset, HalftonePalette> = {
   paper: { background: "#efebe3", ink: "#17150f", warm: "#c2361c" },
   ember: { background: "#160a06", ink: "#f2c48c", warm: "#ff5a1f" },
   cobalt: { background: "#0d1b4d", ink: "#dfe7ff", warm: "#ffcd3c" },
+  sky: { background: "#f5faff", ink: "#152b43", warm: "#5b9bd5" },
 };
 
 const SANS_STACK =

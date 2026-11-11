@@ -458,7 +458,7 @@ footer p {
   width: 42%;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #0874d1, #22a447, #f08a24);
+  background: linear-gradient(90deg, #0874d1, #5b9bd5, #c7e1f7);
   animation: loader-progress 1.25s ease-in-out infinite;
 }
 
@@ -541,7 +541,7 @@ html::-webkit-scrollbar-thumb:hover {
 .odp-cursor__ring {
   position: absolute;
   inset: 0;
-  border: 1px solid #b85e2e;
+  border: 1px solid #0874d1;
   border-radius: 999px;
   background: rgb(240 168 121 / 12%);
 }
@@ -551,7 +551,7 @@ html::-webkit-scrollbar-thumb:hover {
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: #b85e2e;
+  background: #0874d1;
 }
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {

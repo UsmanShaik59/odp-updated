@@ -847,7 +847,7 @@ export function HomePage() {
         <span
           data-scroll-progress
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-[60] h-[2px] origin-left scale-x-0 bg-gradient-to-r from-[#cf7544] via-[#f0a879] to-[#f8d8c4]"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[60] h-[2px] origin-left scale-x-0 bg-gradient-to-r from-[#0874d1] via-[#5b9bd5] to-[#c7e1f7]"
         />
       </header>
       {locationOpen && (
@@ -1116,12 +1116,12 @@ export function HomePage() {
                     data-motion-path
                     d="M 38 354 C 62 152 220 40 376 66 C 540 94 643 225 612 357 C 589 455 476 509 355 480"
                     fill="none"
-                    stroke="#cf7544"
+                    stroke="#5b9bd5"
                     strokeDasharray="4 9"
                     strokeOpacity="0.34"
                     strokeWidth="1.5"
                   />
-                  <circle data-motion-dot r="5" fill="#cf7544" />
+                  <circle data-motion-dot r="5" fill="#5b9bd5" />
                 </svg>
               </div>
           </Reveal>
@@ -1807,7 +1807,7 @@ export function HomePage() {
                             <CarFront
                               size={24}
                               strokeWidth={2}
-                              className="text-[#0874d1] drop-shadow-[2px_1px_0px_#ffad42]"
+                              className="text-[#0874d1] drop-shadow-[2px_1px_0px_#5b9bd5]"
                               aria-hidden="true"
                             />
                           </span>
@@ -1983,13 +1983,13 @@ export function HomePage() {
             </p>
           </div>
         </div>
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 border-t border-white/30 px-5 py-6 text-xs text-[#542d18] lg:text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 border-t border-white/30 px-5 py-6 text-xs text-white/90 lg:text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
           <span>© 2026 OneStep Dream Property. All rights reserved.</span>
           <span>Privacy · Terms</span>
         </div>{" "}
         <div className="mx-auto mt-4 w-full max-w-[1280px] border-t border-white/20 px-5 pb-8 pt-6 sm:mt-6 sm:px-8 sm:pb-10 sm:pt-8">
-          <p className="text-xs leading-6 text-[#542d18] sm:text-sm sm:leading-7">
-            <strong className="font-semibold text-[#542d18]">Disclaimer:</strong>{" "}
+          <p className="text-xs leading-6 text-white/90 sm:text-sm sm:leading-7">
+            <strong className="font-semibold text-white/90">Disclaimer:</strong>{" "}
             ODP Services acts solely as an intermediary platform for advertising
             properties and is not a party to or responsible for transactions
             between buyers and sellers. All offers, discounts, and property
@@ -2002,8 +2002,8 @@ export function HomePage() {
         wordmark="odp"
         label="OneStep Dream Property"
         meta="ODP Services · © 2026"
-        preset="ember"
-        palette={{ background: "#2b160d", ink: "#f7e4d0", warm: "#f0a879" }}
+preset="sky"
+  palette={{ background: "#f5faff", ink: "#152b43", warm: "#5b9bd5" }}
         dotGap={6}
         radius={88}
         crop={0.16}
