@@ -733,10 +733,7 @@ export function HomePage() {
           id="property-search"
           className="relative z-40 w-full overflow-hidden bg-[#eaf5ff]"
         >
-          <KineticMatrix
-            title="FIND HOME"
-            className="h-[360px] sm:h-[410px] lg:h-[450px]"
-          />
+          <KineticMatrix title="FIND HOME" />
         </section>
 
   <section data-hero-stage className="relative mx-auto grid w-full min-w-0 max-w-full items-center overflow-hidden rounded-none border-0 bg-[#eaf5ff] px-3 pb-8 pt-8 min-[360px]:px-4 sm:pb-16 sm:pt-16 md:grid-cols-2 md:gap-10 md:px-10 md:py-12 lg:gap-16 lg:px-14 lg:py-16 xl:gap-20 2xl:px-16">

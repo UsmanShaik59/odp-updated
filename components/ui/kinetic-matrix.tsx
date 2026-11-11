@@ -376,7 +376,7 @@ export default function KineticMatrix({
       onPointerCancel={handlePointerUp}
       onPointerLeave={handlePointerLeave}
       className={cn(
-        "relative isolate h-[360px] w-full select-none overflow-hidden bg-[#eaf5ff] touch-pan-y sm:h-[410px] lg:h-[450px]",
+        "relative isolate h-[calc(100dvh-60px)] min-h-[calc(100svh-60px)] w-full select-none overflow-hidden bg-[#eaf5ff] touch-pan-y",
         className,
       )}
     >
