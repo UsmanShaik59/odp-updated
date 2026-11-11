@@ -528,10 +528,6 @@ export default function HalftoneWordmarkFooter({
       style={
         {
           height,
-          width: "100vw",
-          maxWidth: "none",
-          left: "50%",
-          transform: "translateX(-50%)",
           "--hwf-bg": colors.background,
           "--hwf-ink": colors.ink,
           "--hwf-mono": monoFamily,
