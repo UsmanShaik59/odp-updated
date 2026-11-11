@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
+import { SiteMobileNav } from "../../components/site-mobile-nav";
 import {
   ArrowRight,
   CheckCircle2,
@@ -27,11 +28,9 @@ import {
   Heart,
   Info,
   House,
-  Menu,
   MessageCircle,
   Search,
   SlidersHorizontal,
-  X,
   ShieldCheck,
   ArrowLeft,
 } from "lucide-react";
@@ -45,18 +44,6 @@ export default function ContactPage() {
   const [cookieConsent, setCookieConsent] = useState<boolean | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
   const [typedBrand, setTypedBrand] = useState("");
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
-    };
-    if (menuOpen) document.addEventListener("keydown", closeOnEscape);
-    return () => {
-      document.body.style.overflow = "";
-      document.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [menuOpen]);
 
   const toggleSaved = (index: number) => {
     setSaved((current) =>
@@ -100,16 +87,14 @@ export default function ContactPage() {
       {/* Navbar */}
       <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-[#e8edf3] bg-white text-[#152b43] shadow-[0_2px_16px_rgba(21,43,67,0.04)]">
         <div className="mx-auto flex h-[64px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
-          <button
-            type="button"
-            className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl text-[#152b43] transition-colors duration-200 hover:bg-[#f3f7fa] active:bg-[#eaf1f6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] motion-reduce:transition-none lg:hidden"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-navigation"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? <X aria-hidden="true" className="size-[22px]" strokeWidth={1.75} /> : <Menu aria-hidden="true" className="size-[22px]" strokeWidth={1.75} />}
-          </button>
+          <SiteMobileNav
+            open={menuOpen}
+            onOpenChange={setMenuOpen}
+            onNavigate={() => {
+              setLocationOpen(false);
+              setSearchOpen(false);
+            }}
+          />
 
           <Link
             href="/"
@@ -158,84 +143,26 @@ export default function ContactPage() {
           <div className="order-3 ml-0 flex min-w-0 flex-1 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px] lg:flex-none">
             <button
               type="button"
-              aria-label="Choose location"
+              aria-label="Choose location. Current location: Koramangala, Bengaluru"
+              aria-expanded={locationOpen}
               onClick={() => {
                 setLocationOpen(true);
                 setMenuOpen(false);
                 setSearchOpen(false);
               }}
-              className="flex min-w-0 flex-1 items-center justify-end gap-1 truncate text-[11px] font-semibold"
+              className="flex size-10 shrink-0 items-center justify-center rounded-xl text-[#152b43] transition-colors hover:bg-[#f3f7fa] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] lg:h-auto lg:w-auto lg:justify-end lg:gap-1 lg:rounded-none lg:text-[11px] lg:font-semibold"
             >
-              <MapPin aria-hidden="true" className="size-4 shrink-0" />
-              <span className="truncate">Koramangala, Bengaluru</span>
+              <MapPin aria-hidden="true" className="size-5 shrink-0 text-[#0874d1] lg:size-4" />
+              <span className="sr-only lg:not-sr-only lg:truncate">Koramangala, Bengaluru</span>
               <ChevronDown
                 aria-hidden="true"
-                className="size-3 shrink-0 text-[#496b73]"
+                className="hidden size-3 shrink-0 text-[#496b73] lg:inline-flex"
               />
             </button>
           </div>
         </div>
 
-<button type="button" aria-label="Close navigation" aria-hidden={!menuOpen} tabIndex={menuOpen ? 0 : -1} onClick={() => setMenuOpen(false)} className={`fixed inset-0 top-[64px] z-40 bg-[#152b43]/10 transition-opacity duration-200 motion-reduce:transition-none lg:hidden ${menuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} />
 
-  <nav
-  id="mobile-navigation"
-          aria-hidden={!menuOpen}
-          inert={!menuOpen ? true : undefined}
-className={`fixed inset-x-0 bottom-0 top-[64px] z-50 flex flex-col overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-sm text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none lg:hidden ${
-              menuOpen
-                ? "pointer-events-auto translate-y-0 opacity-100"
-                : "pointer-events-none -translate-y-2 opacity-0"
-            }`}
-          aria-label="Mobile navigation"
-        >
-          <div className="mx-auto w-full max-w-[520px] divide-y divide-[#edf1f5]">
-            {[
-              { label: "Home", href: "/", icon: House },
-              { label: "Buy Flats", href: "/#properties", icon: BedDouble },
-              { label: "Properties", href: "/#properties", icon: Building2 },
-              { label: "Locations", href: "/#locations", icon: MapPin },
-              { label: "About Us", href: "/about", icon: Info },
-              { label: "Contact", href: "/contact", icon: Headphones },
-            ].map((item) => {
-              const Icon = item.icon;
-              const content = (
-                <>
-                  <span className="flex size-6 shrink-0 items-center justify-center text-[#0874d1] transition-colors duration-200 group-hover:text-[#005da8]">
-                    <Icon aria-hidden="true" className="size-5" strokeWidth={1.75} />
-                  </span>
-                  <span>{item.label}</span>
-                </>
-              );
-              const className =
-                "group flex min-h-[64px] items-center gap-4 px-5 text-[15px] font-medium text-[#24384d] transition-colors duration-200 hover:bg-[#f8fbfe] active:bg-[#f2f7fb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1] motion-reduce:transition-none";
-
-              return (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  onClick={(event) => {
-                    setMenuOpen(false);
-                    const sectionId = item.href.split("#")[1];
-                    if (!sectionId) return;
-
-                    if (window.location.pathname === "/") {
-                      event.preventDefault();
-                      document.getElementById(sectionId)?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                      window.history.replaceState(null, "", `/#${sectionId}`);
-                    }
-                  }}
-                  className={className}
-                >
-                  {content}
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
       </header>
 
       {/* Contact Section — Two Aligned Columns */}

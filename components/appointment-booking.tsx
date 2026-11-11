@@ -18,14 +18,12 @@ import {
   Clock3,
   Headphones,
   MapPin,
-  Menu,
-  Smartphone,
-  X,
 } from "lucide-react";
 import { properties } from "@/lib/properties";
 import { createClient } from "@/lib/supabase/client";
 import { PropertyAssistant } from "./property-assistant";
 import SiteFooter from "./site-footer";
+import { SiteMobileNav } from "./site-mobile-nav";
 
 type Property = (typeof properties)[number];
 
@@ -891,34 +889,12 @@ function Detail({
 function PageShell({ children }: { children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
-    };
-
-    if (menuOpen) document.addEventListener("keydown", closeOnEscape);
-    return () => {
-      document.body.style.overflow = "";
-      document.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [menuOpen]);
-
   const navItems = [
     { label: "Home", href: "/" },
     { label: "Properties", href: "/#properties" },
     { label: "Locations", href: "/#locations" },
     { label: "About Us", href: "/about" },
     { label: "Contact", href: "/contact" },
-  ];
-
-  const mobileItems = [
-    { label: "Home", href: "/", icon: Building2 },
-    { label: "Buy Flats", href: "/#properties", icon: BedDouble },
-    { label: "Properties", href: "/#properties", icon: Building2 },
-    { label: "Locations", href: "/#locations", icon: MapPin },
-    { label: "About Us", href: "/about", icon: Smartphone },
-    { label: "Contact", href: "/contact", icon: Headphones },
   ];
 
   const handleNavClick = (
@@ -941,16 +917,10 @@ function PageShell({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-white text-[#152b43]">
       <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#eaf5ff] text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)]">
         <div className="mx-auto flex h-[58px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
-          <button
-            type="button"
-            className="order-3 inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#cfe2f5] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white lg:hidden"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-navigation"
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-          </button>
+          <SiteMobileNav
+            open={menuOpen}
+            onOpenChange={setMenuOpen}
+          />
 
           <Link
             href="/"
@@ -997,37 +967,7 @@ function PageShell({ children }: { children: ReactNode }) {
           </a>
         </div>
 
-        <nav
-          id="mobile-navigation"
-          aria-label="Mobile navigation"
-          aria-hidden={!menuOpen}
-          inert={!menuOpen ? true : undefined}
-          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#cfe2f5] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
-            menuOpen
-              ? "visible translate-y-0 scale-y-100 opacity-100"
-              : "pointer-events-none invisible -translate-y-4 scale-y-95 opacity-0"
-          }`}
-        >
-          <div className="divide-y divide-[#cfe2f5]">
-            {mobileItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  onClick={(event) => handleNavClick(event, item.href)}
-                  className="group flex min-h-[70px] items-center gap-4 px-6 text-base font-medium text-[#152b43] transition-all duration-200 hover:bg-[#f1f8ff] hover:pl-7"
-                >
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#0874d1] text-white transition-transform duration-200 group-hover:scale-105">
-                    <Icon aria-hidden="true" className="size-[18px]" />
-                  </span>
-                  <span>{item.label}</span>
-                  <ArrowUpRight className="ml-auto size-4 text-[#0874d1] opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100" />
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
+
       </header>
 
       {children}

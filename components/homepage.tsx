@@ -17,6 +17,7 @@ import { HeroScene } from "./hero-scene";
 import { PropertyAssistant } from "./property-assistant";
 import { GsapCursor } from "./gsap-cursor";
 import SiteFooter from "./site-footer";
+import { SiteMobileNav } from "./site-mobile-nav";
 import KineticMatrix from "./ui/kinetic-matrix";
 import Link from "next/link";
 import { CarFront, Phone } from "lucide-react";
@@ -39,7 +40,6 @@ import {
   Info,
   House,
   MapPin,
-  Menu,
   MessageCircle,
   Search,
   SlidersHorizontal,
@@ -152,7 +152,6 @@ function Reveal({
 
 export function HomePage() {
   const pageRef = useRef<HTMLDivElement>(null);
-  const mobileNavRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
@@ -205,18 +204,6 @@ export function HomePage() {
     timer = window.setTimeout(tick, 300);
     return () => window.clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
-    };
-    if (menuOpen) document.addEventListener("keydown", closeOnEscape);
-    return () => {
-      document.body.style.overflow = "";
-      document.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [menuOpen]);
 
   const toggleSaved = (index: number) => {
     setSaved((current) =>
@@ -443,27 +430,14 @@ export function HomePage() {
   <GsapCursor />
   <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-[#e8edf3] bg-white text-[#152b43] shadow-[0_2px_16px_rgba(21,43,67,0.04)]">
         <div className="mx-auto flex h-[64px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
-          <button
-            type="button"
-            className="order-3 inline-flex size-10 shrink-0 items-center justify-center rounded-xl text-[#152b43] transition-colors duration-200 hover:bg-[#f3f7fa] active:bg-[#eaf1f6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] motion-reduce:transition-none lg:hidden"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-navigation"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <span className="relative size-[22px]">
-              <Menu
-                aria-hidden="true"
-                className={`absolute inset-0 size-[22px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${menuOpen ? 'rotate-45 scale-75 opacity-0' : 'rotate-0 scale-100 opacity-100'}`}
-                strokeWidth={1.75}
-              />
-              <X
-                aria-hidden="true"
-                className={`absolute inset-0 size-[22px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${menuOpen ? 'rotate-0 scale-100 opacity-100' : '-rotate-45 scale-75 opacity-0'}`}
-                strokeWidth={1.75}
-              />
-            </span>
-          </button>
+          <SiteMobileNav
+            open={menuOpen}
+            onOpenChange={setMenuOpen}
+            onNavigate={() => {
+              setLocationOpen(false);
+              setSearchOpen(false);
+            }}
+          />
 
           <Link
             href="#top"
@@ -519,70 +493,7 @@ export function HomePage() {
           </div>
         </div>
 
-        <button
-          type="button"
-          aria-label="Close navigation"
-          aria-hidden={!menuOpen}
-          tabIndex={menuOpen ? 0 : -1}
-          onClick={() => setMenuOpen(false)}
-          data-open={menuOpen}
-          className={`mobile-drawer-backdrop fixed inset-0 top-[64px] z-40 bg-[#152b43]/10 lg:hidden ${
-            menuOpen ? "pointer-events-auto" : "pointer-events-none"
-          }`}
-        />
 
-        <nav
-          ref={mobileNavRef}
-          id="mobile-navigation"
-          aria-hidden={!menuOpen}
-          inert={!menuOpen ? true : undefined}
-          data-open={menuOpen}
-          className={`mobile-drawer-panel fixed inset-x-0 bottom-0 top-[64px] z-50 flex flex-col overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-sm text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] lg:hidden ${
-            menuOpen ? "pointer-events-auto" : "pointer-events-none"
-          }`}
-          aria-label="Mobile navigation"
-        >
-          <div className="mx-auto w-full max-w-[520px] divide-y divide-[#edf1f5]">
-  {([
-  ["Home", "/#top"],
-  ["Buy Flats", "/#properties"],
-  ["Properties", "/#properties"],
-  ["Locations", "/#locations"],
-  ["About Us", "/about"],
-  ["Contact", "/contact"],
-  ] as const).map(([item, href], index) => {
-              const icons = {
-                Home: House,
-                "Buy Flats": BedDouble,
-                Properties: Building2,
-                Locations: MapPin,
-                "About Us": Info,
-                Contact: Headphones,
-              };
-
-              const Icon = icons[item];
-
-              return (
-                <Link
-                  key={item}
-                  href={href}
-                  onClick={() => {
-                    setMenuOpen(false);
-                    setLocationOpen(false);
-                    setSearchOpen(false);
-                  }}
-                  style={{ transitionDelay: menuOpen ? `${index * 28}ms` : `${(5 - index) * 12}ms` }}
-                  className={`group flex min-h-[64px] items-center gap-4 px-5 text-[15px] font-medium text-[#24384d] transition-[opacity,transform,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[#f8fbfe] active:bg-[#f2f7fb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1] motion-reduce:transition-none ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'}`}
-                >
-                  <span className="flex size-6 shrink-0 items-center justify-center text-[#0874d1] transition-colors duration-200 group-hover:text-[#005da8]">
-                    <Icon aria-hidden="true" className="size-5" strokeWidth={1.75} />
-                  </span>
-                  <span>{item}</span>
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
         <span
           data-scroll-progress
           aria-hidden="true"
