@@ -14,7 +14,6 @@ import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import { properties } from "@/lib/properties";
 import { HeroScene } from "./hero-scene";
-import { PropertyAssistant } from "./property-assistant";
 import { GsapCursor } from "./gsap-cursor";
 import SiteFooter from "./site-footer";
 import { SiteMobileNav } from "./site-mobile-nav";
@@ -26,7 +25,6 @@ import {
   Handshake,
   ArrowUpRight,
   BedDouble,
-  Bot,
   Building2,
   Calculator,
   ChartNoAxesColumnIncreasing,
@@ -159,7 +157,6 @@ export function HomePage() {
   const [selectedLocation, setSelectedLocation] = useState("Koramangala, Bengaluru");
   const [saved, setSaved] = useState<number[]>([]);
   const [cookieConsent, setCookieConsent] = useState<boolean | null>(null);
-  const [chatOpen, setChatOpen] = useState(false);
   const [typedBrand, setTypedBrand] = useState("");
   const filteredLocations = locations.filter(({ name }) =>
     name.toLocaleLowerCase().includes(locationQuery.trim().toLocaleLowerCase()),
@@ -1598,165 +1595,6 @@ export function HomePage() {
       </section>
       {!locationOpen && <SiteFooter includeBlueSection={false} />}
 
-      {/* chatbot */}
-
-      <div className="fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[75] flex flex-col items-end gap-4 sm:inset-x-auto sm:bottom-6 sm:right-7">
-        {chatOpen && (
-          <section
-            role="dialog"
-            aria-label="ODP property assistant"
-            className="
-        flex max-h-[min(560px,calc(100svh-7rem))]
-        w-full flex-col overflow-hidden rounded-2xl
-        border border-[#e3eaf1] bg-white
-        text-[#152b43]
-        shadow-[0_16px_55px_rgba(21,43,67,0.12)]
-        sm:w-[370px]
-      "
-          >
-            {/* Header */}
-            <div className="flex shrink-0 items-center justify-between border-b border-[#edf1f5] bg-[#dceaf6] px-5 py-4">
-              <div className="flex min-w-0 items-center gap-3  ">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-full text-[#0874d1]">
-                  <Bot className="size-5" strokeWidth={1.7} />
-                </div>
-
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold tracking-[-0.02em]">
-                    ODP Assistant
-                  </p>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                aria-label="Close chatbot"
-                onClick={() => setChatOpen(false)}
-                className="flex size-9 shrink-0 items-center justify-center text-[#8292a3] transition-colors hover:text-[#152b43]"
-              >
-                <X className="size-[18px]" strokeWidth={1.7} />
-              </button>
-            </div>
-
-            {/* Conversation */}
-            <div className="min-h-0 flex-1 space-y-5 overflow-y-auto bg-white p-5">
-              <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#9aa8b7]">
-                Welcome to ODP
-              </div>
-
-              <div className="max-w-[290px] rounded-r-xl rounded-bl-xl rounded-tl-sm bg-[#f4f8fc] px-4 py-3.5">
-                <p className="text-[13px] leading-[1.8] text-[#52677d]">
-                  Hello! Welcome to OneStep Dream Property. How can we help you
-                  find your next home?
-                </p>
-              </div>
-
-              <div className="pt-1">
-                <p className="mb-3 text-[11px] font-medium text-[#8292a3]">
-                  How can we help?
-                </p>
-
-                <div className="space-y-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      document
-                        .getElementById("properties")
-                        ?.scrollIntoView({ behavior: "smooth" });
-                      setChatOpen(false);
-                    }}
-                    className="
-                group flex w-full items-center justify-between
-                rounded-lg border border-[#e3eaf1] bg-white
-                px-4 py-3.5 text-left
-                transition-colors duration-200
-                hover:border-[#a9cfee]
-              "
-                  >
-                    <span>
-                      <span className="block text-[13px] font-medium text-[#152b43]">
-                        Explore properties
-                      </span>
-                      <span className="mt-1 block text-[11px] text-[#8292a3]">
-                        Find a place that feels like home
-                      </span>
-                    </span>
-
-                    <ArrowRight
-                      className="size-4 shrink-0 text-[#8292a3] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#0874d1]"
-                      strokeWidth={1.7}
-                    />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      document
-                        .getElementById("contact")
-                        ?.scrollIntoView({ behavior: "smooth" });
-                      setChatOpen(false);
-                    }}
-                    className="
-                group flex w-full items-center justify-between
-                rounded-lg border border-[#e3eaf1] bg-white
-                px-4 py-3.5 text-left
-                transition-colors duration-200
-                hover:border-[#a9cfee]
-              "
-                  >
-                    <span>
-                      <span className="block text-[13px] font-medium text-[#152b43]">
-                        Speak with our team
-                      </span>
-                      <span className="mt-1 block text-[11px] text-[#8292a3]">
-                        Get help with your property search
-                      </span>
-                    </span>
-
-                    <ArrowRight
-                      className="size-4 shrink-0 text-[#8292a3] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#0874d1]"
-                      strokeWidth={1.7}
-                    />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="shrink-0 border-t border-[#edf1f5] bg-white px-5 py-3">
-              <p className="text-center text-[10px] tracking-wide text-[#9aa8b7]">
-                OneStep Dream Property
-              </p>
-            </div>
-          </section>
-        )}
-
-        {/* Floating launcher */}
-        <button
-          type="button"
-          aria-label={chatOpen ? "Close ODP assistant" : "Open ODP assistant"}
-          aria-expanded={chatOpen}
-          onClick={() => setChatOpen((open) => !open)}
-          className="
-      group flex size-12 shrink-0 items-center justify-center
-      self-end rounded-full border border-[#dceaf6]
-      bg-white text-[#0874d1]
-      shadow-[0_5px_22px_rgba(21,43,67,0.12)]
-      transition-all duration-300
-      hover:border-[#0874d1] hover:shadow-[0_8px_28px_rgba(21,43,67,0.16)]
-      sm:size-14
-    "
-        >
-          {chatOpen ? (
-            <X className="size-5" strokeWidth={1.7} />
-          ) : (
-            <Bot
-              className="size-[22px] transition-transform duration-300 group-hover:scale-105"
-              strokeWidth={1.6}
-            />
-          )}
-        </button>
-      </div>
 
       {/* {cookieConsent === false && ( */}
 

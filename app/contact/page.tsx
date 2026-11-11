@@ -15,7 +15,6 @@ import {
   Handshake,
   ArrowUpRight,
   BedDouble,
-  Bot,
   Building2,
   Calculator,
   ChartNoAxesColumnIncreasing,
@@ -42,7 +41,6 @@ export default function ContactPage() {
   const [locationOpen, setLocationOpen] = useState(false);
   const [saved, setSaved] = useState<number[]>([]);
   const [cookieConsent, setCookieConsent] = useState<boolean | null>(null);
-  const [chatOpen, setChatOpen] = useState(false);
   const [typedBrand, setTypedBrand] = useState("");
 
   const toggleSaved = (index: number) => {

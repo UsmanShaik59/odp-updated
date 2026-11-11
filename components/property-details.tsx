@@ -22,7 +22,6 @@ import {
   Phone,
   Send,
   Handshake,
-  Bot,
   Building2,
   Calculator,
   ChartNoAxesColumnIncreasing,
@@ -39,7 +38,6 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { properties } from "@/lib/properties";
-import { PropertyAssistant } from "./property-assistant";
 import SiteFooter from "./site-footer";
 import { SiteMobileNav } from "./site-mobile-nav";
 
@@ -59,7 +57,6 @@ export function PropertyDetails({ property }: { property: Property }) {
   const [locationOpen, setLocationOpen] = useState(false);
   const [saved, setSaved] = useState<number[]>([]);
   const [cookieConsent, setCookieConsent] = useState<boolean | null>(null);
-  const [chatOpen, setChatOpen] = useState(false);
   const [typedBrand, setTypedBrand] = useState("");
 
   const toggleSaved = (index: number) => {
@@ -409,7 +406,6 @@ export function PropertyDetails({ property }: { property: Property }) {
       </main>
 
       <SiteFooter disclaimer="ODP Services acts solely as an intermediary platform for advertising properties and is not a party to or responsible for transactions between buyers and sellers. All offers, discounts, and property details are subject to verification with the respective seller or developer." />
-      {/* <PropertyAssistant /> */}
     </div>
   );
 }

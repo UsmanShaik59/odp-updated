@@ -88,7 +88,7 @@ export function SiteMobileNav({
         aria-hidden={!open}
         inert={!open ? true : undefined}
         data-open={open}
-        style={{ top: '12px', bottom: '0', left: '15px', width: 'min(calc(100vw - 30px), 280px)' }}
+        style={{ inset: '0' }}
         className={`mobile-drawer-panel fixed z-50 overflow-y-auto overscroll-contain bg-white text-[#152b43] lg:hidden ${open ? 'pointer-events-auto' : 'pointer-events-none'}`}
       >
         <div className="flex h-11 items-center justify-between border-b border-[#e8edf3] px-2">
