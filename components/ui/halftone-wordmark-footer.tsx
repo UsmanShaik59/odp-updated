@@ -259,14 +259,20 @@ export default function HalftoneWordmarkFooter({
 
       maskContext.font = `${current.fontWeight} 100px ${current.fontFamily}`;
       const word = current.wordmark || " ";
-      const fontSize = hwfFitSize(maskContext.measureText(word).width, width * 1.02);
+      const compactLayout = width <= 720;
+      const markWidth = width * (compactLayout ? 0.86 : 1.02);
+      const fontSize = hwfFitSize(maskContext.measureText(word).width, markWidth);
       maskContext.font = `${current.fontWeight} ${fontSize}px ${current.fontFamily}`;
       const textMetrics = maskContext.measureText(word);
       const capHeight = textMetrics.actualBoundingBoxAscent || fontSize * 0.72;
       const cropAmount = Math.max(0, Math.min(0.6, current.crop));
+      const descender = textMetrics.actualBoundingBoxDescent || fontSize * 0.2;
+      const baselineY = compactLayout
+        ? height - descender - Math.max(10, width * 0.04)
+        : height + capHeight * cropAmount;
       maskContext.fillStyle = "#000";
       maskContext.textBaseline = "alphabetic";
-      maskContext.fillText(word, (width - textMetrics.width) / 2, height + capHeight * cropAmount);
+      maskContext.fillText(word, (width - textMetrics.width) / 2, baselineY);
       const image = maskContext.getImageData(0, 0, width, height).data;
 
       const gap = Math.max(3, current.dotGap, Math.min(width / 160, 10));

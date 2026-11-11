@@ -16,7 +16,7 @@ import { properties } from "@/lib/properties";
 import { HeroScene } from "./hero-scene";
 import { PropertyAssistant } from "./property-assistant";
 import { GsapCursor } from "./gsap-cursor";
-import HalftoneWordmarkFooter from "./ui/halftone-wordmark-footer";
+import SiteFooter from "./site-footer";
 import KineticMatrix from "./ui/kinetic-matrix";
 import Link from "next/link";
 import { CarFront, Phone } from "lucide-react";
@@ -156,10 +156,15 @@ export function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
+  const [locationQuery, setLocationQuery] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("Koramangala, Bengaluru");
   const [saved, setSaved] = useState<number[]>([]);
   const [cookieConsent, setCookieConsent] = useState<boolean | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
   const [typedBrand, setTypedBrand] = useState("");
+  const filteredLocations = locations.filter(({ name }) =>
+    name.toLocaleLowerCase().includes(locationQuery.trim().toLocaleLowerCase()),
+  );
 
   useEffect(() => {
     setCookieConsent(document.cookie.includes("odp_cookie_consent=accepted"));
@@ -417,6 +422,7 @@ export function HomePage() {
       event.preventDefault();
       window.history.pushState(null, "", href);
       setMenuOpen(false);
+      setLocationOpen(false);
       gsap.to(window, {
         duration: 0.9,
         ease: "power3.inOut",
@@ -445,7 +451,18 @@ export function HomePage() {
             aria-controls="mobile-navigation"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? <X aria-hidden="true" className="size-[22px]" strokeWidth={1.75} /> : <Menu aria-hidden="true" className="size-[22px]" strokeWidth={1.75} />}
+            <span className="relative size-[22px]">
+              <Menu
+                aria-hidden="true"
+                className={`absolute inset-0 size-[22px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${menuOpen ? 'rotate-45 scale-75 opacity-0' : 'rotate-0 scale-100 opacity-100'}`}
+                strokeWidth={1.75}
+              />
+              <X
+                aria-hidden="true"
+                className={`absolute inset-0 size-[22px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${menuOpen ? 'rotate-0 scale-100 opacity-100' : '-rotate-45 scale-75 opacity-0'}`}
+                strokeWidth={1.75}
+              />
+            </span>
           </button>
 
           <Link
@@ -484,6 +501,7 @@ export function HomePage() {
               type="button"
               aria-label="Choose location"
               onClick={() => {
+                setLocationQuery("");
                 setLocationOpen(true);
                 setMenuOpen(false);
                 setSearchOpen(false);
@@ -491,7 +509,7 @@ export function HomePage() {
               className="flex min-w-0 flex-1 items-center justify-end gap-1 truncate text-[11px] font-semibold"
             >
               <MapPin aria-hidden="true" className="size-4 shrink-0" />
-              <span className="truncate">Koramangala, Bengaluru</span>
+              <span className="truncate">{selectedLocation}</span>
               <ChevronDown
                 aria-hidden="true"
                 className="size-3 shrink-0 text-[#496b73]"
@@ -506,8 +524,9 @@ export function HomePage() {
           aria-hidden={!menuOpen}
           tabIndex={menuOpen ? 0 : -1}
           onClick={() => setMenuOpen(false)}
-          className={`fixed inset-0 top-[64px] z-40 bg-[#152b43]/10 transition-opacity duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:hidden ${
-            menuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+          data-open={menuOpen}
+          className={`mobile-drawer-backdrop fixed inset-0 top-[64px] z-40 bg-[#152b43]/10 lg:hidden ${
+            menuOpen ? "pointer-events-auto" : "pointer-events-none"
           }`}
         />
 
@@ -516,10 +535,9 @@ export function HomePage() {
           id="mobile-navigation"
           aria-hidden={!menuOpen}
           inert={!menuOpen ? true : undefined}
-  className={`fixed inset-x-0 bottom-0 top-[64px] z-50 flex flex-col overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-sm text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:hidden ${
-            menuOpen
-              ? "pointer-events-auto translate-y-0 opacity-100"
-              : "pointer-events-none -translate-y-2 opacity-0"
+          data-open={menuOpen}
+          className={`mobile-drawer-panel fixed inset-x-0 bottom-0 top-[64px] z-50 flex flex-col overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-sm text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] lg:hidden ${
+            menuOpen ? "pointer-events-auto" : "pointer-events-none"
           }`}
           aria-label="Mobile navigation"
         >
@@ -531,7 +549,7 @@ export function HomePage() {
   ["Locations", "/#locations"],
   ["About Us", "/about"],
   ["Contact", "/contact"],
-  ] as const).map(([item, href]) => {
+  ] as const).map(([item, href], index) => {
               const icons = {
                 Home: House,
                 "Buy Flats": BedDouble,
@@ -548,7 +566,8 @@ export function HomePage() {
                   key={item}
                   href={href}
                   onClick={() => setMenuOpen(false)}
-                  className="group flex min-h-[64px] items-center gap-4 px-5 text-[15px] font-medium text-[#24384d] transition-colors duration-200 hover:bg-[#f8fbfe] active:bg-[#f2f7fb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1] motion-reduce:transition-none"
+                  style={{ transitionDelay: menuOpen ? `${index * 28}ms` : `${(5 - index) * 12}ms` }}
+                  className={`group flex min-h-[64px] items-center gap-4 px-5 text-[15px] font-medium text-[#24384d] transition-[opacity,transform,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[#f8fbfe] active:bg-[#f2f7fb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1] motion-reduce:transition-none ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'}`}
                 >
                   <span className="flex size-6 shrink-0 items-center justify-center text-[#0874d1] transition-colors duration-200 group-hover:text-[#005da8]">
                     <Icon aria-hidden="true" className="size-5" strokeWidth={1.75} />
@@ -567,152 +586,117 @@ export function HomePage() {
       </header>
       {locationOpen && (
         <section
-          className="fixed inset-0 z-[60] overflow-y-auto bg-white text-[#152b43]"
+          className="fixed inset-x-0 bottom-0 top-[64px] z-[49] overflow-y-auto bg-location-background text-location-ink lg:top-[72px]"
           aria-label="Location picker"
         >
-          {/* Header */}
-          <header className="sticky top-0 z-20 border-b border-[#e6edf5] bg-white/95 backdrop-blur-xl">
-            <div className="mx-auto flex h-[76px] max-w-[1280px] items-center justify-between px-5 sm:px-8">
-              <div className="flex items-center gap-4">
-                <button
-                  type="button"
-                  onClick={() => setLocationOpen(false)}
-                  aria-label="Close location picker"
-                  className="flex size-10 items-center justify-center rounded-full border border-[#e1eaf3] text-[#152b43] transition hover:bg-[#f4f9fe] hover:text-[#0874d1]"
-                >
-                  <ArrowRight className="size-5 rotate-180" />
-                </button>
+          <main className="mx-auto max-w-[1280px] px-4 pb-8 pt-6 sm:px-8 sm:pb-12 sm:pt-10 lg:pb-16 lg:pt-14">
+            <button
+              type="button"
+              onClick={() => setLocationOpen(false)}
+              className="inline-flex min-h-10 items-center gap-2 rounded-full border border-location-border bg-location-surface px-4 text-sm font-semibold text-location-ink transition-colors hover:border-location-accent/40 hover:text-location-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-location-accent"
+            >
+              <ArrowRight aria-hidden="true" className="size-4 rotate-180" />
+              Back to home
+            </button>
 
-                <div>
-                  <h1 className="text-base font-semibold tracking-tight sm:text-lg">
-                    Go Back
-                  </h1>
+            <div className="mt-8 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:gap-16">
+              <div className="max-w-2xl">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-location-accent sm:text-xs">
+                  Bengaluru · Area guide
+                </p>
+
+                <h1 className="mt-4 max-w-[720px] text-[clamp(2rem,8.5vw,3.75rem)] font-semibold leading-[1.03] tracking-[-0.055em]">
+                  Find a place that <span className="text-location-accent">feels like home.</span>
+                </h1>
+
+                <p className="mt-4 max-w-xl text-sm leading-6 text-location-muted sm:mt-5 sm:text-base sm:leading-7">
+                  Explore properties in Bengaluru&apos;s most loved neighbourhoods, and find the area that fits your next move.
+                </p>
+              </div>
+
+              <div className="rounded-3xl border border-location-border bg-location-surface p-4 shadow-[0_18px_55px_rgba(21,43,67,0.06)] sm:p-6">
+                <label htmlFor="location-search" className="mb-3 block text-sm font-semibold text-location-ink">
+                  Search locations
+                </label>
+
+                <div className="flex h-13 items-center gap-3 rounded-2xl border border-location-border bg-white px-4 transition-colors focus-within:border-location-accent focus-within:ring-4 focus-within:ring-location-accent/10">
+                  <Search aria-hidden="true" className="size-5 shrink-0 text-location-muted" />
+                  <input
+                    id="location-search"
+                    type="search"
+                    value={locationQuery}
+                    onChange={(event) => setLocationQuery(event.target.value)}
+                    placeholder="Try Koramangala or HSR"
+                    className="h-full min-w-0 flex-1 bg-transparent text-sm text-location-ink outline-none placeholder:text-location-muted/70 sm:text-base"
+                  />
                 </div>
-              </div>
-            </div>
-          </header>
 
-          <div className="mx-auto max-w-[1040px] px-5 pb-16 pt-9 sm:px-8 sm:pt-14">
-            {/* Intro */}
-            <div className="max-w-2xl">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0874d1]">
-                Find your area
-              </p>
-
-              <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-[-0.045em] sm:text-4xl">
-                Where would you like
-                <span className="block text-[#0874d1]">
-                  to find a property?
-                </span>
-              </h2>
-
-              <p className="mt-4 max-w-xl text-sm leading-7 text-[#718195] sm:text-base">
-                Search a city or neighbourhood, or choose one of the popular
-                areas to explore available properties.
-              </p>
-            </div>
-
-            {/* Search */}
-            <div className="mt-8 max-w-3xl">
-              <label
-                htmlFor="location-search"
-                className="mb-2.5 block text-sm font-semibold"
-              >
-                Search locations
-              </label>
-
-              <div className="flex h-[58px] items-center gap-3 rounded-2xl border border-[#d5e3f0] bg-white px-4 transition focus-within:border-[#0874d1] focus-within:ring-4 focus-within:ring-[#0874d1]/10">
-                {/* <Search className="size-5 shrink-0 text-[#0874d1]" /> */}
-
-                <input
-                  id="location-search"
-                  type="search"
-                  placeholder="Enter city, area or locality"
-                  className="h-full min-w-0 flex-1 bg-transparent text-sm text-[#152b43] outline-none placeholder:text-[#9aa8b7] sm:text-base"
-                />
-
-                <MapPin className="hidden size-5 shrink-0 text-[#9aa8b7] sm:block" />
+                <p className="mt-3 text-xs leading-5 text-location-muted sm:text-sm">
+                  Search by city or neighbourhood to find the right place.
+                </p>
               </div>
             </div>
 
-            {/* Current location */}
-
-            {/* Popular locations */}
-            <div className="mt-10">
+            <section aria-labelledby="popular-locations-title" className="mt-10 sm:mt-14">
               <div className="mb-5 flex items-end justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-semibold tracking-tight sm:text-xl">
+                  <h2 id="popular-locations-title" className="text-xl font-semibold tracking-tight text-location-ink sm:text-2xl">
                     Popular locations
-                  </h3>
-                  <p className="mt-1.5 text-sm text-[#8292a3]">
-                    Explore sought-after areas in Bengaluru
+                  </h2>
+                  <p className="mt-1.5 text-sm text-location-muted">
+                    A few great places to start your search.
                   </p>
                 </div>
 
-                <span className="shrink-0 text-xs font-medium text-[#0874d1]">
-                  4 areas
+                <span className="shrink-0 text-xs font-semibold text-location-muted">
+                  {filteredLocations.length} {filteredLocations.length === 1 ? "area" : "areas"}
                 </span>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-2">
-                {[
-                  "Whitefield",
-                  "Indiranagar",
-                  "Koramangala",
-                  "Electronic City",
-                ].map((place) => (
-                  <button
-                    type="button"
-                    key={place}
-                    onClick={() => setLocationOpen(false)}
-                    className="
-    group flex min-h-[84px] items-center gap-4
-    rounded-2xl border border-[#e2eaf3]
-    bg-white p-4 text-left
-    transition-colors duration-200
-    hover:border-[#a9cfee]
-    sm:p-5
-  "
-                  >
-                    <span className="flex size-11 shrink-0 items-center justify-center text-[#0874d1]">
-                      <MapPin className="size-5" />
-                    </span>
-
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-semibold text-[#152b43]">
-                        {place}
+              {filteredLocations.length > 0 ? (
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {filteredLocations.map((location) => (
+                    <button
+                      type="button"
+                      key={location.name}
+                      onClick={() => {
+                        setSelectedLocation(
+                          location.name === "Bengaluru"
+                            ? location.name
+                            : `${location.name}, Bengaluru`,
+                        );
+                        setLocationOpen(false);
+                      }}
+                      className="group flex min-h-[84px] items-center gap-3 rounded-2xl border border-location-border bg-location-surface p-4 text-left shadow-[0_4px_20px_rgba(21,43,67,0.03)] transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-location-accent/50 hover:shadow-[0_12px_28px_rgba(21,43,67,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-location-accent sm:p-5"
+                    >
+                      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-location-accent/10 text-location-accent">
+                        <MapPin aria-hidden="true" className="size-[18px]" />
                       </span>
-                      <span className="mt-1 block text-xs text-[#8292a3]">
-                        Bengaluru, Karnataka
+
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-semibold text-location-ink">
+                          {location.name}
+                        </span>
+                        <span className="mt-1 block text-xs text-location-muted">
+                          {location.count}
+                        </span>
                       </span>
-                    </span>
 
-                    <ArrowRight
-                      className="
-      size-4 shrink-0 text-[#a6b3c0]
-      transition-transform duration-200
-      group-hover:translate-x-1
-      group-hover:text-[#0874d1]
-    "
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="mt-12 border-t border-[#e6edf5] pt-5">
-              <p className="text-xs leading-6 text-[#8292a3]">
-                <span className="font-semibold text-[#52677d]">
-                  OneStep Dream Property
-                </span>{" "}
-                · One step closer to your dream property.
-              </p>
-            </div>
-          </div>
+                      <ArrowRight aria-hidden="true" className="size-4 shrink-0 text-location-muted transition-transform duration-200 group-hover:translate-x-1 group-hover:text-location-accent" />
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p aria-live="polite" className="rounded-2xl border border-dashed border-location-border bg-location-surface px-4 py-8 text-center text-sm text-location-muted">
+                  No popular areas match that search. Try another neighbourhood.
+                </p>
+              )}
+            </section>
+          </main>
+          <SiteFooter />
         </section>
       )}
-      <main id="top" className="overflow-clip mt-15">
+      <main id="top" aria-hidden={locationOpen} inert={locationOpen ? true : undefined} className="overflow-clip mt-15">
         <section
           id="property-search"
           className="relative z-40 w-full overflow-hidden bg-[#eaf5ff]"
@@ -1264,7 +1248,7 @@ export function HomePage() {
           </section>
         </section>
       </main>
-      <section className="mx-auto max-w-[1280px] px-4 py-8 min-[360px]:px-5 sm:py-12 lg:px-8">
+      <section aria-hidden={locationOpen} inert={locationOpen ? true : undefined} className="mx-auto max-w-[1280px] px-4 py-8 min-[360px]:px-5 sm:py-12 lg:px-8">
         <Reveal>
           <div className="relative overflow-hidden rounded-[18px] border border-[#f3c95f] bg-gradient-to-r from-[#fffdf8] via-[#fffefa] to-[#effaf2] px-5 py-7 sm:px-10 sm:py-9">
             <div className="relative z-10 max-w-[760px]">
@@ -1288,8 +1272,13 @@ export function HomePage() {
                 Our banking partners
               </p>
 
-              <div data-gsap-drag className="mt-4 flex gap-3 overflow-x-auto pb-2">
-                {[
+              <div
+                data-gsap-drag
+                role="region"
+                aria-label="Bank offers, scroll horizontally to view each bank"
+                tabIndex={0}
+                className="-mx-4 mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4"
+              >                {[
                   {
                     bank: "SBI",
                     rate: "Starts at 7.25%",
@@ -1317,7 +1306,7 @@ export function HomePage() {
                 ].map(({ bank, rate, logo, alt }) => (
                   <div
                     key={bank}
-                    className="group relative min-w-[145px] overflow-hidden rounded-xl border border-[#e6e6e6] bg-white px-3 py-3 text-center transition-colors duration-300 hover:border-[#b8b8b8]"
+                    className="group relative w-[min(78vw,220px)] shrink-0 snap-start overflow-hidden rounded-xl border border-[#e6e6e6] bg-white px-3 py-3 text-center transition-colors duration-300 hover:border-[#b8b8b8] sm:w-auto sm:min-w-0 sm:shrink sm:snap-none"
                   >
                     <span
                       aria-hidden="true"
@@ -1383,7 +1372,7 @@ export function HomePage() {
           </div>
         </Reveal>
       </section>
-      <section className=" text-[#111111]" aria-label="More ways to connect">
+      <section aria-hidden={locationOpen} inert={locationOpen ? true : undefined} className=" text-[#111111]" aria-label="More ways to connect">
         <div className="mx-auto max-w-[1280px] px-0 lg:px-8">
           <div className="px-4 pb-5 pt-8 sm:px-5 lg:px-0 lg:pb-2 lg:pt-10">
             <div className="mb-7">
@@ -1395,7 +1384,7 @@ export function HomePage() {
                 aria-hidden="true"
               />
             </div>
-            <div data-gsap-drag className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-5 lg:overflow-visible lg:px-0">
+            <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4 lg:gap-5">
               {[
                 {
                   title: "EMI Calculator",
@@ -1425,7 +1414,7 @@ export function HomePage() {
                 <Link
                   href="#contact"
                   key={title}
-                  className="group flex min-h-[310px] min-w-[300px] snap-start flex-col rounded-[10px] border border-[#d9d9d9] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#11b6c9] hover:shadow-[0_12px_26px_rgba(0,0,0,0.08)] sm:p-6 lg:min-h-[310px] lg:min-w-0"
+                  className="group flex min-h-[310px] w-[min(84vw,320px)] shrink-0 snap-start flex-col rounded-[10px] border border-[#d9d9d9] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#11b6c9] hover:shadow-[0_12px_26px_rgba(0,0,0,0.08)] sm:w-auto sm:min-w-0 sm:shrink sm:snap-none sm:p-6"
                 >
                   <span className="flex size-14 items-center justify-center text-[#303030]">
                     <Icon className="size-12 stroke-[1.7]" aria-hidden="true" />
@@ -1477,7 +1466,7 @@ export function HomePage() {
             </Link>
           </div>
 
-          <div className=" px-5 py-5 text-center lg:rounded-sm lg:px-8">
+          <div className="px-3 py-5 text-center lg:rounded-sm lg:px-8">
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#5f6368]">
               Why people choose us
             </p>
@@ -1499,10 +1488,10 @@ export function HomePage() {
                 </p>
               </div>
             </div>
-            <section className="mx-auto max-w-[1280px] px-4 pb-8 pt-2 min-[360px]:px-5 sm:pb-12 lg:px-8">
+            <section aria-hidden={locationOpen} inert={locationOpen ? true : undefined} className="mx-auto w-full max-w-[1280px] px-0 pb-8 pt-2 sm:pb-12 lg:px-8">
               <Reveal>
                 <div className="relative overflow-hidden rounded-[18px] bg-gradient-to-r from-[#e9fbff] via-[#f5fdff] to-white px-5 py-6 sm:px-8 sm:py-8 lg:px-10">
-                  <div className="relative z-10 flex flex-col items-start gap-5 lg:flex-row lg:items-center lg:justify-between">
+                  <div className="relative z-10 flex flex-col items-center gap-5 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
                     <div>
                       <p className="max-w-[700px] text-[clamp(1.35rem,3vw,2rem)] leading-[1.15] tracking-[-0.035em] text-[#243442]">
                         Plan hassle-free{" "}
@@ -1510,7 +1499,7 @@ export function HomePage() {
                         with <strong>ODP</strong>
                       </p>
 
-                      <div className="mt-3 inline-flex items-center gap-3 rounded-xl border border-[#f3e4b9] bg-[#fff8e5] px-3 py-2.5 text-sm text-[#17202a] sm:text-base">
+                      <div className="mt-3 inline-flex w-full max-w-[260px] items-center justify-center gap-3 rounded-xl border border-[#f3e4b9] bg-[#fff8e5] px-3 py-2.5 text-sm text-[#17202a] sm:text-base">
                         <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-[#17202a] shadow-sm">
                           <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white shadow-sm">
                             <CarFront
@@ -1530,7 +1519,7 @@ export function HomePage() {
 
                     <Link
                       href="#contact"
-                      className="group relative isolate inline-flex shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-[#e5232b] bg-[#e5232b] px-7 py-3 text-sm font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e5232b] sm:px-9 sm:text-base"
+                      className="group relative isolate inline-flex w-full max-w-[210px] shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-[#e5232b] bg-[#e5232b] px-7 py-3 text-sm font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e5232b] lg:w-auto sm:px-9 sm:text-base"
                     >
                       <span
                         aria-hidden="true"
@@ -1633,6 +1622,8 @@ export function HomePage() {
       </section>
   <section
   id="contact"
+  aria-hidden={locationOpen}
+  inert={locationOpen ? true : undefined}
   aria-label="Contact and legal information"
   className="border-t border-[#0874d1] bg-[#0874d1] text-white"
   >
@@ -1640,14 +1631,14 @@ export function HomePage() {
           <div>
             <Link
               href="#top"
-              className="inline-flex items-center text-[#0874d1]"
+              className="inline-flex items-center text-white"
               aria-label="ODP home"
             >
               <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
                 odp
               </span>
             </Link>
-            <p className="mt-5 max-w-xs text-sm leading-6 text-[#5f6368]">
+            <p className="mt-5 max-w-xs text-sm leading-6 text-white">
               Thoughtfully selected homes for the way you want to live.
             </p>
           </div>
@@ -1655,7 +1646,7 @@ export function HomePage() {
             <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
               Discover
             </h3>
-            <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
+            <div className="mt-5 flex flex-col gap-3 text-sm text-white">
               <Link href="#properties">Buy Flats</Link>
               <Link href="#properties">Properties</Link>
               <Link href="#locations">Locations</Link>
@@ -1665,7 +1656,7 @@ export function HomePage() {
             <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
               Company
             </h3>
-            <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
+            <div className="mt-5 flex flex-col gap-3 text-sm text-white">
               <Link href="#about">About Us</Link>
               <Link href="#contact">Contact</Link>
               <Link href="#contact">List Property</Link>
@@ -1675,17 +1666,17 @@ export function HomePage() {
             <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
               Get in touch
             </h3>
-            <p className="mt-5 text-sm leading-6 text-[#5f6368]">
+            <p className="mt-5 text-sm leading-6 text-white">
               <a
                 href="mailto:help.onestepdreamproperty@gmail.com"
-                className="transition-colors hover:text-[#0874d1]"
+                className="transition-colors hover:text-white/80"
               >
                 help.onestepdreamproperty@gmail.com
               </a>
               <br />
               <a
                 href="tel:+91 7411535782"
-                className="transition-colors hover:text-[#0874d1]"
+                className="transition-colors hover:text-white/80"
               >
                 +91 7411535782
               </a>
@@ -1696,56 +1687,8 @@ export function HomePage() {
           <span>© 2026 OneStep Dream Property. All rights reserved.</span>
           <span>Privacy · Terms</span>
         </div>{" "}
-        <div className="mx-auto mt-4 w-full max-w-[1280px] border-t border-white/20 px-5 pb-8 pt-6 sm:mt-6 sm:px-8 sm:pb-10 sm:pt-8">
-          <p className="text-xs leading-6 text-white/90 sm:text-sm sm:leading-7">
-            <strong className="font-semibold text-white/90">Disclaimer:</strong>{" "}
-            ODP Services acts solely as an intermediary platform for advertising
-            properties and is not a party to or responsible for transactions
-            between buyers and sellers. All offers, discounts, and property
-            details are subject to verification with the respective seller or
-            developer.
-          </p>
-        </div>
       </section>
-      <HalftoneWordmarkFooter
-        wordmark="odp"
-        label="OneStep Dream Property"
-        meta="ODP Services · © 2026"
-preset="sky"
-  palette={{ background: "#f5faff", ink: "#152b43", warm: "#5b9bd5" }}
-        dotGap={6}
-        radius={88}
-        crop={0.16}
-        grain={0.28}
-        columns={[
-          {
-            title: "Explore",
-            links: [
-              { label: "Buy Flats", href: "#properties" },
-              { label: "Properties", href: "#properties" },
-              { label: "Locations", href: "#locations" },
-            ],
-          },
-          {
-            title: "Company",
-            links: [
-              { label: "About Us", href: "#about" },
-              { label: "Contact", href: "#contact" },
-              { label: "List Property", href: "#contact" },
-            ],
-          },
-          {
-            title: "Get in touch",
-            links: [
-              {
-                label: "help.onestepdreamproperty@gmail.com",
-                href: "mailto:help.onestepdreamproperty@gmail.com",
-              },
-              { label: "+91 7411535782", href: "tel:+917411535782" },
-            ],
-          },
-        ]}
-      />
+      {!locationOpen && <SiteFooter />}
 
       {/* chatbot */}
 
