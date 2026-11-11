@@ -1272,7 +1272,7 @@ export function HomePage() {
                 Our banking partners
               </p>
 
-              <div data-gsap-drag className="mt-4 flex gap-3 overflow-x-auto pb-2">
+              <div data-gsap-drag className="mt-4 flex min-w-full snap-x snap-mandatory flex-nowrap gap-3 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {[
                   {
                     bank: "SBI",
@@ -1301,7 +1301,7 @@ export function HomePage() {
                 ].map(({ bank, rate, logo, alt }) => (
                   <div
                     key={bank}
-                    className="group relative min-w-[145px] overflow-hidden rounded-xl border border-[#e6e6e6] bg-white px-3 py-3 text-center transition-colors duration-300 hover:border-[#b8b8b8]"
+                    className="group relative w-[min(78vw,220px)] shrink-0 snap-start overflow-hidden rounded-xl border border-[#e6e6e6] bg-white px-3 py-3 text-center transition-colors duration-300 hover:border-[#b8b8b8]"
                   >
                     <span
                       aria-hidden="true"
@@ -1379,7 +1379,7 @@ export function HomePage() {
                 aria-hidden="true"
               />
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+            <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4 lg:gap-5">
               {[
                 {
                   title: "EMI Calculator",
@@ -1409,7 +1409,7 @@ export function HomePage() {
                 <Link
                   href="#contact"
                   key={title}
-                  className="group flex min-h-[310px] min-w-0 flex-col rounded-[10px] border border-[#d9d9d9] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#11b6c9] hover:shadow-[0_12px_26px_rgba(0,0,0,0.08)] sm:p-6"
+                  className="group flex min-h-[310px] w-[min(84vw,320px)] shrink-0 snap-start flex-col rounded-[10px] border border-[#d9d9d9] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#11b6c9] hover:shadow-[0_12px_26px_rgba(0,0,0,0.08)] sm:w-auto sm:min-w-0 sm:shrink sm:snap-none sm:p-6"
                 >
                   <span className="flex size-14 items-center justify-center text-[#303030]">
                     <Icon className="size-12 stroke-[1.7]" aria-hidden="true" />
@@ -1461,7 +1461,7 @@ export function HomePage() {
             </Link>
           </div>
 
-          <div className=" px-5 py-5 text-center lg:rounded-sm lg:px-8">
+          <div className="px-3 py-5 text-center lg:rounded-sm lg:px-8">
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#5f6368]">
               Why people choose us
             </p>
@@ -1483,10 +1483,10 @@ export function HomePage() {
                 </p>
               </div>
             </div>
-            <section aria-hidden={locationOpen} inert={locationOpen ? true : undefined} className="mx-auto max-w-[1280px] px-4 pb-8 pt-2 min-[360px]:px-5 sm:pb-12 lg:px-8">
+            <section aria-hidden={locationOpen} inert={locationOpen ? true : undefined} className="mx-auto w-full max-w-[1280px] px-0 pb-8 pt-2 sm:pb-12 lg:px-8">
               <Reveal>
                 <div className="relative overflow-hidden rounded-[18px] bg-gradient-to-r from-[#e9fbff] via-[#f5fdff] to-white px-5 py-6 sm:px-8 sm:py-8 lg:px-10">
-                  <div className="relative z-10 flex flex-col items-start gap-5 lg:flex-row lg:items-center lg:justify-between">
+                  <div className="relative z-10 flex flex-col items-center gap-5 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
                     <div>
                       <p className="max-w-[700px] text-[clamp(1.35rem,3vw,2rem)] leading-[1.15] tracking-[-0.035em] text-[#243442]">
                         Plan hassle-free{" "}
@@ -1494,7 +1494,7 @@ export function HomePage() {
                         with <strong>ODP</strong>
                       </p>
 
-                      <div className="mt-3 inline-flex items-center gap-3 rounded-xl border border-[#f3e4b9] bg-[#fff8e5] px-3 py-2.5 text-sm text-[#17202a] sm:text-base">
+                      <div className="mt-3 inline-flex w-full max-w-[260px] items-center justify-center gap-3 rounded-xl border border-[#f3e4b9] bg-[#fff8e5] px-3 py-2.5 text-sm text-[#17202a] sm:text-base">
                         <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-[#17202a] shadow-sm">
                           <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white shadow-sm">
                             <CarFront
@@ -1514,7 +1514,7 @@ export function HomePage() {
 
                     <Link
                       href="#contact"
-                      className="group relative isolate inline-flex shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-[#e5232b] bg-[#e5232b] px-7 py-3 text-sm font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e5232b] sm:px-9 sm:text-base"
+                      className="group relative isolate inline-flex w-full max-w-[210px] shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full border border-[#e5232b] bg-[#e5232b] px-7 py-3 text-sm font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e5232b] lg:w-auto sm:px-9 sm:text-base"
                     >
                       <span
                         aria-hidden="true"
