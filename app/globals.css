@@ -574,15 +574,14 @@ html::-webkit-scrollbar-thumb:hover {
 }
 
 .odp-gradient-theme {
-  min-height: 100vh;
-  background: linear-gradient(112deg, #efb08e 0%, #f7e7dc 48%, #f2b89a 100%);
+  background: linear-gradient(125deg, #d1dbe1 0%, #e6e2df 44%, #f1b28f 100%);
   background-attachment: fixed;
 }
 
 .odp-gradient-theme > header {
-  background: linear-gradient(110deg, #ef9e6d 0%, #f3b28e 58%, #f7c6a8 100%) !important;
+  background: rgb(255 255 255 / 18%) !important;
   border-color: transparent !important;
-  box-shadow: 0 1px 10px rgb(146 73 34 / 12%) !important;
+  box-shadow: none !important;
 }
 
 .odp-gradient-theme main section {

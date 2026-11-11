@@ -737,7 +737,7 @@ export function HomePage() {
 
           <Link
             href="#top"
-            className="flex shrink-0 items-center text-[#9b3f12]"
+            className="flex shrink-0 items-center text-[#0874d1]"
             aria-label="OneStep Dream Property home"
           >
             <span className="text-[25px] font-black leading-none tracking-[-0.12em] lg:text-[32px]">
@@ -1000,7 +1000,7 @@ export function HomePage() {
       <main id="top" className="overflow-clip mt-15">
         <section
           id="property-search"
-          className="relative z-40 w-full overflow-visible px-4 pb-8 pt-8 min-[360px]:px-5 sm:pb-10 sm:pt-10 md:px-10 lg:px-14"
+          className="odp-warm-gradient relative z-40 w-full overflow-visible px-4 pb-8 pt-8 min-[360px]:px-5 sm:pb-10 sm:pt-10 md:px-10 lg:px-14"
         >
           <div className="relative z-40 mx-auto w-full max-w-[1280px] text-center">
             <h2 className="text-[clamp(1.8rem,4vw,2.4rem)] tracking-[-0.04em] text-[#263542]">
@@ -1011,7 +1011,7 @@ export function HomePage() {
           </div>
         </section>
 
-        <section data-hero-stage className="relative mx-auto grid w-full min-w-0 max-w-full items-center overflow-hidden rounded-none border-0 px-3 pb-8 pt-8 min-[360px]:px-4 sm:pb-16 sm:pt-16 md:grid-cols-2 md:gap-10 md:px-10 md:py-12 lg:gap-16 lg:px-14 lg:py-16 xl:gap-20 2xl:px-16">
+  <section data-hero-stage className="relative mx-auto grid w-full min-w-0 max-w-full items-center overflow-hidden rounded-none border-0 px-3 pb-8 pt-8 min-[360px]:px-4 sm:pb-16 sm:pt-16 md:grid-cols-2 md:gap-10 md:px-10 md:py-12 lg:gap-16 lg:px-14 lg:py-16 xl:gap-20 2xl:px-16">
           {/* LEFT — HERO INFORMATION */}
           <Reveal className="hero-copy relative z-10 order-1 flex h-full w-full items-center justify-center md:justify-self-start">
             <div className="mx-auto w-full min-w-0 max-w-[560px] overflow-hidden text-left">
@@ -1931,7 +1931,7 @@ export function HomePage() {
           <div>
             <Link
               href="#top"
-              className="inline-flex items-center text-[#9b3f12]"
+              className="inline-flex items-center text-[#0874d1]"
               aria-label="ODP home"
             >
               <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
