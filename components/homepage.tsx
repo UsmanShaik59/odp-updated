@@ -1685,7 +1685,7 @@ export function HomePage() {
           <span>Privacy · Terms</span>
         </div>{" "}
       </section>
-      {!locationOpen && <SiteFooter />}
+      {!locationOpen && <SiteFooter includeBlueSection={false} />}
 
       {/* chatbot */}
 
