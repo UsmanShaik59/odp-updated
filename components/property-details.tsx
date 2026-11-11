@@ -13,10 +13,8 @@ import {
   CalendarDays,
   Heart,
   MapPin,
-  Menu,
-  Ruler,
-  Share2,
-  X,
+  MessageCircle,
+  Search,
   CheckCircle2,
   Clock3,
   Mail,
@@ -36,13 +34,13 @@ import {
   Headphones,
   House,
   Info,
-  MessageCircle,
-  Search,
+  Ruler,
   SlidersHorizontal,
   ShieldCheck,
 } from "lucide-react";
 import { properties } from "@/lib/properties";
 import { PropertyAssistant } from "./property-assistant";
+import SiteFooter from "./site-footer";
 import { SiteMobileNav } from "./site-mobile-nav";
 
 type Property = (typeof properties)[number];
@@ -92,20 +90,18 @@ export function PropertyDetails({ property }: { property: Property }) {
     <div className="min-h-screen bg-white text-[#111111]">
       <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-[#e8edf3] bg-white text-[#152b43] shadow-[0_2px_16px_rgba(21,43,67,0.04)]">
         <div className="mx-auto flex h-[64px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
-          <button
-            type="button"
-            className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl text-[#152b43] transition-colors duration-200 hover:bg-[#f3f7fa] active:bg-[#eaf1f6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] motion-reduce:transition-none lg:hidden"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-navigation"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? <X aria-hidden="true" className="size-[22px]" strokeWidth={1.75} /> : <Menu aria-hidden="true" className="size-[22px]" strokeWidth={1.75} />}
-          </button>
+          <SiteMobileNav
+            open={menuOpen}
+            onOpenChange={setMenuOpen}
+            onNavigate={() => {
+              setLocationOpen(false);
+              setSearchOpen(false);
+            }}
+          />
 
           <Link
             href="/"
-            className="flex shrink-0 items-center text-[#0874d1]"
+            className="order-1 flex shrink-0 items-center text-[#0874d1]"
             aria-label="OneStep Dream Property home"
           >
             <span className="text-[25px] font-black leading-none tracking-[-0.12em] lg:text-[32px]">
@@ -114,7 +110,7 @@ export function PropertyDetails({ property }: { property: Property }) {
           </Link>
 
           <nav
-            className="hidden flex-1 items-center justify-center gap-8 text-[13px] text-[#5f6368] lg:flex lg:text-[15px]"
+            className="hidden flex-1 items-center justify-center gap-8 text-[13px] text-[#5f6368] lg:order-2 lg:flex lg:text-[15px]"
             aria-label="Main navigation"
           >
             {[
@@ -147,85 +143,29 @@ export function PropertyDetails({ property }: { property: Property }) {
             ))}
           </nav>
 
-          <div className="order-3 ml-0 flex min-w-0 flex-1 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px] lg:flex-none">
+          <div className="order-2 ml-auto flex min-w-0 items-center justify-end gap-2 lg:order-3 lg:max-w-[230px] lg:flex-none">
             <button
               type="button"
-              aria-label="Choose location"
+              aria-label="Choose location. Current location: Koramangala, Bengaluru"
+              aria-expanded={locationOpen}
               onClick={() => {
                 setLocationOpen(true);
                 setMenuOpen(false);
                 setSearchOpen(false);
               }}
-              className="flex min-w-0 flex-1 items-center justify-end gap-1 truncate text-[11px] font-semibold"
+              className="flex size-10 shrink-0 items-center justify-center rounded-xl text-[#152b43] transition-colors hover:bg-[#f3f7fa] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] lg:h-auto lg:w-auto lg:justify-end lg:gap-1 lg:rounded-none lg:text-[11px] lg:font-semibold"
             >
-              <MapPin aria-hidden="true" className="size-4 shrink-0" />
-              <span className="truncate">Koramangala, Bengaluru</span>
+              <MapPin aria-hidden="true" className="size-5 shrink-0 text-[#0874d1] lg:size-4" />
+              <span className="sr-only lg:not-sr-only lg:truncate">Koramangala, Bengaluru</span>
               <ChevronDown
                 aria-hidden="true"
-                className="size-3 shrink-0 text-[#496b73]"
+                className="hidden size-3 shrink-0 text-[#496b73] lg:inline-flex"
               />
             </button>
           </div>
         </div>
 
-        <nav
-          id="mobile-navigation"
-          aria-hidden={!menuOpen}
-          inert={!menuOpen ? true : undefined}
-          className={`fixed inset-x-0 bottom-0 top-[64px] z-50 flex flex-col overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-sm text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none lg:hidden ${
-            menuOpen
-              ? "pointer-events-auto translate-y-0 opacity-100"
-              : "pointer-events-none -translate-y-2 opacity-0"
-          }`}
-          aria-label="Mobile navigation"
-        >
-          <div className="divide-y divide-[#edf1f5]">
-            {[
-              { label: "Home", href: "/", icon: House },
-              { label: "Buy Flats", href: "/#properties", icon: BedDouble },
-              { label: "Properties", href: "/#properties", icon: Building2 },
-              { label: "Locations", href: "/#locations", icon: MapPin },
-              { label: "About Us", href: "/about", icon: Info },
-              { label: "Contact", href: "/contact", icon: Headphones },
-            ].map((item) => {
-              const Icon = item.icon;
-              const content = (
-                <>
-                  <span className="flex size-6 shrink-0 items-center justify-center text-[#0874d1] transition-colors duration-200 group-hover:text-[#005da8]">
-                    <Icon aria-hidden="true" className="size-5" strokeWidth={1.75} />
-                  </span>
-                  <span>{item.label}</span>
-                </>
-              );
-              const className =
-                "group flex min-h-[64px] items-center gap-4 px-5 text-[15px] font-medium text-[#24384d] transition-colors duration-200 hover:bg-[#f8fbfe] active:bg-[#f2f7fb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1] motion-reduce:transition-none";
 
-              return (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  onClick={(event) => {
-                    setMenuOpen(false);
-                    const sectionId = item.href.split("#")[1];
-                    if (!sectionId) return;
-
-                    if (window.location.pathname === "/") {
-                      event.preventDefault();
-                      document.getElementById(sectionId)?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                      window.history.replaceState(null, "", `/#${sectionId}`);
-                    }
-                  }}
-                  className={className}
-                >
-                  {content}
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
       </header>
 
       <main>
@@ -468,87 +408,7 @@ export function PropertyDetails({ property }: { property: Property }) {
         </div>
       </main>
 
-      <footer
-        id="contact"
-        className="border-t border-[#0874d1] bg-[#0874d1] text-white"
-      >
-        <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
-          <div>
-            <Link
-              href="/"
-              className="inline-flex items-center text-[#0874d1]"
-              aria-label="ODP home"
-            >
-              <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
-                odp
-              </span>
-            </Link>
-            <p className="mt-5 max-w-xs text-sm leading-6 text-[#5f6368]">
-              Thoughtfully selected homes for the way you want to live.
-            </p>
-          </div>
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
-              Discover
-            </h3>
-            <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
-              <Link href="/#properties" scroll={false}>
-                Buy Flats
-              </Link>
-              <Link href="/#properties" scroll={false}>
-                Properties
-              </Link>
-              <Link href="/#locations" scroll={false}>
-                Locations
-              </Link>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
-              Company
-            </h3>
-            <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
-              <Link href="/about">About Us</Link>
-              <Link href="/contact">Contact</Link>
-              <Link href="/contact">List Property</Link>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
-              Get in touch
-            </h3>
-            <p className="mt-5 text-sm leading-6 text-[#5f6368]">
-              <a
-                href="mailto:help.onestepdreamproperty@gmail.com"
-                className="transition-colors hover:text-[#0874d1]"
-              >
-                help.onestepdreamproperty@gmail.com
-              </a>
-              <br />
-              <a
-                href="tel:+91 7411535782"
-                className="transition-colors hover:text-[#0874d1]"
-              >
-                +91 7411535782
-              </a>
-            </p>
-          </div>
-        </div>
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 border-t border-white/30 px-5 py-6 text-xs text-white lg:text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
-          <span>© 2026 OneStep Dream Property. All rights reserved.</span>
-          <span>Privacy · Terms</span>
-        </div>{" "}
-        <div className="mx-auto mt-4 w-full max-w-[1280px] border-t border-white/20 px-5 pb-8 pt-6 sm:mt-6 sm:px-8 sm:pb-10 sm:pt-8">
-          <p className="text-xs leading-6 text-white/80 sm:text-sm sm:leading-7">
-            <strong className="font-semibold text-white">Disclaimer:</strong>{" "}
-            ODP Services acts solely as an intermediary platform for advertising
-            properties and is not a party to or responsible for transactions
-            between buyers and sellers. All offers, discounts, and property
-            details are subject to verification with the respective seller or
-            developer.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter disclaimer="ODP Services acts solely as an intermediary platform for advertising properties and is not a party to or responsible for transactions between buyers and sellers. All offers, discounts, and property details are subject to verification with the respective seller or developer." />
       {/* <PropertyAssistant /> */}
     </div>
   );

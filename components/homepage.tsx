@@ -17,6 +17,7 @@ import { HeroScene } from "./hero-scene";
 import { PropertyAssistant } from "./property-assistant";
 import { GsapCursor } from "./gsap-cursor";
 import SiteFooter from "./site-footer";
+import { SiteMobileNav } from "./site-mobile-nav";
 import KineticMatrix from "./ui/kinetic-matrix";
 import Link from "next/link";
 import { CarFront, Phone } from "lucide-react";
@@ -39,7 +40,6 @@ import {
   Info,
   House,
   MapPin,
-  Menu,
   MessageCircle,
   Search,
   SlidersHorizontal,
@@ -152,7 +152,6 @@ function Reveal({
 
 export function HomePage() {
   const pageRef = useRef<HTMLDivElement>(null);
-  const mobileNavRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
@@ -205,18 +204,6 @@ export function HomePage() {
     timer = window.setTimeout(tick, 300);
     return () => window.clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
-    };
-    if (menuOpen) document.addEventListener("keydown", closeOnEscape);
-    return () => {
-      document.body.style.overflow = "";
-      document.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [menuOpen]);
 
   const toggleSaved = (index: number) => {
     setSaved((current) =>
@@ -443,31 +430,18 @@ export function HomePage() {
   <GsapCursor />
   <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-[#e8edf3] bg-white text-[#152b43] shadow-[0_2px_16px_rgba(21,43,67,0.04)]">
         <div className="mx-auto flex h-[64px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
-          <button
-            type="button"
-            className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl text-[#152b43] transition-colors duration-200 hover:bg-[#f3f7fa] active:bg-[#eaf1f6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] motion-reduce:transition-none lg:hidden"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-navigation"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <span className="relative size-[22px]">
-              <Menu
-                aria-hidden="true"
-                className={`absolute inset-0 size-[22px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${menuOpen ? 'rotate-45 scale-75 opacity-0' : 'rotate-0 scale-100 opacity-100'}`}
-                strokeWidth={1.75}
-              />
-              <X
-                aria-hidden="true"
-                className={`absolute inset-0 size-[22px] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${menuOpen ? 'rotate-0 scale-100 opacity-100' : '-rotate-45 scale-75 opacity-0'}`}
-                strokeWidth={1.75}
-              />
-            </span>
-          </button>
+          <SiteMobileNav
+            open={menuOpen}
+            onOpenChange={setMenuOpen}
+            onNavigate={() => {
+              setLocationOpen(false);
+              setSearchOpen(false);
+            }}
+          />
 
           <Link
             href="#top"
-            className="flex shrink-0 items-center text-[#0874d1]"
+            className="order-1 flex shrink-0 items-center text-[#0874d1]"
             aria-label="OneStep Dream Property home"
           >
             <span className="text-[25px] font-black leading-none tracking-[-0.12em] lg:text-[32px]">
@@ -476,7 +450,7 @@ export function HomePage() {
           </Link>
 
           <nav
-            className="hidden flex-1 items-center justify-center gap-8 text-[13px] text-[#5f6368] lg:flex lg:text-[15px]"
+            className="hidden flex-1 items-center justify-center gap-8 text-[13px] text-[#5f6368] lg:order-2 lg:flex lg:text-[15px]"
             aria-label="Main navigation"
           >
             {[
@@ -496,88 +470,30 @@ export function HomePage() {
             ))}
           </nav>
 
-          <div className="order-3 ml-0 flex min-w-0 flex-1 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px] lg:flex-none">
+          <div className="order-2 ml-auto flex min-w-0 items-center justify-end gap-2 lg:order-3 lg:max-w-[230px] lg:flex-none">
             <button
               type="button"
-              aria-label="Choose location"
+              aria-label={`Choose location. Current location: ${selectedLocation}`}
+              aria-expanded={locationOpen}
               onClick={() => {
                 setLocationQuery("");
                 setLocationOpen(true);
                 setMenuOpen(false);
                 setSearchOpen(false);
               }}
-              className="flex min-w-0 flex-1 items-center justify-end gap-1 truncate text-[11px] font-semibold"
+              className="flex size-10 shrink-0 items-center justify-center rounded-xl text-[#152b43] transition-colors hover:bg-[#f3f7fa] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] lg:h-auto lg:w-auto lg:justify-end lg:gap-1 lg:rounded-none lg:text-[11px] lg:font-semibold"
             >
-              <MapPin aria-hidden="true" className="size-4 shrink-0" />
-              <span className="truncate">{selectedLocation}</span>
+              <MapPin aria-hidden="true" className="size-5 shrink-0 text-[#0874d1] lg:size-4" />
+              <span className="sr-only lg:not-sr-only lg:truncate">{selectedLocation}</span>
               <ChevronDown
                 aria-hidden="true"
-                className="size-3 shrink-0 text-[#496b73]"
+                className="hidden size-3 shrink-0 text-[#496b73] lg:inline-flex"
               />
             </button>
           </div>
         </div>
 
-        <button
-          type="button"
-          aria-label="Close navigation"
-          aria-hidden={!menuOpen}
-          tabIndex={menuOpen ? 0 : -1}
-          onClick={() => setMenuOpen(false)}
-          data-open={menuOpen}
-          className={`mobile-drawer-backdrop fixed inset-0 top-[64px] z-40 bg-[#152b43]/10 lg:hidden ${
-            menuOpen ? "pointer-events-auto" : "pointer-events-none"
-          }`}
-        />
 
-        <nav
-          ref={mobileNavRef}
-          id="mobile-navigation"
-          aria-hidden={!menuOpen}
-          inert={!menuOpen ? true : undefined}
-          data-open={menuOpen}
-          className={`mobile-drawer-panel fixed inset-x-0 bottom-0 top-[64px] z-50 flex flex-col overflow-y-auto overscroll-contain border-t border-[#e8edf3] bg-white text-sm text-[#152b43] shadow-[0_16px_40px_rgba(21,43,67,0.08)] lg:hidden ${
-            menuOpen ? "pointer-events-auto" : "pointer-events-none"
-          }`}
-          aria-label="Mobile navigation"
-        >
-          <div className="mx-auto w-full max-w-[520px] divide-y divide-[#edf1f5]">
-  {([
-  ["Home", "/#top"],
-  ["Buy Flats", "/#properties"],
-  ["Properties", "/#properties"],
-  ["Locations", "/#locations"],
-  ["About Us", "/about"],
-  ["Contact", "/contact"],
-  ] as const).map(([item, href], index) => {
-              const icons = {
-                Home: House,
-                "Buy Flats": BedDouble,
-                Properties: Building2,
-                Locations: MapPin,
-                "About Us": Info,
-                Contact: Headphones,
-              };
-
-              const Icon = icons[item];
-
-              return (
-                <Link
-                  key={item}
-                  href={href}
-                  onClick={() => setMenuOpen(false)}
-                  style={{ transitionDelay: menuOpen ? `${index * 28}ms` : `${(5 - index) * 12}ms` }}
-                  className={`group flex min-h-[64px] items-center gap-4 px-5 text-[15px] font-medium text-[#24384d] transition-[opacity,transform,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[#f8fbfe] active:bg-[#f2f7fb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0874d1] motion-reduce:transition-none ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'}`}
-                >
-                  <span className="flex size-6 shrink-0 items-center justify-center text-[#0874d1] transition-colors duration-200 group-hover:text-[#005da8]">
-                    <Icon aria-hidden="true" className="size-5" strokeWidth={1.75} />
-                  </span>
-                  <span>{item}</span>
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
         <span
           data-scroll-progress
           aria-hidden="true"
@@ -590,16 +506,7 @@ export function HomePage() {
           aria-label="Location picker"
         >
           <main className="mx-auto max-w-[1280px] px-4 pb-8 pt-6 sm:px-8 sm:pb-12 sm:pt-10 lg:pb-16 lg:pt-14">
-            <button
-              type="button"
-              onClick={() => setLocationOpen(false)}
-              className="inline-flex min-h-10 items-center gap-2 rounded-full border border-location-border bg-location-surface px-4 text-sm font-semibold text-location-ink transition-colors hover:border-location-accent/40 hover:text-location-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-location-accent"
-            >
-              <ArrowRight aria-hidden="true" className="size-4 rotate-180" />
-              Back to home
-            </button>
-
-            <div className="mt-8 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:gap-16">
+            <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:gap-16">
               <div className="max-w-2xl">
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-location-accent sm:text-xs">
                   Bengaluru · Area guide
@@ -614,7 +521,7 @@ export function HomePage() {
                 </p>
               </div>
 
-              <div className="rounded-3xl border border-location-border bg-location-surface p-4 shadow-[0_18px_55px_rgba(21,43,67,0.06)] sm:p-6">
+              <div className="min-w-0">
                 <label htmlFor="location-search" className="mb-3 block text-sm font-semibold text-location-ink">
                   Search locations
                 </label>
@@ -637,8 +544,8 @@ export function HomePage() {
               </div>
             </div>
 
-            <section aria-labelledby="popular-locations-title" className="mt-10 sm:mt-14">
-              <div className="mb-5 flex items-end justify-between gap-4">
+            <section aria-labelledby="popular-locations-title" className="mt-8 sm:mt-14">
+              <div className="mb-4 flex items-end justify-between gap-4">
                 <div>
                   <h2 id="popular-locations-title" className="text-xl font-semibold tracking-tight text-location-ink sm:text-2xl">
                     Popular locations
@@ -654,38 +561,39 @@ export function HomePage() {
               </div>
 
               {filteredLocations.length > 0 ? (
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <ul className="overflow-hidden rounded-2xl border border-location-border bg-location-surface">
                   {filteredLocations.map((location) => (
-                    <button
-                      type="button"
-                      key={location.name}
-                      onClick={() => {
-                        setSelectedLocation(
-                          location.name === "Bengaluru"
-                            ? location.name
-                            : `${location.name}, Bengaluru`,
-                        );
-                        setLocationOpen(false);
-                      }}
-                      className="group flex min-h-[84px] items-center gap-3 rounded-2xl border border-location-border bg-location-surface p-4 text-left shadow-[0_4px_20px_rgba(21,43,67,0.03)] transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-location-accent/50 hover:shadow-[0_12px_28px_rgba(21,43,67,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-location-accent sm:p-5"
-                    >
-                      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-location-accent/10 text-location-accent">
-                        <MapPin aria-hidden="true" className="size-[18px]" />
-                      </span>
-
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-sm font-semibold text-location-ink">
-                          {location.name}
+                    <li key={location.name} className="border-b border-location-border last:border-b-0">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedLocation(
+                            location.name === "Bengaluru"
+                              ? location.name
+                              : `${location.name}, Bengaluru`,
+                          );
+                          setLocationOpen(false);
+                        }}
+                        className="group flex min-h-[64px] w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-location-accent"
+                      >
+                        <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-location-accent/10 text-location-accent">
+                          <MapPin aria-hidden="true" className="size-4" />
                         </span>
-                        <span className="mt-1 block text-xs text-location-muted">
-                          {location.count}
-                        </span>
-                      </span>
 
-                      <ArrowRight aria-hidden="true" className="size-4 shrink-0 text-location-muted transition-transform duration-200 group-hover:translate-x-1 group-hover:text-location-accent" />
-                    </button>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-sm font-semibold text-location-ink">
+                            {location.name}
+                          </span>
+                          <span className="mt-0.5 block text-xs text-location-muted">
+                            {location.count}
+                          </span>
+                        </span>
+
+                        <ArrowRight aria-hidden="true" className="size-4 shrink-0 text-location-muted transition-transform duration-200 group-hover:translate-x-1 group-hover:text-location-accent" />
+                      </button>
+                    </li>
                   ))}
-                </div>
+                </ul>
               ) : (
                 <p aria-live="polite" className="rounded-2xl border border-dashed border-location-border bg-location-surface px-4 py-8 text-center text-sm text-location-muted">
                   No popular areas match that search. Try another neighbourhood.
@@ -1688,7 +1596,7 @@ export function HomePage() {
           <span>Privacy · Terms</span>
         </div>{" "}
       </section>
-      {!locationOpen && <SiteFooter />}
+      {!locationOpen && <SiteFooter includeBlueSection={false} />}
 
       {/* chatbot */}
 

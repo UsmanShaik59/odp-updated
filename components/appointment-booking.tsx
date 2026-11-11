@@ -18,13 +18,12 @@ import {
   Clock3,
   Headphones,
   MapPin,
-  Menu,
-  Smartphone,
-  X,
 } from "lucide-react";
 import { properties } from "@/lib/properties";
 import { createClient } from "@/lib/supabase/client";
 import { PropertyAssistant } from "./property-assistant";
+import SiteFooter from "./site-footer";
+import { SiteMobileNav } from "./site-mobile-nav";
 
 type Property = (typeof properties)[number];
 
@@ -890,34 +889,12 @@ function Detail({
 function PageShell({ children }: { children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
-    };
-
-    if (menuOpen) document.addEventListener("keydown", closeOnEscape);
-    return () => {
-      document.body.style.overflow = "";
-      document.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [menuOpen]);
-
   const navItems = [
     { label: "Home", href: "/" },
     { label: "Properties", href: "/#properties" },
     { label: "Locations", href: "/#locations" },
     { label: "About Us", href: "/about" },
     { label: "Contact", href: "/contact" },
-  ];
-
-  const mobileItems = [
-    { label: "Home", href: "/", icon: Building2 },
-    { label: "Buy Flats", href: "/#properties", icon: BedDouble },
-    { label: "Properties", href: "/#properties", icon: Building2 },
-    { label: "Locations", href: "/#locations", icon: MapPin },
-    { label: "About Us", href: "/about", icon: Smartphone },
-    { label: "Contact", href: "/contact", icon: Headphones },
   ];
 
   const handleNavClick = (
@@ -940,20 +917,14 @@ function PageShell({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-white text-[#152b43]">
       <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#eaf5ff] text-[#152b43] shadow-[0_2px_12px_rgba(21,43,67,0.06)]">
         <div className="mx-auto flex h-[58px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
-          <button
-            type="button"
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#cfe2f5] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white lg:hidden"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-navigation"
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-          </button>
+          <SiteMobileNav
+            open={menuOpen}
+            onOpenChange={setMenuOpen}
+          />
 
           <Link
             href="/"
-            className="flex shrink-0 items-center text-[#0874d1] transition-transform duration-200 hover:scale-[1.03]"
+            className="order-1 flex shrink-0 items-center text-[#0874d1] transition-transform duration-200 hover:scale-[1.03]"
             aria-label="OneStep Dream Property home"
           >
             <span className="text-[25px] font-black leading-none tracking-[-0.12em] lg:text-[32px]">
@@ -962,7 +933,7 @@ function PageShell({ children }: { children: ReactNode }) {
           </Link>
 
           <nav
-            className="hidden flex-1 items-center justify-center gap-8 text-[13px] text-[#5f6368] lg:flex lg:text-[15px]"
+            className="hidden flex-1 items-center justify-center gap-8 text-[13px] text-[#5f6368] lg:order-2 lg:flex lg:text-[15px]"
             aria-label="Main navigation"
           >
             {navItems.map((item) => (
@@ -981,130 +952,27 @@ function PageShell({ children }: { children: ReactNode }) {
             href="https://www.google.com/maps/search/?api=1&query=Koramangala%2C%20Bengaluru"
             target="_blank"
             rel="noopener noreferrer"
-            className="group ml-auto inline-flex min-w-0 items-center justify-end gap-1.5 rounded-lg px-2 py-2 text-[11px] font-semibold text-[#152b43] transition-all duration-200 hover:bg-white hover:text-[#0874d1] sm:text-xs lg:max-w-[230px]"
+            aria-label="View Koramangala, Bengaluru in Google Maps"
+            className="group order-2 ml-auto inline-flex size-10 shrink-0 items-center justify-center rounded-lg text-[11px] font-semibold text-[#152b43] transition-all duration-200 hover:bg-white hover:text-[#0874d1] lg:order-3 lg:h-auto lg:w-auto lg:min-w-0 lg:justify-end lg:gap-1.5 lg:px-2 lg:py-2 lg:max-w-[230px] sm:text-xs"
           >
             <MapPin
               aria-hidden="true"
-              className="size-4 shrink-0 text-[#0874d1] transition-transform duration-200 group-hover:-translate-y-0.5"
+              className="size-5 shrink-0 text-[#0874d1] transition-transform duration-200 group-hover:-translate-y-0.5 lg:size-4"
             />
-            <span className="truncate">Koramangala, Bengaluru</span>
+            <span className="sr-only lg:not-sr-only lg:truncate">Koramangala, Bengaluru</span>
             <ArrowUpRight
               aria-hidden="true"
-              className="size-3 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              className="hidden size-3 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 lg:inline-flex"
             />
           </a>
         </div>
 
-        <nav
-          id="mobile-navigation"
-          aria-label="Mobile navigation"
-          aria-hidden={!menuOpen}
-          inert={!menuOpen ? true : undefined}
-          className={`fixed inset-x-0 bottom-0 top-[58px] z-50 flex origin-top flex-col overflow-y-auto border-t border-[#cfe2f5] bg-white text-sm text-[#152b43] shadow-[0_18px_50px_rgba(21,43,67,0.18)] transition-[opacity,transform,visibility] duration-300 ease-out lg:hidden ${
-            menuOpen
-              ? "visible translate-y-0 scale-y-100 opacity-100"
-              : "pointer-events-none invisible -translate-y-4 scale-y-95 opacity-0"
-          }`}
-        >
-          <div className="divide-y divide-[#cfe2f5]">
-            {mobileItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  onClick={(event) => handleNavClick(event, item.href)}
-                  className="group flex min-h-[70px] items-center gap-4 px-6 text-base font-medium text-[#152b43] transition-all duration-200 hover:bg-[#f1f8ff] hover:pl-7"
-                >
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#0874d1] text-white transition-transform duration-200 group-hover:scale-105">
-                    <Icon aria-hidden="true" className="size-[18px]" />
-                  </span>
-                  <span>{item.label}</span>
-                  <ArrowUpRight className="ml-auto size-4 text-[#0874d1] opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100" />
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
+
       </header>
 
       {children}
 
-      <footer
-        id="contact"
-        className="border-t border-[#0874d1] bg-[#0874d1] text-white"
-      >
-        <div className="mx-auto grid max-w-[1280px] gap-9 px-5 py-12 sm:grid-cols-2 sm:gap-10 sm:py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:px-8">
-          <div>
-            <Link
-              href="#top"
-              className="inline-flex items-center text-[#0874d1]"
-              aria-label="ODP home"
-            >
-              <span className="text-[32px] font-black leading-none tracking-[-0.12em]">
-                odp
-              </span>
-            </Link>
-            <p className="mt-5 max-w-xs text-sm leading-6 text-[#5f6368]">
-              Thoughtfully selected homes for the way you want to live.
-            </p>
-          </div>
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
-              Discover
-            </h3>
-            <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
-              <Link href="#properties">Buy Flats</Link>
-              <Link href="#properties">Properties</Link>
-              <Link href="#locations">Locations</Link>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
-              Company
-            </h3>
-            <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
-              <Link href="#about">About Us</Link>
-              <Link href="#contact">Contact</Link>
-              <Link href="#contact">List Property</Link>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
-              Get in touch
-            </h3>
-            <p className="mt-5 text-sm leading-6 text-[#5f6368]">
-              <a
-                href="mailto:help.onestepdreamproperty@gmail.com"
-                className="transition-colors hover:text-[#0874d1]"
-              >
-                help.onestepdreamproperty@gmail.com
-              </a>
-              <br />
-              <a
-                href="tel:+91 7411535782"
-                className="transition-colors hover:text-[#0874d1]"
-              >
-                +91 7411535782
-              </a>
-            </p>
-          </div>
-        </div>
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 border-t border-white/30 px-5 py-6 text-xs text-white lg:text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
-          <span>© 2026 OneStep Dream Property. All rights reserved.</span>
-          <span>Privacy · Terms</span>
-        </div>{" "}
-        <div className="mx-auto mt-4 w-full max-w-[1280px] border-t border-white/20 px-5 pb-8 pt-6 sm:mt-6 sm:px-8 sm:pb-10 sm:pt-8">
-          <p className="text-xs leading-6 text-white/80 sm:text-sm sm:leading-7">
-            <strong className="font-semibold text-white">Disclaimer:</strong>{" "}
-            ODP Services acts solely as an intermediary platform for advertising
-            properties and is not a party to or responsible for transactions
-            between buyers and sellers. All offers, discounts, and property
-            details are subject to verification with the respective seller or
-            developer.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter disclaimer="ODP Services acts solely as an intermediary platform for advertising properties and is not a party to or responsible for transactions between buyers and sellers. All offers, discounts, and property details are subject to verification with the respective seller or developer." />
     </div>
   );
 }
