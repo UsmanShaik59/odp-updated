@@ -445,7 +445,7 @@ export function HomePage() {
         <div className="mx-auto flex h-[64px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
           <button
             type="button"
-            className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl text-[#152b43] transition-colors duration-200 hover:bg-[#f3f7fa] active:bg-[#eaf1f6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] motion-reduce:transition-none lg:hidden"
+            className="order-3 inline-flex size-10 shrink-0 items-center justify-center rounded-xl text-[#152b43] transition-colors duration-200 hover:bg-[#f3f7fa] active:bg-[#eaf1f6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] motion-reduce:transition-none lg:hidden"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
@@ -467,7 +467,7 @@ export function HomePage() {
 
           <Link
             href="#top"
-            className="flex shrink-0 items-center text-[#0874d1]"
+            className="order-1 flex shrink-0 items-center text-[#0874d1]"
             aria-label="OneStep Dream Property home"
           >
             <span className="text-[25px] font-black leading-none tracking-[-0.12em] lg:text-[32px]">
@@ -476,7 +476,7 @@ export function HomePage() {
           </Link>
 
           <nav
-            className="hidden flex-1 items-center justify-center gap-8 text-[13px] text-[#5f6368] lg:flex lg:text-[15px]"
+            className="hidden flex-1 items-center justify-center gap-8 text-[13px] text-[#5f6368] lg:order-2 lg:flex lg:text-[15px]"
             aria-label="Main navigation"
           >
             {[
@@ -496,23 +496,24 @@ export function HomePage() {
             ))}
           </nav>
 
-          <div className="order-3 ml-0 flex min-w-0 flex-1 items-center justify-end gap-2 lg:order-2 lg:ml-auto lg:max-w-[230px] lg:flex-none">
+          <div className="order-2 ml-auto flex min-w-0 items-center justify-end gap-2 lg:order-3 lg:max-w-[230px] lg:flex-none">
             <button
               type="button"
-              aria-label="Choose location"
+              aria-label={`Choose location. Current location: ${selectedLocation}`}
+              aria-expanded={locationOpen}
               onClick={() => {
                 setLocationQuery("");
                 setLocationOpen(true);
                 setMenuOpen(false);
                 setSearchOpen(false);
               }}
-              className="flex min-w-0 flex-1 items-center justify-end gap-1 truncate text-[11px] font-semibold"
+              className="flex size-10 shrink-0 items-center justify-center rounded-xl text-[#152b43] transition-colors hover:bg-[#f3f7fa] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0874d1] lg:h-auto lg:w-auto lg:justify-end lg:gap-1 lg:rounded-none lg:text-[11px] lg:font-semibold"
             >
-              <MapPin aria-hidden="true" className="size-4 shrink-0" />
-              <span className="truncate">{selectedLocation}</span>
+              <MapPin aria-hidden="true" className="size-5 shrink-0 text-[#0874d1] lg:size-4" />
+              <span className="sr-only lg:not-sr-only lg:truncate">{selectedLocation}</span>
               <ChevronDown
                 aria-hidden="true"
-                className="size-3 shrink-0 text-[#496b73]"
+                className="hidden size-3 shrink-0 text-[#496b73] lg:inline-flex"
               />
             </button>
           </div>

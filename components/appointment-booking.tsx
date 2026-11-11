@@ -942,7 +942,7 @@ function PageShell({ children }: { children: ReactNode }) {
         <div className="mx-auto flex h-[58px] max-w-[1280px] items-center gap-3 px-3 lg:h-[72px] lg:gap-6 lg:px-8">
           <button
             type="button"
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#cfe2f5] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white lg:hidden"
+            className="order-3 inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#cfe2f5] bg-white/70 text-[#152b43] shadow-sm transition-all duration-200 hover:scale-105 hover:bg-white lg:hidden"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
@@ -953,7 +953,7 @@ function PageShell({ children }: { children: ReactNode }) {
 
           <Link
             href="/"
-            className="flex shrink-0 items-center text-[#0874d1] transition-transform duration-200 hover:scale-[1.03]"
+            className="order-1 flex shrink-0 items-center text-[#0874d1] transition-transform duration-200 hover:scale-[1.03]"
             aria-label="OneStep Dream Property home"
           >
             <span className="text-[25px] font-black leading-none tracking-[-0.12em] lg:text-[32px]">
@@ -962,7 +962,7 @@ function PageShell({ children }: { children: ReactNode }) {
           </Link>
 
           <nav
-            className="hidden flex-1 items-center justify-center gap-8 text-[13px] text-[#5f6368] lg:flex lg:text-[15px]"
+            className="hidden flex-1 items-center justify-center gap-8 text-[13px] text-[#5f6368] lg:order-2 lg:flex lg:text-[15px]"
             aria-label="Main navigation"
           >
             {navItems.map((item) => (
@@ -981,16 +981,17 @@ function PageShell({ children }: { children: ReactNode }) {
             href="https://www.google.com/maps/search/?api=1&query=Koramangala%2C%20Bengaluru"
             target="_blank"
             rel="noopener noreferrer"
-            className="group ml-auto inline-flex min-w-0 items-center justify-end gap-1.5 rounded-lg px-2 py-2 text-[11px] font-semibold text-[#152b43] transition-all duration-200 hover:bg-white hover:text-[#0874d1] sm:text-xs lg:max-w-[230px]"
+            aria-label="View Koramangala, Bengaluru in Google Maps"
+            className="group order-2 ml-auto inline-flex size-10 shrink-0 items-center justify-center rounded-lg text-[11px] font-semibold text-[#152b43] transition-all duration-200 hover:bg-white hover:text-[#0874d1] lg:order-3 lg:h-auto lg:w-auto lg:min-w-0 lg:justify-end lg:gap-1.5 lg:px-2 lg:py-2 lg:max-w-[230px] sm:text-xs"
           >
             <MapPin
               aria-hidden="true"
-              className="size-4 shrink-0 text-[#0874d1] transition-transform duration-200 group-hover:-translate-y-0.5"
+              className="size-5 shrink-0 text-[#0874d1] transition-transform duration-200 group-hover:-translate-y-0.5 lg:size-4"
             />
-            <span className="truncate">Koramangala, Bengaluru</span>
+            <span className="sr-only lg:not-sr-only lg:truncate">Koramangala, Bengaluru</span>
             <ArrowUpRight
               aria-hidden="true"
-              className="size-3 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              className="hidden size-3 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 lg:inline-flex"
             />
           </a>
         </div>
